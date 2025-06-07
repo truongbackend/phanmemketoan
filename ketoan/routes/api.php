@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Import\ViettelPostImportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('accounting')->group(function () {
+    Route::prefix('invoice-processing')->group(function () {
+        Route::prefix('viettel-post')->group(function () {
+            Route::post('/data', [ViettelPostImportController::class, 'importData'])->name('accounting.invoiceprocessing.viettelpost.data');
+        });
+    });
+});
+
