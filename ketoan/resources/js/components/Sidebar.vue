@@ -1,52 +1,84 @@
 <template>
     <div class="sidebar-area" id="sidebar-area">
-            <div class="logo position-relative">
-                <a href="index.html" class="d-block text-decoration-none position-relative">
-                    <span class="logo-text fw-bold text-dark">Trezo</span>
-                </a>
-                <button class="sidebar-burger-menu bg-transparent p-0 border-0 opacity-0 z-n1 position-absolute top-50 end-0 translate-middle-y" id="sidebar-burger-menu">
-                    <i data-feather="x"></i>
-                </button>
-            </div>
+      <div class="logo position-relative">
+        <a href="" class="d-block text-decoration-none position-relative">
+          <img src="assets/avatar/logo.webp" alt="logo-icon" />
+          <span class="logo-text fw-bold text-dark">PNL</span>
+        </a>
+        <button
+          class="sidebar-burger-menu bg-transparent p-0 border-0 opacity-0 z-n1 position-absolute top-50 end-0 translate-middle-y"
+          id="sidebar-burger-menu"
+        >
+          <i data-feather="x"></i>
+        </button>
+      </div>
 
-            <aside id="layout-menu" class="layout-menu menu-vertical menu active" data-simplebar>
-                <ul class="menu-inner">
-                    <li class="menu-title small text-uppercase">
-                        <span class="menu-title-text">MAIN</span>
-                    </li>
+      <aside id="layout-menu" class="layout-menu menu-vertical menu" data-simplebar>
+        <ul class="menu-inner">
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+                <span class="material-symbols-outlined menu-icon">calculate</span>
+              <span class="title">Xuất hoá đơn sàn</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-package' }" class="menu-link">
+                <span class="material-symbols-outlined menu-icon">local_activity</span>
+              <span class="title">Gói</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-user' }" class="menu-link">
+                <span class="material-symbols-outlined menu-icon">person</span>
+              <span class="title">User</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+              <span class="material-symbols-outlined menu-icon">logout</span>
+              <span class="title">Thông tin</span>
+            </router-link>
+          </li>
 
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle active">
-                            <span class="material-symbols-outlined menu-icon">person</span>
-                            <span class="title">Users</span>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="team-members.html" class="menu-link">
-                                    Team Members
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="users-list.html" class="menu-link">
-                                    Users List
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="add-user.html" class="menu-link">
-                                    Add User
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="logout.html" class="menu-link">
-                            <span class="material-symbols-outlined menu-icon">logout</span>
-                            <span class="title">Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </aside>
-        </div>
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+                <span class="material-symbols-outlined menu-icon">account_box</span>
+              <span class="title">Phân quyền</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+                <span class="material-symbols-outlined menu-icon">pie_chart</span>
+              <span class="title">Báo cáo</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-profile' }" class="menu-link">
+                <span class="material-symbols-outlined menu-icon">contact_page</span>
+              <span class="title">Tài khoản</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+                <span class="material-symbols-outlined menu-icon">notifications</span>
+              <span class="title">Thông báo</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+                <span class="material-symbols-outlined menu-icon">forum</span>
+              <span class="title">Khiếu nại</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <a href="logout.html" class="menu-link">
+              <span class="material-symbols-outlined menu-icon">logout</span>
+              <span class="title">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+    </div>
   </template>
 
   <script>
@@ -54,7 +86,3 @@
     name: "Sidebar",
   };
   </script>
-
-  <style scoped>
-  /* Các style tùy chỉnh cho Sidebar */
-  </style>
