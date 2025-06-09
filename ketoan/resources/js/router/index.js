@@ -12,15 +12,20 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const toast = useToast();
-    const token = Cookies.get('token');
-    const user = localStorage.getItem('user');
-    if (to.path.startsWith('/admin') && (!token || !user)) {
-        toast.error('Bạn cần đăng nhập để truy cập trang này');
-        next({ name: 'login' });
-    } else {
-        next();
-    }
+  const token = Cookies.get('token');
+  const isAuthenticated = !!token;
+
+  const isAuthPage = to.name === 'login' || to.name === 'register';
+  const isAdminRoute = to.path.startsWith('/admin');
+
+  if (!isAuthenticated && isAdminRoute) {
+    return next({ name: 'login' });
+  }
+  if (isAuthenticated && isAuthPage) {
+    return next({ path: '/admin' });
+  }
+
+  next();
 });
 
 export default router;

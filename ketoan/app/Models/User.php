@@ -3,11 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\Models\package;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -21,6 +22,13 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'phone',
+        'create_package',
+        'expiration_package',
+        'address',
+        'status',
+        'packages_id',
+        'note'
     ];
     public function getJWTIdentifier()
     {
@@ -48,4 +56,8 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function packages()
+    {
+        return $this->belongsTo(package::class, 'packages_id');
+    }
 }

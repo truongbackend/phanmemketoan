@@ -34,7 +34,7 @@
                                     </button>
                                 </div>
                                 <div class="form-group">
-                                    <p>Bạn chưa có tài khoản. <a href="register.html" class="fw-medium text-primary text-decoration-none">Đăng ký ngay</a></p>
+                                    <p>Bạn chưa có tài khoản.  <router-link :to="{ name: 'register' }" class="fw-medium text-primary text-decoration-none">Đăng ký ngay</router-link></p>
                                 </div>
                             </form>
                         </div>
@@ -48,15 +48,15 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useToast } from 'vue-toast-notification';  // Import toast
-import Cookies from 'js-cookie';  // Import js-cookie
+import { useToast } from 'vue-toast-notification';
+import Cookies from 'js-cookie';
 
 export default defineComponent({
     setup() {
         const email = ref('');
         const password = ref('');
         const router = useRouter();
-        const toast = useToast();  // Khởi tạo toast
+        const toast = useToast();
 
         const login = () => {
             if (!email.value || !password.value) {
@@ -82,8 +82,11 @@ export default defineComponent({
                 }
             })
             .catch((error) => {
-                console.error(error);
-                toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
+                if (error.response) {
+                    const errors = error.response.data.error;
+                    toast.error(errors);
+                }
+
             });
         };
 

@@ -22,7 +22,6 @@ class packageController extends Controller
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
-
         return response()->json($query->get());
     }
 
@@ -43,32 +42,30 @@ class packageController extends Controller
      */
 
 
-public function store(Request $request)
-{
-    $messages = [
-    'name.unique' => 'Tên gói đã tồn tại, vui lòng chọn tên khác.',
-];
+    public function store(Request $request)
+    {
+        $messages = [
+        'name.unique' => 'Tên gói đã tồn tại, vui lòng chọn tên khác.',
+    ];
 
-$validator = Validator::make($request->all(), [
-    'name' => 'required|unique:packages,name',
-], $messages);
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|unique:packages,name',
+    ], $messages);
 
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $package = Package::create([
+            'name' => $request->input('name'),
+            'price' => $request->input('price'),
+            'discould' => $request->input('discould'),
+            'expiration_time' => $request->input('expiration_time'),
+            'note' => $request->input('note'),
+            'status' => $request->input('status', 1),
+        ]);
+
+        return response()->json($package, 201);
     }
-
-
-    $package = Package::create([
-        'name' => $request->input('name'),
-        'price' => $request->input('price'),
-        'discould' => $request->input('discould'),
-        'expiration_time' => $request->input('expiration_time'),
-        'note' => $request->input('note'),
-        'status' => $request->input('status', 1),
-    ]);
-
-    return response()->json($package, 201);
-}
 
 
     /**
@@ -88,9 +85,10 @@ $validator = Validator::make($request->all(), [
      * @param  \App\Models\package  $package
      * @return \Illuminate\Http\Response
      */
-    public function edit(package $package)
+    public function edit($id)
     {
-        //
+        $package = Package::find($id);
+        return response()->json($package, 201);
     }
 
     /**
@@ -100,10 +98,30 @@ $validator = Validator::make($request->all(), [
      * @param  \App\Models\package  $package
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, package $package)
+    public function update(Request $request, $id)
     {
-        //
+        $messages = [
+            'name.unique' => 'Tên gói đã tồn tại, vui lòng chọn tên khác.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:packages,name,' . $id,
+        ], $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $package = Package::findOrFail($id);
+        $package->name = $request->name;
+        $package->price = $request->price;
+        $package->discould = $request->discould;
+        $package->expiration_time = $request->expiration_time;
+        $package->note = $request->note;
+        $package->save();
+        return response()->json(['message' => 'Cập nhật thành công']);
     }
+
 
     /**
      * Remove the specified resource from storage.

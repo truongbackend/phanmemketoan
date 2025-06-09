@@ -1,4 +1,5 @@
 <?php
+//jhejejeje
 
 namespace App\Http\Controllers\Import;
 
@@ -70,10 +71,10 @@ class ViettelPostImportController extends Controller
             ->filter(function($row) {
                 for ($i = 0; $i <= 2; $i++) {
                     if (empty($row[$i])) {
-                        return false; 
+                        return false;
                     }
                 }
-                return true; 
+                return true;
             })
             ->values()
             ->all();
@@ -92,7 +93,9 @@ class ViettelPostImportController extends Controller
                 ->all();
             $infoRow['push_sale_details'] = $matchingPushSales;
             return $infoRow;
-        });
+        })->values()->all();
+
+        dd($fileInfoDataMerged);
 
         $type1_has_special = [];
         $type1_no_special = [];

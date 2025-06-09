@@ -23,6 +23,11 @@ const adminRoutes = [
                 name: "admin-package",
                 component: () =>import ("../page/admin/package/index.vue"),
             },
+             {
+                path: "notification",
+                name: "admin-notification",
+                component: () =>import ("../page/admin/notification/index.vue"),
+            },
         ]
     },
     {
@@ -33,6 +38,11 @@ const adminRoutes = [
                 path: "login",
                 name: "login",
                 component: () =>import ("../page/auth/login.vue"),
+            },
+            {
+                path: "register",
+                name: "register",
+                component: () =>import ("../page/auth/register.vue"),
             },
         ]
     },

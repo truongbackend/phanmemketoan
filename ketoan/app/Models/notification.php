@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class package extends Model
+class notification extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'note', 'price', 'discould', 'status', 'expiration_time'
+        'notification', 'content', 'type', 'status',
     ];
-
 }
