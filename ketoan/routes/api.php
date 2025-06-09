@@ -24,6 +24,7 @@ Route::prefix('accounting')->group(function () {
     Route::prefix('invoice-processing')->group(function () {
         Route::prefix('viettel-post')->group(function () {
             Route::post('/data', [ViettelPostImportController::class, 'importData'])->name('accounting.invoiceprocessing.viettelpost.data');
+            Route::get('/export', [ViettelPostImportController::class, 'downloadExport'])->name('accounting.invoiceprocessing.viettelpost.export');
         });
     });
 });
