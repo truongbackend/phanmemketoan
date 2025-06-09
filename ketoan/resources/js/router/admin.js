@@ -39,6 +39,11 @@ const adminRoutes = [
                 name: "login",
                 component: () =>import ("../page/auth/login.vue"),
             },
+            {
+                path: "register",
+                name: "register",
+                component: () =>import ("../page/auth/register.vue"),
+            },
         ]
     },
 ];

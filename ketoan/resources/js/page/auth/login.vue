@@ -34,7 +34,7 @@
                                     </button>
                                 </div>
                                 <div class="form-group">
-                                    <p>Bạn chưa có tài khoản. <a href="register.html" class="fw-medium text-primary text-decoration-none">Đăng ký ngay</a></p>
+                                    <p>Bạn chưa có tài khoản.  <router-link :to="{ name: 'register' }" class="fw-medium text-primary text-decoration-none">Đăng ký ngay</router-link></p>
                                 </div>
                             </form>
                         </div>
