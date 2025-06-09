@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -22,11 +24,23 @@ class AuthController extends Controller
         ]);
 
         $credentials = request(['email', 'password']);
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'Email không tồn tại'], 404);
+        }
+        if ($user->status == 0) {
+            return response()->json(['error' => 'Tài khoản của bạn đã bị khóa'], 403);
+        }
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Email hoặc mật khẩu không đúng'], 401);
+        }
+        if ($user->expiration_package && now()->gt(Carbon::parse($user->expiration_package))) {
+            return response()->json(['error' => 'Gói sử dụng của bạn đã hết hạn'], 403);
         }
         return $this->respondWithToken($token);
     }
+
 
     protected function respondWithToken($token)
     {
@@ -49,32 +63,21 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6'],
+            'email' => [ 'unique:users,email'],
         ], [
-            'name.required' => 'Vui lòng nhập tên',
-            'email.required' => 'Vui lòng nhập email',
-            'email.email' => 'Email không đúng định dạng',
             'email.unique' => 'Email đã tồn tại',
-            'password.required' => 'Vui lòng nhập mật khẩu',
-            'password.min' => 'Mật khẩu ít nhất 6 ký tự',
         ]);
-
-        // Tạo user mới
-        $user = \App\Models\User::create([
-            'name' => $validatedData['name'],
+        $user = User::create([
+            'name' => $request->name,
             'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
+            'password' => bcrypt($request->password),
         ]);
 
-        // Đăng nhập và tạo token
         $token = auth()->login($user);
-
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'expires_in' => Auth::factory()->getTTL() * 60,
             'user' => $user,
         ]);
     }

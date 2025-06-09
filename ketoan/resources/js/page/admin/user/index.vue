@@ -157,8 +157,7 @@
                                  <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Địa chỉ</label>
-                                        <input v-model="address" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ..." :class="{'is-invalid': !addressValid}">
-                                        <div v-if="!addressValid" class="invalid-feedback">Địa chỉ không hợp lệ</div>
+                                        <input v-model="address" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -253,14 +252,13 @@
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Số điện thoại</label>
                                         <input v-model="phone" type="text" class="form-control h-60 border-border-color" placeholder="012345678" :class="{'is-invalid': !phoneValid}">
-                                        <div v-if="!phoneValid" class="invalid-feedback">Giá tiền không hợp lệ</div>
+                                        <div v-if="!phoneValid" class="invalid-feedback">Số điện thoại không hợp lệ</div>
                                     </div>
                                 </div>
                                  <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Địa chỉ</label>
-                                        <input v-model="address" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ..." :class="{'is-invalid': !addressValid}">
-                                        <div v-if="!addressValid" class="invalid-feedback">Giá tiền không hợp lệ</div>
+                                        <input v-model="address" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -389,7 +387,6 @@ export default defineComponent({
             nameValid.value = name.value.trim() !== '';
             emailValid.value = email.value.trim() !== '' && /\S+@\S+\.\S+/.test(email.value);
             phoneValid.value = typeof phone.value === 'string' ? phone.value.trim() === '' || /^\d{9,11}$/.test(phone.value) : true;
-            addressValid.value = address.value.trim() !== '';
             expirationValid.value = expiration_package.value !== '';
             if (nameValid.value && emailValid.value && phoneValid.value && addressValid.value && expirationValid.value) {
                 axios.post(`${baseUrl}/api/user`, {
@@ -428,9 +425,8 @@ export default defineComponent({
             nameValid.value = name.value.trim() !== '';
             emailValid.value = email.value.trim() !== '' && /\S+@\S+\.\S+/.test(email.value);
             phoneValid.value = typeof phone.value === 'string' ? phone.value.trim() === '' || /^\d{9,11}$/.test(phone.value) : true;
-            addressValid.value = address.value.trim() !== '';
             expirationValid.value = expiration_package.value !== '';
-            if (nameValid.value && emailValid.value && phoneValid.value && addressValid.value && expirationValid.value) {
+            if (nameValid.value && emailValid.value && phoneValid.value && expirationValid.value) {
                 axios.put(`${baseUrl}/api/user/${userId.value}`, {
                     name: name.value,
                     phone: phone.value,

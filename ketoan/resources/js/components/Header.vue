@@ -107,7 +107,7 @@
                       <div class="d-flex align-items-center justify-content-between">
                         <div class="d-none d-xxl-block">
                           <div class="d-flex align-content-center">
-                            <h3>{{ userName }}</h3> 
+                            <h3>{{ userName }}</h3>
                           </div>
                         </div>
                       </div>
@@ -147,33 +147,36 @@
   </template>
 
   <script>
-  export default {
-    name: "Header",
-    data() {
-      return {
-        userName: ''
-      };
-    },
-    mounted() {
-      const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.name) {
-            this.userName = user.name;
+import Cookies from 'js-cookie';
+import axios from 'axios';
+
+export default {
+  name: "Header",
+  data() {
+    return {
+      userName: null,
+    };
+  },
+  mounted() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  console.log('User from localStorage:', user.name);
+  if (user && user.name) {
+    this.userName = user.name;
+  }
+},
+  methods: {
+    async logout() {
+      try {
+        const response = await axios.post('/api/logout');
+        if (response.status === 200) {
+          localStorage.removeItem('user');
+          Cookies.remove('token');
+          this.$router.push('/login');  // dùng this.$router trong option API
         }
-    },
-    methods: {
-        async logout() {
-            try {
-            console.log('Logout function called');
-            const response = await axios.post('/api/logout');
-            if (response.status === 200) {
-                console.log('Logout successful');
-                localStorage.removeItem('user');
-                this.$router.push('/login');
-            }
-            } catch (error) {
-            console.error('Có lỗi khi đăng xuất', error);
-            }
-        }
-        }
-  };
-  </script>
+      } catch (error) {
+        console.error('Có lỗi khi đăng xuất', error);
+      }
+    }
+  }
+};
+</script>
