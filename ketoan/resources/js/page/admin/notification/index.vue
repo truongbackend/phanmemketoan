@@ -40,16 +40,13 @@
                                 STT
                             </th>
                             <th scope="col">
-                                Tên gói
-                            </th>
-                            <th scope="col">
-                                Giá tiền
-                            </th>
-                            <th scope="col">
-                                Giảm giá
-                            </th>
-                            <th scope="col">
                                 Thời gian
+                            </th>
+                            <th scope="col">
+                               Hệ thống
+                            </th>
+                            <th scope="col">
+                                Content
                             </th>
                             <th scope="col">
                                 Trạng thái
@@ -280,14 +277,14 @@ export default defineComponent({
             formattedPrice.value = formatPrice(newVal);
         });
 
-        const getPackage = () => {
+        const getNotification = () => {
             const params = {};
 
             if (searchKeyword.value.trim() !== '') {
                 params.search = searchKeyword.value.trim();
             }
             axios
-                .get(`${baseUrl}/api/packages`, {
+                .get(`${baseUrl}/api/notification`, {
                     params
                 })
                 .then((response) => {

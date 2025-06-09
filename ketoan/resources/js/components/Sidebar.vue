@@ -59,7 +59,7 @@
             </router-link>
           </li>
           <li class="menu-item">
-            <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+            <router-link :to="{ name: 'admin-notification' }" class="menu-link">
                 <span class="material-symbols-outlined menu-icon">notifications</span>
               <span class="title">Thông báo</span>
             </router-link>

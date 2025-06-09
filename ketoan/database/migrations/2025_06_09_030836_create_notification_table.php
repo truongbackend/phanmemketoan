@@ -13,16 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('packages', function (Blueprint $table) {
+        Schema::create('notification', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
-            $table->string('name');
-            $table->text('note');
-            $table->decimal('price', 10, 2);
-            $table->decimal('discould', 5, 2);
+            $table->string('notification');
+            $table->text('content');
+            $table->string('type');
             $table->boolean('status')->default(1);
-            $table->string('expiration_time');
-            $table->string('user_create');
+            $table->timestamps();
         });
     }
 
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('package');
+        Schema::dropIfExists('notification');
     }
 };

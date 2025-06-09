@@ -23,6 +23,11 @@ const adminRoutes = [
                 name: "admin-package",
                 component: () =>import ("../page/admin/package/index.vue"),
             },
+             {
+                path: "notification",
+                name: "admin-notification",
+                component: () =>import ("../page/admin/notification/index.vue"),
+            },
         ]
     },
     {
