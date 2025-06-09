@@ -117,6 +117,20 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'log_data_request' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/log_data_accounting/log_data_request.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
+
+        'log_data_import' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/log_data_accounting/log_data_import.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
     ],
 
 ];
