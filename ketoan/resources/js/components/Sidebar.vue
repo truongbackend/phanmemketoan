@@ -13,6 +13,12 @@
     <aside id="layout-menu" class="layout-menu menu-vertical menu" data-simplebar>
         <ul class="menu-inner">
             <li class="menu-item">
+                <router-link :to="{ name: 'admin-delivery' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">calculate</span>
+                    <span class="title">Xuất hoá đơn giao hàng</span>
+                </router-link>
+            </li>
+            <li class="menu-item">
                 <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">calculate</span>
                     <span class="title">Xuất hoá đơn sàn</span>
@@ -28,6 +34,12 @@
                 <router-link :to="{ name: 'admin-user' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">person</span>
                     <span class="title">User</span>
+                </router-link>
+            </li>
+            <li class="menu-item">
+                <router-link :to="{ name: 'admin-product' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">dataset</span>
+                    <span class="title">Hàng hoá</span>
                 </router-link>
             </li>
             <li class="menu-item">

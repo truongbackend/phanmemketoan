@@ -5,10 +5,14 @@ const adminRoutes = [
         children: [
             {
                 path: "accounting",
-                icon: 'calculate',
                 name: "admin-accounting",
-                
                 component: () =>import ("../page/admin/accounting/index.vue"),
+            },
+            {
+                path: "delivery",
+                name: "admin-delivery",
+
+                component: () =>import ("../page/admin/delivery/index.vue"),
             },
             {
                 path: "profile",
@@ -19,6 +23,11 @@ const adminRoutes = [
                 path: "user",
                 name: "admin-user",
                 component: () =>import ("../page/admin/user/index.vue"),
+            },
+            {
+                path: "product",
+                name: "admin-product",
+                component: () =>import ("../page/admin/product/index.vue"),
             },
             {
                 path: "package",
