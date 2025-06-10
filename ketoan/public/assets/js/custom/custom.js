@@ -577,7 +577,7 @@
 				data.getMonth(),
 				-inici_mes);
 			/* 6 setmanes per cobrir totes les posiblitats
-			*  Quedaria mes consistent alhora de mostrar molts mesos 
+			*  Quedaria mes consistent alhora de mostrar molts mesos
 			*  en una quadricula */
 			for (var s = 0; s < 6; s++) {
 				var fila = document.createElement('tr');
@@ -1055,7 +1055,7 @@
 		slidesPerView: 4,
 		freeMode: true,
 		watchSlidesProgress: true,
-		
+
 	});
 	var swiper = new Swiper(".room-details-slide2", {
 		spaceBetween: 15,
@@ -1089,7 +1089,7 @@
 		});
 	}
 
-	// Days, Hrs, Min, Sec JS 
+	// Days, Hrs, Min, Sec JS
 	const getCountDownId = document.getElementsByClassName('clockdiv');
 	if (getCountDownId) {
 		document.addEventListener('readystatechange', event => {
@@ -2288,10 +2288,9 @@
 			const menuItems = document.querySelectorAll("#menu > li");
 			const prevBtn = document.getElementById("prev-btn");
 			const nextBtn = document.getElementById("next-btn");
-			let itemsPerPage = 8; // Default value
+			let itemsPerPage = 8;
 			let currentIndex = 0;
 
-			// Function to update menu visibility
 			function updateMenu() {
 				menuItems.forEach((item, index) => {
 					item.style.display =

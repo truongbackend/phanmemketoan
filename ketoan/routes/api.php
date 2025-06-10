@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Import\ViettelPostImportController;
-use App\Http\Controllers\Admin\notificationController;
-use App\Http\Controllers\Admin\packageController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\packageController;
+use App\Http\Controllers\Admin\notificationController;
+use App\Http\Controllers\Import\ViettelPostImportController;
 
 
 /*
@@ -43,3 +44,15 @@ Route::post('user', [UserController::class, 'store']);
 Route::get('user/{id}', [UserController::class, 'edit']);
 Route::put('user/{id}', [UserController::class, 'update']);
 Route::delete('user/{id}', [UserController::class, 'destroy']);
+ Route::get('roles', [RoleController::class, 'index']);
+    Route::post('roles', [RoleController::class, 'store']);
+    Route::put('roles/{role}', [RoleController::class, 'update']);
+    Route::delete('roles/{role}', [RoleController::class, 'destroy']);
+    Route::get('permissions', [RoleController::class, 'permissions']);
+
+// check login 1 thiet bi
+// Route::middleware(['auth:api', 'check.user.token'])->group(function () {
+//     Route::get('/packages', [PackageController::class, 'index']);
+//     Route::post('/packages', [PackageController::class, 'store']);
+//     // các route cần bảo vệ
+// });

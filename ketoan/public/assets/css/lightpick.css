@@ -168,7 +168,7 @@
 
 .lightpick__day:not(.is-disabled):hover {
     background-size: contain;
-    background-color: #605DFF;
+    background-color: #1677ff;
     color: #FFF;
 }
 
@@ -205,7 +205,7 @@
 }
 
 .lightpick__day.is-in-range:hover {
-    background-color: #605DFF;
+    background-color: #1677ff;
 }
 
 .lightpick__day.is-start-date.is-in-range,
@@ -214,7 +214,7 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 50%;
-    background-color: #605DFF;
+    background-color: #1677ff;
     background-image: none;
 }
 
@@ -224,20 +224,20 @@
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
     border-bottom-left-radius: 0;
-    background-color: #605DFF;
+    background-color: #1677ff;
     background-image: none;
 }
 
 .lightpick__day.is-start-date.is-end-date {
     background-color: transparent;
-    
+
 }
 
 .lightpick__day.is-start-date,
 .lightpick__day.is-end-date,
 .lightpick__day.is-start-date:hover,
 .lightpick__day.is-end-date:hover {
-    background-color: #605DFF;
+    background-color: #1677ff;
     background-size: auto;
     background-position: center;
     color: #FFF;
@@ -291,5 +291,5 @@
 }
 .lightpick__apply-action {
     color: #fff;
-    background-color: #605DFF;
+    background-color: #1677ff;
 }

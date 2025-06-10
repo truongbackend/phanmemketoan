@@ -9,10 +9,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles;
     /**
      * The attributes that are mass assignable.
      *
@@ -28,7 +29,8 @@ class User extends Authenticatable implements JWTSubject
         'address',
         'status',
         'packages_id',
-        'note'
+        'note',
+        'api_token'
     ];
     public function getJWTIdentifier()
     {
@@ -46,6 +48,7 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'api_token'
     ];
 
     /**

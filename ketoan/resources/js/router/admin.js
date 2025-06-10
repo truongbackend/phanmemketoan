@@ -5,7 +5,9 @@ const adminRoutes = [
         children: [
             {
                 path: "accounting",
+                icon: 'calculate',
                 name: "admin-accounting",
+                
                 component: () =>import ("../page/admin/accounting/index.vue"),
             },
             {
@@ -28,24 +30,35 @@ const adminRoutes = [
                 name: "admin-notification",
                 component: () =>import ("../page/admin/notification/index.vue"),
             },
+            {
+                path: "role",
+                name: "admin-role",
+                component: () => import("../page/admin/role/index.vue"),
+            }
         ]
     },
     {
-        path: "/",
-        component: () =>import ("../layouts/AuthLayout.vue"),
-        children: [
-            {
-                path: "login",
-                name: "login",
-                component: () =>import ("../page/auth/login.vue"),
-            },
-            {
-                path: "register",
-                name: "register",
-                component: () =>import ("../page/auth/register.vue"),
-            },
-        ]
-    },
+    path: "/",
+    component: () => import("../layouts/AuthLayout.vue"),
+    children: [
+        {
+            path: "",
+            name: "home",
+            component: () => import("../page/client/home.vue"),
+        },
+        {
+            path: "login",
+            name: "login",
+            component: () => import("../page/auth/login.vue"),
+        },
+        {
+            path: "register",
+            name: "register",
+            component: () => import("../page/auth/register.vue"),
+        },
+    ]
+}
+
 ];
 
 export default adminRoutes;

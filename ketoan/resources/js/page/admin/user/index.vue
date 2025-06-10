@@ -24,7 +24,7 @@
                 <input type="text" class="form-control border-0" placeholder="Tìm kiếm người dùng...." v-model="searchKeyword" />
                 <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
             </form>
-            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal">
+            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal" v-if="hasPermission('user create')">
                 <span class="d-flex align-items-center" style="gap: 5px;">
                     <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
                     <span>Thêm mới</span>
@@ -188,6 +188,16 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group mb-4">
+                                        <label class="label text-secondary">Nhóm quyền</label>
+                                        <select v-model="selectedRole" class="form-select form-control h-60">
+                                            <option v-for="roles in role" :key="roles.id" :value="roles.id">
+                                                {{ roles.name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-4">
                                         <label class="label text-secondary">Ghi chú</label>
                                         <div class="form-group position-relative">
                                             <textarea v-model="note" class="form-control text-dark" placeholder="Ghi chú ... " cols="30" rows="4"></textarea>
@@ -308,8 +318,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 </template>
@@ -323,10 +331,11 @@ import {
 import axios from 'axios';
 import { useToast } from 'vue-toast-notification';
 import { inject } from 'vue';
-
+import { hasPermission } from '@/utils/permission';
 export default defineComponent({
     setup() {
         const packageList = ref([]);
+        const role = ref([]);
         const user = ref([]);
         const name = ref('');
         const phone = ref('');
@@ -350,7 +359,7 @@ export default defineComponent({
         const totalPages = ref(1);
         const selectedPackageId = ref(null);
         const selectedStatus = ref(1);
-
+        const selectedRole = ref('');
         const getUser = () => {
             const params = {
                 page: currentPage.value,
@@ -376,6 +385,7 @@ export default defineComponent({
                         return { ...u, duration };
                     });
                     packageList.value = response.data.packages;
+                    role.value = response.data.role;
                     totalPages.value = pagination.last_page;
                 })
                 .catch((error) => {
@@ -398,6 +408,7 @@ export default defineComponent({
                     package_id: selectedPackageId.value,
                     status: selectedStatus.value,
                     note: note.value,
+                    role_id: selectedRole.value
                 })
                 .then(() => {
                     getUser();
@@ -530,8 +541,13 @@ export default defineComponent({
             selectedStatus,
             getUserID,
             userId,
-            updateUser
+            updateUser,
+            role,
+            selectedRole
         };
     },
+    methods: {
+        hasPermission
+    }
 });
 </script>

@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('roles', function (Blueprint $table) {
+            $table->string('note')->nullable();
+            $table->boolean('status')->default(1);
         });
     }
 
@@ -26,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notifications');
+       Schema::table('roles', function (Blueprint $table) {
+        $table->dropColumn(['note', 'status']);
+    });
     }
 };

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\package;
+use Spatie\Permission\Models\Role;
 use App\Models\User;
+use App\Models\package;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 class UserController extends Controller
 {
     public function index(Request $request)
@@ -24,9 +26,11 @@ class UserController extends Controller
         $perPage = $request->input('per_page', 10);
         $users = $query->paginate($perPage);
         $packages = Package::where('status', 1)->get();
+        $role = Role::where('status', 1)->get();
         return response()->json([
             'users' => $users,
             'packages' => $packages,
+            'role' => $role,
         ]);
     }
     public function store(Request $request)
@@ -36,12 +40,15 @@ class UserController extends Controller
         ];
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:users,name',
+            'email' => 'required|unique:users,email',
+            'role_id' => 'required|exists:roles,id',
         ], $messages);
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        $package = User::create([
+
+        $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
@@ -52,7 +59,10 @@ class UserController extends Controller
             'status' => $request->input('status'),
             'password' => Hash::make('pnl@12345'),
         ]);
-        return response()->json($package, 201);
+
+        $user->syncRoles([$request->input('role_id')]);
+
+        return response()->json($user, 201);
     }
     public function update(Request $request, $id)
     {

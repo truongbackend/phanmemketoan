@@ -23,10 +23,10 @@
 				textStyle: {
 					fontSize: 12,
 					color: "#64748B",
-					
+
 				}
 			},
-			color: ["#37D80A", "#FD5812", "#605DFF"],
+			color: ["#37D80A", "#FD5812", "#1677ff"],
 			series: [
 				{
 					name: 'Cash at End of the Month',
@@ -64,7 +64,7 @@
 				textStyle: {
 					fontSize: 12,
 					color: "#fff",
-					
+
 				}
 			},
 			toolbox: {
@@ -118,7 +118,7 @@
 				textStyle: {
 					fontSize: 12,
 					color: "#64748B",
-					
+
 				}
 			},
 			color: ["#AD63F6", "#BF85FB", "#D7B5FD", "#E9D5FF"],

@@ -7,7 +7,7 @@
         margin-bottom: 37px;
     }
     &.style-two {
-        background: linear-gradient(81deg, #605DFF 3.39%, #9747FF 93.3%);
+        background: linear-gradient(81deg, #1677ff 3.39%, #9747FF 93.3%);
         .welcome-2 {
             position: absolute;
             top: 0;
@@ -46,9 +46,9 @@
                     color: #25B003;
                 }
             }
-            
+
         }
-        
+
     }
 }
 .stats-box {
@@ -150,7 +150,7 @@
 }
 
 @media only screen and (min-width : 1200px) and (max-width : 1399px) {
-    
+
     .stats-box {
         &.style-three {
             .p-4 {
@@ -165,16 +165,16 @@
             }
         }
     }
-    
+
 }
 
 
 
 /* Min width 1400px to Max width 1799px */
 @media only screen and (min-width : 1400px) and (max-width : 1799px) {
-    
+
 }
 
 @media only screen and (max-width : 1199px) {
-    
+
 }

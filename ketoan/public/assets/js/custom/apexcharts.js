@@ -25,7 +25,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#DDE4FF"
+				"#1677ff", "#DDE4FF"
 			],
 			dataLabels: {
 				enabled: false
@@ -261,7 +261,7 @@
 				enabled: false
 			},
 			colors: [
-				"#605DFF", "#C2CDFF"
+				"#1677ff", "#C2CDFF"
 			],
 			stroke: {
 				width: 2,
@@ -361,7 +361,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#C2CDFF"
+				"#1677ff", "#C2CDFF"
 			],
 			grid: {
 				borderColor: "#ffffff"
@@ -449,7 +449,7 @@
 				"Completed", "New Order", "Pending"
 			],
 			colors: [
-				"#37D80A", "#605DFF", "#AD63F6"
+				"#37D80A", "#1677ff", "#AD63F6"
 			],
 			legend: {
 				show: true,
@@ -507,7 +507,7 @@
 				enabled: false
 			},
 			colors: [
-				"#605DFF", "#AD63F6"
+				"#1677ff", "#AD63F6"
 			],
 			stroke: {
 				curve: "smooth",
@@ -728,7 +728,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#3584FC", "#AD63F6", "#FD5812"
+				"#1677ff", "#3584FC", "#AD63F6", "#FD5812"
 			],
 			plotOptions: {
 				bar: {
@@ -846,7 +846,7 @@
 				}
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			dataLabels: {
 				enabled: false
@@ -1140,7 +1140,7 @@
 				}
 			},
 			colors: [
-				"#AD63F6", "#605DFF"
+				"#AD63F6", "#1677ff"
 			],
 			dataLabels: {
 				enabled: false
@@ -1237,7 +1237,7 @@
 				"Organic", "Paid", "Direct", "Social", "Referrals", "Others"
 			],
 			colors: [
-				"#605DFF", "#3584FC", "#AD63F6", "#0dcaf0", "#25B003", "#FD5812"
+				"#1677ff", "#3584FC", "#AD63F6", "#0dcaf0", "#25B003", "#FD5812"
 			],
 			stroke: {
 				width: 1,
@@ -1327,7 +1327,7 @@
 				enabled: false
 			},
 			colors: [
-				"#605DFF", "#FE7A36"
+				"#1677ff", "#FE7A36"
 			],
 			stroke: {
 				curve: "straight",
@@ -1611,7 +1611,7 @@
 				enabled: false
 			},
 			colors: [
-				"#605DFF", "#FE7A36", "#AD63F6", "#D71C00"
+				"#1677ff", "#FE7A36", "#AD63F6", "#D71C00"
 			],
 			stroke: {
 				curve: "smooth",
@@ -1729,7 +1729,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#AD63F6", "#3584FC"
+				"#1677ff", "#AD63F6", "#3584FC"
 			],
 			plotOptions: {
 				bar: {
@@ -1857,7 +1857,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#AD63F6", "#3584FC"
+				"#1677ff", "#AD63F6", "#3584FC"
 			],
 			plotOptions: {
 				bar: {
@@ -1974,7 +1974,7 @@
 				"Solved", "In Progress", "Pending", "Unassigned"
 			],
 			colors: [
-				"#37D80A", "#605DFF", "#AD63F6", "#FD5812"
+				"#37D80A", "#1677ff", "#AD63F6", "#FD5812"
 			],
 			dataLabels: {
 				enabled: false
@@ -2031,7 +2031,7 @@
 				"Completed", "In Progress", "Pending", "Active", "Cancelled"
 			],
 			colors: [
-				"#37D80A", "#605DFF", "#AD63F6", "#3584FC", "#FD5812"
+				"#37D80A", "#1677ff", "#AD63F6", "#3584FC", "#FD5812"
 			],
 			dataLabels: {
 				enabled: false
@@ -2088,7 +2088,7 @@
 				"Completed", "In Progress", "Pending", "Active", "Cancelled"
 			],
 			colors: [
-				"#37D80A", "#605DFF", "#AD63F6", "#3584FC", "#FD5812"
+				"#37D80A", "#1677ff", "#AD63F6", "#3584FC", "#FD5812"
 			],
 			dataLabels: {
 				enabled: false
@@ -2150,7 +2150,7 @@
 				}
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			plotOptions: {
 				bar: {
@@ -2239,7 +2239,7 @@
 				width: 2
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			fill: {
 				type: 'gradient',
@@ -2491,7 +2491,7 @@
 				width: 2
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			fill: {
 				type: 'gradient',
@@ -2957,7 +2957,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#3584FC", "#AD63F6", "#FD5812"
+				"#1677ff", "#3584FC", "#AD63F6", "#FD5812"
 			],
 			plotOptions: {
 				bar: {
@@ -3509,7 +3509,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#FD5812"
+				"#1677ff", "#FD5812"
 			],
 			dataLabels: {
 				enabled: false
@@ -3618,7 +3618,7 @@
 				"Completed", "In Progress", "Pending", "Active", "Cancelled"
 			],
 			colors: [
-				"#37D80A", "#605DFF", "#AD63F6", "#3584FC", "#FD5812"
+				"#37D80A", "#1677ff", "#AD63F6", "#3584FC", "#FD5812"
 			],
 			dataLabels: {
 				enabled: false
@@ -3684,7 +3684,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#FD5812"
+				"#1677ff", "#FD5812"
 			],
 			dataLabels: {
 				enabled: false
@@ -3811,7 +3811,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#AD63F6", "#3584FC", "#FD5812"
+				"#1677ff", "#AD63F6", "#3584FC", "#FD5812"
 			],
 			plotOptions: {
 				bar: {
@@ -4014,7 +4014,7 @@
 				"Desktop", "Mobile", "Tablet", "Other"
 			],
 			colors: [
-				"#37D80A", "#605DFF", "#AD63F6", "#FD5812"
+				"#37D80A", "#1677ff", "#AD63F6", "#FD5812"
 			],
 			dataLabels: {
 				enabled: false
@@ -4293,7 +4293,7 @@
 				width: 2
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			fill: {
 				type: 'gradient',
@@ -4665,7 +4665,7 @@
 				"Email", "Organic Search", "Direct Browse", "Paid Search", "Social", "Referral"
 			],
 			colors: [
-				"#605DFF", "#3584FC", "#AD63F6", "#0dcaf0", "#25B003", "#FD5812"
+				"#1677ff", "#3584FC", "#AD63F6", "#0dcaf0", "#25B003", "#FD5812"
 			],
 			stroke: {
 				width: 1,
@@ -4758,7 +4758,7 @@
 				width: 2
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			fill: {
 				type: 'gradient',
@@ -6129,7 +6129,7 @@
 				enabled: false
 			},
 			colors: [
-				"#605DFF", "#9CAAFF", "#DDE4FF"
+				"#1677ff", "#9CAAFF", "#DDE4FF"
 			],
 			xaxis: {
 				categories: [
@@ -6356,7 +6356,7 @@
 				strokeWidth: 0
 			},
 			colors: [
-				"#605DFF", "#37D80A", "#FD5812"
+				"#1677ff", "#37D80A", "#FD5812"
 			],
 			yaxis: {
 				show: false
@@ -6848,15 +6848,15 @@
 
 		var options = {
 			colors: [
-				"#605DFF",
-				"#605DFF",
-				"#605DFF",
-				"#605DFF",
-				"#605DFF",
-				"#605DFF",
-				"#605DFF",
-				"#605DFF",
-				"#605DFF"
+				"#1677ff",
+				"#1677ff",
+				"#1677ff",
+				"#1677ff",
+				"#1677ff",
+				"#1677ff",
+				"#1677ff",
+				"#1677ff",
+				"#1677ff"
 			],
 			plotOptions: {
 				heatmap: {
@@ -6928,7 +6928,7 @@
 				enabled: false
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			grid: {
 				show: false,
@@ -7210,7 +7210,7 @@
 				"0-18 Years", "19-40 Years", "41-60 Years", "60+ Years"
 			],
 			colors: [
-				"#AD63F6", "#605DFF", "#25B003", "#3584FC"
+				"#AD63F6", "#1677ff", "#25B003", "#3584FC"
 			],
 			dataLabels: {
 				enabled: true,
@@ -7680,7 +7680,7 @@
 				enabled: false
 			},
 			colors: [
-				"#605DFF", "#9CAAFF", "#DDE4FF"
+				"#1677ff", "#9CAAFF", "#DDE4FF"
 			],
 			xaxis: {
 				categories: [
@@ -8760,7 +8760,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#C2CDFF"
+				"#1677ff", "#C2CDFF"
 			],
 			grid: {
 				borderColor: "#ffffff"
@@ -8853,7 +8853,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#AD63F6", "#3584FC", "#FD5812"
+				"#1677ff", "#AD63F6", "#3584FC", "#FD5812"
 			],
 			plotOptions: {
 				bar: {
@@ -9586,7 +9586,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#37D80A"
+				"#1677ff", "#37D80A"
 			],
 			dataLabels: {
 				enabled: false
@@ -9753,7 +9753,7 @@
 			},
 
 			series: [35],
-			colors: ["#605DFF"],
+			colors: ["#1677ff"],
 			plotOptions: {
 				radialBar: {
 					hollow: {
@@ -9811,7 +9811,7 @@
 				}
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			plotOptions: {
 				bar: {
@@ -10395,7 +10395,7 @@
 				"Air", "Road", "Sea", "Rail"
 			],
 			colors: [
-				"#3584FC", "#FD5812", "#605DFF", "#37D80A"
+				"#3584FC", "#FD5812", "#1677ff", "#37D80A"
 			],
 			dataLabels: {
 				enabled: true,
@@ -10638,7 +10638,7 @@
 				}
 			},
 			colors: [
-				"#9CAAFF", "#605DFF"
+				"#9CAAFF", "#1677ff"
 			],
 			plotOptions: {
 				bar: {
@@ -10762,7 +10762,7 @@
 				}
 			},
 			colors: [
-				"#AD63F6", "#605DFF"
+				"#AD63F6", "#1677ff"
 			],
 			dataLabels: {
 				enabled: false
@@ -11393,7 +11393,7 @@
 				"Remote", "In-office", "Hybrid", "Shift"
 			],
 			colors: [
-				"#FD5812", "#605DFF", "#37D80A", "#AD63F6"
+				"#FD5812", "#1677ff", "#37D80A", "#AD63F6"
 			],
 			stroke: {
 				width: 1,
@@ -11640,7 +11640,7 @@
 				enabled: false
 			},
 			colors: [
-				"#605DFF", "#9CAAFF", "#DDE4FF"
+				"#1677ff", "#9CAAFF", "#DDE4FF"
 			],
 			xaxis: {
 				categories: [
@@ -11718,7 +11718,7 @@
 				type: 'gradient',
 				opacity: 1,
 				gradient: {
-					shade: '#605DFF',
+					shade: '#1677ff',
 					type: "vertical",
 					shadeIntensity: 0.5,
 					gradientToColors: undefined,
@@ -11865,7 +11865,7 @@
 				"Mathematics", "English", "History", "Art", "Music"
 			],
 			colors: [
-				"#37D80A", "#FF4023", "#605DFF", "#AD63F6", "#90C7FF"
+				"#37D80A", "#FF4023", "#1677ff", "#AD63F6", "#90C7FF"
 			],
 			stroke: {
 				width: 1,
@@ -11959,7 +11959,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#DDE4FF"
+				"#1677ff", "#DDE4FF"
 			],
 			dataLabels: {
 				enabled: false
@@ -12302,7 +12302,7 @@
 				width: 1
 			},
 			colors: [
-				"#605DFF"
+				"#1677ff"
 			],
 			fill: {
 				type: 'gradient',
@@ -13312,7 +13312,7 @@
 				"Male", "Female", "Children"
 			],
 			colors: [
-				"#605DFF", "#58F229", "#5DA8FF"
+				"#1677ff", "#58F229", "#5DA8FF"
 			],
 			stroke: {
 				width: 5,
@@ -13405,7 +13405,7 @@
 					data: [-70, -44, -70, -120, -40, -70, -90, -20, -40],
 				},
 			],
-			colors: ['#605DFF', '#C2CDFF'],
+			colors: ['#1677ff', '#C2CDFF'],
 			chart: {
 				type: 'bar',
 				height: 386,
@@ -13878,7 +13878,7 @@
 				"Male", "Female",
 			],
 			colors: [
-				"#605DFF", "#AD63F6"
+				"#1677ff", "#AD63F6"
 			],
 			stroke: {
 				width: 5,
@@ -14168,11 +14168,11 @@
 					left: 5,
 					blur: 3,
 					opacity: 0.6,
-					color: "#605DFF" // Custom color for the shadow
+					color: "#1677ff" // Custom color for the shadow
 				}
 			},
 			colors: [
-				"#605DFF", "#DDE4FF"
+				"#1677ff", "#DDE4FF"
 			],
 			dataLabels: {
 				enabled: false
@@ -14284,7 +14284,7 @@
 				"Female Followers", "Male Followers"
 			],
 			colors: [
-				"#605DFF", "#AD63F6"
+				"#1677ff", "#AD63F6"
 			],
 			dataLabels: {
 				enabled: false,
@@ -14382,7 +14382,7 @@
 					show: false,
 				},
 			},
-			colors: ["#605DFF", '#BF85FB', '#37D80A', '#FD5812'],
+			colors: ["#1677ff", '#BF85FB', '#37D80A', '#FD5812'],
 			grid: {
 				borderColor: '#ECEEF2',
 				strokeDashArray: 8,
@@ -14930,7 +14930,7 @@
 				}
 			},
 			colors: [
-				"#605DFF", "#9CAAFF",
+				"#1677ff", "#9CAAFF",
 			],
 			plotOptions: {
 				bar: {
@@ -15059,7 +15059,7 @@
 				"Men", "Woman",
 			],
 			colors: [
-				"#605DFF", "#AD63F6"
+				"#1677ff", "#AD63F6"
 			],
 			stroke: {
 				width: 0,
@@ -16105,7 +16105,7 @@
 					show: false
 				}
 			},
-			colors: ["#605DFF"],
+			colors: ["#1677ff"],
 			plotOptions: {
 				bar: {
 					horizontal: true
@@ -16385,7 +16385,7 @@
 					type: "donut"
 				},
 				labels: labels,
-				colors: ["#37D80A", "#FE7A36", "#3584FC", "#FF4023", "#AD63F6", "#605DFF"],
+				colors: ["#37D80A", "#FE7A36", "#3584FC", "#FF4023", "#AD63F6", "#1677ff"],
 				stroke: {
 					width: 2,
 					show: true,
@@ -16487,7 +16487,7 @@
 					show: false
 				}
 			},
-			colors: ["#605DFF", "#FF4023"],
+			colors: ["#1677ff", "#FF4023"],
 			plotOptions: {
 				bar: {
 					horizontal: false,
@@ -16813,7 +16813,7 @@
 			},
 			labels: ["Revenue Growth", "Profit Margins", "Cost of Goods Sold", "Market Share", "Sales Volume", "Return on Investment"], // Example sectors
 			colors: [
-				"#37D80A", "#3584FC", "#FE7A36", "#AD63F6", "#FF4023", "#605DFF"
+				"#37D80A", "#3584FC", "#FE7A36", "#AD63F6", "#FF4023", "#1677ff"
 			],
 			stroke: {
 				width: 0,
@@ -16880,7 +16880,7 @@
 				}
 			},
 			colors: [
-				"#37D80A", "#FF4023", "#605DFF"
+				"#37D80A", "#FF4023", "#1677ff"
 			],
 			dataLabels: {
 				enabled: false
@@ -17456,7 +17456,7 @@
 				}
 			},
 			colors: [
-				"#AD63F6", "#605DFF", "#37D80A"
+				"#AD63F6", "#1677ff", "#37D80A"
 			],
 			yaxis: {
 				show: true,
@@ -17688,7 +17688,7 @@
 				}
 			},
 			fill: { opacity: 1 },
-			colors: ["#605DFF"],
+			colors: ["#1677ff"],
 			xaxis: {
 				type: "datetime",
 				axisTicks: { show: true, color: '#64748B' },
@@ -18096,7 +18096,7 @@
 					size: 3,
 					strokeWidth: 0
 				},
-				colors: ["#FD5812", "#37D80A", "#605DFF"],
+				colors: ["#FD5812", "#37D80A", "#1677ff"],
 				fill: {
 					type: 'gradient',
 					gradient: {
@@ -18234,7 +18234,7 @@
 					"BTC 30%", "ETH 25%", "USDC 20%", "ADA 15%", "SHIB 10%"
 				],
 				colors: [
-					"#605DFF", "#757DFF", "#9CAAFF", "#C2CDFF", "#DDE4FF"
+					"#1677ff", "#757DFF", "#9CAAFF", "#C2CDFF", "#DDE4FF"
 				],
 				legend: {
 					show: true,

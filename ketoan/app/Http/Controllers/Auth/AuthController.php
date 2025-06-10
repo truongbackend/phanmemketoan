@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -23,22 +24,34 @@ class AuthController extends Controller
             'password.required' => 'Hãy nhập mật khẩu',
         ]);
 
-        $credentials = request(['email', 'password']);
-        $user = User::where('email', $credentials['email'])->first();
+        // Kiểm tra xác thực
+        if (!$token = Auth::attempt($credentials)) {
+            return response()->json(['error' => 'Email hoặc mật khẩu không đúng'], 401);
+        }
+
+        $user = Auth::user();
 
         if (!$user) {
             return response()->json(['error' => 'Email không tồn tại'], 404);
         }
+
         if ($user->status == 0) {
             return response()->json(['error' => 'Tài khoản của bạn đã bị khóa'], 403);
         }
-        if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Email hoặc mật khẩu không đúng'], 401);
-        }
+
         if ($user->expiration_package && now()->gt(Carbon::parse($user->expiration_package))) {
             return response()->json(['error' => 'Gói sử dụng của bạn đã hết hạn'], 403);
         }
-        return $this->respondWithToken($token);
+
+        // Gán token duy nhất (để login 1 thiết bị duy nhất)
+        $user->api_token = Str::random(60);
+        $user->save();
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'user' => $user
+        ]);
     }
 
 
@@ -52,9 +65,14 @@ class AuthController extends Controller
         ]);
     }
     public function userProfile()
-    {
-        return response()->json(Auth::user());
-    }
+        {
+            $user = auth()->user()->load('roles.permissions');
+            $perms = $user->getAllPermissions()->pluck('name');
+            return response()->json([
+            'user' => $user,
+            'permissions' => $perms
+            ]);
+        }
     public function logout()
     {
         auth()->logout();
