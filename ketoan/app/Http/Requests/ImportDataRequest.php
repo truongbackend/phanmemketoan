@@ -40,7 +40,8 @@ class ImportDataRequest extends FormRequest
             
             'export_receipt_number' => 'nullable|string|max:255',
             'posting_date' => 'required|numeric|in:1,2',
-            'submission_reason' => 'required|string|size:1',
+            'submission_reason' => 'required|array|min:1',
+            'submission_reason.*' => 'required|string',
         ];
     }
 

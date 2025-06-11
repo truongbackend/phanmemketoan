@@ -1,17 +1,20 @@
 <?php
 return [
     'viettel_post' => [
-        "key1" => [
+        "VTP_KEY1" => [
             "column" => "C",
             "column_name" => "Mã đơn hàng",
+            "file" => "push_sales",
         ],
-        "key2" => [
+        "VTP_KEY2" => [
             "column" => "D",
             "column_name" => "Mã vận đơn",
+            "file" => "push_sales",
         ],
-        "key3" => [
+        "VTP_KEY3" => [
             "column" => "N",
             "column_name" => "Tên người nhận",
+            "file" => "push_sales",
         ],
     ]
 ];
