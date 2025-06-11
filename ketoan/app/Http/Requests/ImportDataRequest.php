@@ -36,7 +36,6 @@ class ImportDataRequest extends FormRequest
                 'date_format:"d/m/Y H:i:s"',
                 'after:reporting_date_from',
             ],
-            'export_invoice' => 'required|in:Y,N',
             'export_receipt_number' => 'nullable|string|max:255',
         ];
     }
