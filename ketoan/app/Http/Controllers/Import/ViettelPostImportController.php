@@ -7,12 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DownLoadExportViettelPostRequest;
 use App\Http\Requests\ImportDataRequest;
 use App\Repositories\ExportReceiptViettelPostRepository;
+use App\Services\DataExportService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 
 use App\Traits\LoggerTrait;
+use Dflydev\DotAccessData\Data;
 use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
 
 class ViettelPostImportController extends Controller
@@ -20,10 +22,12 @@ class ViettelPostImportController extends Controller
     use LoggerTrait;
 
     public $exportReceiptViettelPostRepository;
+    public $dataExportService;
 
-    public function __construct(ExportReceiptViettelPostRepository $exportReceiptViettelPostRepository)
+    public function __construct(ExportReceiptViettelPostRepository $exportReceiptViettelPostRepository, DataExportService $dataExportService)
     {
         $this->exportReceiptViettelPostRepository = $exportReceiptViettelPostRepository;
+        $this->dataExportService = $dataExportService;
     }
 
     public function columnSubmitReason()
@@ -43,6 +47,18 @@ class ViettelPostImportController extends Controller
             $export_instance_id = Str::random(40);
 
             $validated = $request->validated();
+            
+            $inputSetting = [
+                'export_receipt_number' => $validated['export_receipt_number'] ?? null,
+                'posting_date' => $validated['posting_date'],
+                'submission_reason' =>  $validated['submission_reason'] ?? [],
+                'account_cash_expense_debt' =>  $validated['account_cash_expense_debt'] ?? null,
+                'account_revenue_credit' =>     $validated['account_revenue_credit'] ?? null,
+                'account_vat_tax' =>          $validated['account_vat_tax'] ?? null,
+                'warehouse_code' =>        $validated['warehouse_code'] ?? null,
+                'account_cost_of_goods_sold' =>     $validated['account_cost_of_goods_sold'] ?? null,
+                'account_inventory' =>     $validated['account_inventory'] ?? null,
+            ];
 
             $fileInfoData = Excel::toArray([], $request->file('file_info'));
             $filePushSaleData = Excel::toArray([], $request->file('file_push_sale'));
@@ -95,7 +111,7 @@ class ViettelPostImportController extends Controller
                 'data' => $filePushSaleFiltered
             ]);
 
-            $fileDataProductDataFiltered = collect($fileDataProductData[0])
+            $fileProductDataFiltered = collect($fileDataProductData[0])
                 ->filter(function($row) {
                     for ($i = 0; $i <= 2; $i++) {
                         if (empty($row[$i])) {
@@ -138,7 +154,7 @@ class ViettelPostImportController extends Controller
                 $diff = floatval($pushRowDetai[11]) - floatval($pushRowDetai[34]) - floatval($infoRow[27]);
             
                 $infoSelected = [
-                    "delivery_code"      => $infoRow[1] ?? null,
+                    "delivery_code"      => $infoRow[2] ?? null,
                     "date_change_status" => $infoRow[42] ?? null,
                     "total_amount"       => $pushRowDetai[11] ?? null,
                     "cod"                => $infoRow[27] ?? null,
@@ -173,6 +189,8 @@ class ViettelPostImportController extends Controller
             Cache::put("viettelpost.normal.{$export_instance_id}", $dataCaseNormal, 60 * 60 * 24 * 7); 
             Cache::put("viettelpost.exception.{$export_instance_id}", $dataCaseException, 60 * 60 * 24 * 7);
             Cache::put("viettelpost.merged.{$export_instance_id}", $fileInfoDataMerged, 60 * 60 * 24 * 7);
+            Cache::put("viettelpost.product.{$export_instance_id}", $fileProductDataFiltered, 60 * 60 * 24 * 7);
+            Cache::put("viettelpost.setting.{$export_instance_id}", $inputSetting, 60 * 60 * 24 * 7);
             
             return response()->json([
                 'message' => 'Successfully imported data',
@@ -253,9 +271,31 @@ class ViettelPostImportController extends Controller
         $dataNormal = Cache::get("viettelpost.normal.{$exportInstanceId}", []);
         $dataException = Cache::get("viettelpost.exception.{$exportInstanceId}", []);
         $dataMerged = Cache::get("viettelpost.merged.{$exportInstanceId}", []);
-
+        $dataProducts = Cache::get("viettelpost.product.{$exportInstanceId}", []);
+        $dataSetting = Cache::get("viettelpost.setting.{$exportInstanceId}", []);
+    
         $dataExportSales = [];
         $dataExportServices = [];
+
+        $dataExportSales = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportSale) {
+                            return in_array($item[1], $arrDeliveryCodeExportSale);
+                        })->values();
+
+        $dataExportSales = $dataExportSales->merge($dataNormal)->values();
+
+        foreach($dataExportSales as $key => $itemExportSales) {
+            $productCodeOfPushSaleProduct = array_column($itemExportSales['push_sale_details'], 4);
+            $filteredProductsOfPushSaleProduct = collect($dataProducts)->filter(function ($item) use ($productCodeOfPushSaleProduct) {
+                                    return in_array($item[0], $productCodeOfPushSaleProduct);
+                                })->values();
+            $this->dataExportService->exportTemplateSales($itemExportSales, $dataSetting, $filteredProductsOfPushSaleProduct);
+        }
+
+        $dataExportServices = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportService) {
+                            return in_array($item[1], $arrDeliveryCodeExportService);
+                        })->values();
+        
+        return response()->json($dataExportSales);
         
         $dataExportService = new \App\Services\DataExportService();
         $headingsExportSales  = $dataExportService->getExportHead('sales');

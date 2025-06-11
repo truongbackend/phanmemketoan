@@ -42,6 +42,15 @@ class ImportDataRequest extends FormRequest
             'posting_date' => 'required|numeric|in:1,2',
             'submission_reason' => 'required|array|min:1',
             'submission_reason.*' => 'required|string',
+
+            'account_cash_expense_debt' => 'required|string|max:255',
+            'account_revenue_credit' => 'required|string|max:255',
+            'account_vat_tax' => 'required|string|max:255',
+            'account_cost_of_goods_sold' => 'required|string|max:255',
+            'account_inventory' => 'required|string|max:255',
+
+            'warehouse_code' => 'required|string|max:255',
+            'customer_code' => 'require|string|max:255',
         ];
     }
 
