@@ -134,9 +134,10 @@ class ViettelPostImportController extends Controller
             
                 ];
     
-                if ($diff === 0.0) {
+                if ($diff == 0) {
                     $hasSpecial = in_array($pushRowDetai[11], $specialValues, true) &&
                                 in_array($infoRow[27], $specialValues, true);
+
                     if ($hasSpecial || (empty($pushRowDetai[11]) && empty($infoRow[27]))) {
                         $infoRow['allow_sales_invoice_export'] = true;
                         $infoSelected['allow_sales_invoice_export'] = true;
