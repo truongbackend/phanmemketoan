@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('accounting')->group(function () {
     Route::prefix('invoice-processing')->group(function () {
         Route::prefix('viettel-post')->group(function () {
+            Route::post('/column-submit-reason', [ViettelPostImportController::class, 'columnSubmitReason'])->name('accounting.invoiceprocessing.viettelpost.colsubmitreason');
             Route::post('/data', [ViettelPostImportController::class, 'importData'])->name('accounting.invoiceprocessing.viettelpost.data');
             Route::post('/export', [ViettelPostImportController::class, 'downloadExport'])->name('accounting.invoiceprocessing.viettelpost.export');
         });

@@ -27,6 +27,7 @@ class ImportDataRequest extends FormRequest
             'file_info' => 'required|file',
             'file_push_sale' => 'required|file',
             'file_data_product' => 'required|file',
+            
             'reporting_date_from' => [
                 'required',
                 'date_format:"d/m/Y H:i:s"',
@@ -36,7 +37,10 @@ class ImportDataRequest extends FormRequest
                 'date_format:"d/m/Y H:i:s"',
                 'after:reporting_date_from',
             ],
+            
             'export_receipt_number' => 'nullable|string|max:255',
+            'posting_date' => 'required|numeric|in:1,2',
+            'submission_reason' => 'required|string|size:1',
         ];
     }
 

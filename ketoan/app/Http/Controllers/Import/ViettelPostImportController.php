@@ -26,6 +26,17 @@ class ViettelPostImportController extends Controller
         $this->exportReceiptViettelPostRepository = $exportReceiptViettelPostRepository;
     }
 
+    public function columnSubmitReason()
+    {
+        $viettelPostConfig = config('col_submit_reason.viettel_post', []);
+
+        return response()->json([
+                'message' => 'Successfully retrieved column submit reason',
+                'status' => true,
+                'data' => $viettelPostConfig
+            ]);
+    }
+
     public function importData(ImportDataRequest $request)
     {
         try {
