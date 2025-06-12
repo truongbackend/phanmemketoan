@@ -118,6 +118,7 @@ class packageController extends Controller
         $package->discould = $request->discould;
         $package->expiration_time = $request->expiration_time;
         $package->note = $request->note;
+        $package->default_packages = $request->default_packages;
         $package->save();
         return response()->json(['message' => 'Cập nhật thành công']);
     }

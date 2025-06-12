@@ -43,7 +43,12 @@ const adminRoutes = [
                 path: "role",
                 name: "admin-role",
                 component: () => import("../page/admin/role/index.vue"),
-            }
+            },
+            {
+                path: "setting",
+                name: "admin-setting",
+                component: () =>import ("../page/admin/setting/index.vue"),
+            },
         ]
     },
     {

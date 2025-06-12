@@ -73,10 +73,10 @@
                                 <span class="badge bg-danger bg-opacity-10 text-danger fw-normal">Ngưng hoạt động</span>
                             </td>
                             <td class="text-secondary">
-                                <button v-if="hasPermission('package edit')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
+                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
                                     <i class="material-symbols-outlined fs-16 text-body">edit</i>
                                 </button>
-                                <button v-if="hasPermission('package delete')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
+                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
                                         data-bs-toggle="modal" data-bs-target="#deleteModal"
                                         @click="deleteId = Items.id">
                                     <i class="material-symbols-outlined fs-16 text-danger">delete</i>
@@ -139,12 +139,6 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ghi chú</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
                                     <div class="d-flex justify-content-end flex-wrap gap-3">
                                         <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
                                         <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="createPackage"> <i class="ri-add-line text-white fw-medium"></i> Tạo mới</button>
@@ -202,6 +196,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-4">
+                                       <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" :value="1" v-model="default_packages">
+                                            <label class="form-check-label"> Đặt mặc định đăng ký </label>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="col-lg-12">
                                     <div class="d-flex justify-content-end flex-wrap gap-3">
@@ -269,6 +272,7 @@ export default defineComponent({
         const globalState = inject('globalState');
         const baseUrl = globalState.baseUrl;
         const deleteId = ref(null);
+        const default_packages = ref(false);
         const formatPrice = (value) => {
             if (!value) return '';
             const cleaned = value.toString().replace(/[^\d]/g, '');
@@ -333,6 +337,7 @@ export default defineComponent({
                     discount.value = data.discould;
                     expiration_time.value = data.expiration_time;
                     note.value = data.note;
+                    default_packages.value = data.default_packages === 1;
                     formattedPrice.value = formatPrice(price.value);
                 })
                 .catch((error) => {
@@ -397,6 +402,7 @@ export default defineComponent({
                         discould: discount.value,
                         expiration_time: expiration_time.value,
                         note: note.value,
+                        default_packages:default_packages.value,
                     })
                     .then(() => {
                         getPackage();
@@ -446,7 +452,8 @@ export default defineComponent({
             packagesId,
             updatePackage,
             deleteId,
-            confirmDelete
+            confirmDelete,
+            default_packages
         };
     },
 });

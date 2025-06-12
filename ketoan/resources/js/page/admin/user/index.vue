@@ -48,9 +48,7 @@
                             <th scope="col">
                                 Số điện thoại
                             </th>
-                            <th scope="col">
-                                Địa chỉ
-                            </th>
+
                             <th scope="col">
                                 Ngày đăng ký
                             </th>
@@ -75,7 +73,6 @@
                             <td>{{ Items.name }}</td>
                             <td class="text-secondary">{{ Items.email }}</td>
                             <td class="text-secondary">{{ Items.phone}}</td>
-                            <td class="text-secondary">{{ Items.address}}</td>
                             <td class="text-secondary">{{ Items.create_package}}</td>
                             <td class="text-secondary">{{ Items.expiration_package}}</td>
                             <td class="text-secondary">{{ Items.duration }}</td>
@@ -286,6 +283,7 @@
                                                 {{ pkg.name }}
                                             </option>
                                         </select>
+
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -294,6 +292,16 @@
                                         <select v-model="selectedStatus" class="form-select form-control h-60" aria-label="Default select example">
                                             <option value="1" class="text-dark">Hoạt động</option>
                                             <option value="0" class="text-dark">Ngưng hoạt động</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-4">
+                                        <label class="label text-secondary">Nhóm quyền</label>
+                                        <select v-model="selectedRole" class="form-select form-control h-60">
+                                            <option v-for="roles in role" :key="roles.id" :value="roles.id">
+                                                {{ roles.name }}
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -408,7 +416,6 @@ export default defineComponent({
                     package_id: selectedPackageId.value,
                     status: selectedStatus.value,
                     note: note.value,
-                    role_id: selectedRole.value
                 })
                 .then(() => {
                     getUser();
@@ -447,6 +454,7 @@ export default defineComponent({
                     package_id: selectedPackageId.value,
                     status: selectedStatus.value,
                     note: note.value,
+                    role_id: selectedRole.value
                 })
                 .then(() => {
                     getUser();

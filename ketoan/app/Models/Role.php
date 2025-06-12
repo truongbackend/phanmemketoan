@@ -10,6 +10,17 @@ class Role extends SpatieRole
         'name',
         'guard_name',
         'note',
-        'status'
+        'status',
+        'default_role'
     ];
+    protected static function booted()
+    {
+        static::saving(function (Role $role) {
+            if ($role->default_role	) {
+                self::where('id', '!=', $role->id)
+                    ->update(['default_role' => false]);
+            }
+
+        });
+    }
 }

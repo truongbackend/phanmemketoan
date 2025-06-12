@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\package;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -81,14 +82,27 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'email' => [ 'unique:users,email'],
+            'email' => ['unique:users,email'],
         ], [
             'email.unique' => 'Email đã tồn tại',
         ]);
+        $package = Package::where('default_packages', 1)->first();
+
+        if (!$package) {
+            return response()->json(['error' => 'Không tìm thấy gói mặc định'], 400);
+        }
+
+        $expiration_days = $package->expiration_time;
+        $expiration_package = Carbon::now()->addDays($expiration_days);
+        $now = Carbon::now();
         $user = User::create([
             'name' => $request->name,
             'email' => $validatedData['email'],
             'password' => bcrypt($request->password),
+            'packages_id' => $package->id,
+            'create_package' => $now,
+            'expiration_package' => $expiration_package,
+
         ]);
 
         $token = auth()->login($user);
@@ -99,6 +113,7 @@ class AuthController extends Controller
             'user' => $user,
         ]);
     }
+
 
 
 }

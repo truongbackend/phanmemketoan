@@ -5,14 +5,13 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 d-none d-lg-block">
                     <img src="assets/images/register.jpg" class="rounded-3" alt="register">
+
                 </div>
                 <div class="col-lg-6">
                     <div class="mw-480 ms-lg-auto">
                         <div class="d-inline-block mb-4">
-                            <img src="assets/images/logo.svg" class="rounded-3 for-light-logo" alt="login">
-                            <img src="assets/images/white-logo.svg" class="rounded-3 for-dark-logo" alt="login">
                         </div>
-                        <h3 class="fs-28 mb-2">Đăng kí tài khoản</h3>
+                        <h3 class="fs-28 mb-2">Đăng kí tài khoản với Pnl International </h3>
                         <p class="fw-medium fs-16 mb-4">Đăng ký bằng tài khoản mạng xã hội hoặc nhập thông tin của bạn</p>
                         <div class="row justify-content-center">
                             <div class="col-lg-4 col-sm-4">

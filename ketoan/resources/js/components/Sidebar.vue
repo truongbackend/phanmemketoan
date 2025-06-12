@@ -12,40 +12,28 @@
 
     <aside id="layout-menu" class="layout-menu menu-vertical menu" data-simplebar>
         <ul class="menu-inner">
-            <li class="menu-item" v-if="hasPermission('delivery')">
+            <li class="menu-item" >
                 <router-link :to="{ name: 'admin-delivery' }" class="menu-link" >
                     <span class="material-symbols-outlined menu-icon">calculate</span>
                     <span class="title">Xuất hoá đơn giao hàng</span>
                 </router-link>
             </li>
-            <li class="menu-item" v-if="hasPermission('package')">
+            <li class="menu-item" >
                 <router-link :to="{ name: 'admin-package' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">local_activity</span>
                     <span class="title">Gói</span>
                 </router-link>
             </li>
-            <li class="menu-item" v-if="hasPermission('user')">
-                <router-link :to="{ name: 'admin-user' }" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">person</span>
-                    <span class="title">User</span>
-                </router-link>
-            </li>
-            <li class="menu-item" v-if="hasPermission('product')">
+            <li class="menu-item">
                 <router-link :to="{ name: 'admin-product' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">dataset</span>
                     <span class="title">Hàng hoá</span>
                 </router-link>
             </li>
             <li class="menu-item">
-                <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">logout</span>
-                    <span class="title">Thông tin</span>
-                </router-link>
-            </li>
-            <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle active">
                     <span class="material-symbols-outlined menu-icon">account_box</span>
-                    <span class="title">Phân quyền</span>
+                    <span class="title">Hệ thống</span>
                 </a>
                 <ul class="menu-sub">
                     <li class="menu-item">
@@ -54,8 +42,13 @@
                         </router-link>
                     </li>
                     <li class="menu-item">
-                        <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+                        <router-link :to="{ name: 'admin-user' }" class="menu-link">
                             Người dùng
+                        </router-link>
+                    </li>
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-setting' }" class="menu-link">
+                            Cài đặt hệ thống
                         </router-link>
                     </li>
 
@@ -65,12 +58,6 @@
                 <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">pie_chart</span>
                     <span class="title">Báo cáo</span>
-                </router-link>
-            </li>
-            <li class="menu-item">
-                <router-link :to="{ name: 'admin-profile' }" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">contact_page</span>
-                    <span class="title">Tài khoản</span>
                 </router-link>
             </li>
             <li class="menu-item">
@@ -85,12 +72,11 @@
                     <span class="title">Khiếu nại</span>
                 </router-link>
             </li>
-
             <li class="menu-item">
-                <a href="logout.html" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">logout</span>
-                    <span class="title">Logout</span>
-                </a>
+                <router-link :to="{ name: 'admin-profile' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">contact_page</span>
+                    <span class="title">Thông tin tài khoản</span>
+                </router-link>
             </li>
         </ul>
     </aside>

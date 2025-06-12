@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('status')->default(1);
             $table->string('expiration_time');
             $table->string('user_create');
+            $table->boolean('default')->default(0);
         });
     }
 

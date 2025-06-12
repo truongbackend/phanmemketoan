@@ -10,7 +10,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4 active" href="landing-page.html">Home</a>
+                            <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4 active" href="landing-page.html">Trang chủ</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4" href="features.html">Features</a>
@@ -128,7 +128,7 @@
             <div class="container">
                 <div class="section-title mw-630">
                     <span class="top-title">
-                        <span>Testimonials</span>
+                        <span>Lời chứng thực</span>
                     </span>
                     <h2>Inspiring Feedback: What Users Love About Trezo Dashboard</h2>
                 </div>
@@ -562,16 +562,16 @@
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <div class="footer-single-item mb-4 ms-lg-5 ps-lg-4">
-                            <h3 class="mb-md-4 mb-3 fw-semibold">Quick Links</h3>
+                            <h3 class="mb-md-4 mb-3 fw-semibold">Liên kết nhanh</h3>
                             <ul class="ps-0 mb-0 list-unstyled">
                                 <li class="mb-2 pb-1">
-                                    <a href="landing-page.html" class="text-decoration-none">Home</a>
+                                    <a href="landing-page.html" class="text-decoration-none">Trang chủ</a>
                                 </li>
                                 <li class="mb-2 pb-1">
-                                    <a href="features.html" class="text-decoration-none">Features</a>
+                                    <a href="features.html" class="text-decoration-none">Tính năng</a>
                                 </li>
                                 <li class="mb-2 pb-1">
-                                    <a href="faqs.html" class="text-decoration-none">Testimonials</a>
+                                    <a href="faqs.html" class="text-decoration-none">Lời chứng thực</a>
                                 </li>
                                 <li class="mb-0">
                                     <a href="our-team.html" class="text-decoration-none">Our Team</a>
@@ -587,13 +587,13 @@
                                     <a href="#" class="text-decoration-none">Terms & Conditions</a>
                                 </li>
                                 <li class="mb-2 pb-1">
-                                    <a href="#" class="text-decoration-none">Cookie Policy</a>
+                                    <a href="#" class="text-decoration-none">Chính sách cookie</a>
                                 </li>
                                 <li class="mb-2 pb-1">
                                     <a href="#" class="text-decoration-none">Notice at Collection</a>
                                 </li>
                                 <li class="mb-0">
-                                    <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                    <a href="#" class="text-decoration-none">Chính sách bảo mật</a>
                                 </li>
                             </ul>
                         </div>
