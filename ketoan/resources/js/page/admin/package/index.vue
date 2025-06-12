@@ -73,16 +73,19 @@
                                 <span class="badge bg-danger bg-opacity-10 text-danger fw-normal">Ngưng hoạt động</span>
                             </td>
                             <td class="text-secondary">
-                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
+                                <button v-if="hasPermission('package edit')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
                                     <i class="material-symbols-outlined fs-16 text-body">edit</i>
                                 </button>
-                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
+                                <button v-if="hasPermission('package delete')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
                                         data-bs-toggle="modal" data-bs-target="#deleteModal"
                                         @click="deleteId = Items.id">
                                     <i class="material-symbols-outlined fs-16 text-danger">delete</i>
                                 </button>
                             </td>
                         </tr>
+
+
+
                     </tbody>
                 </table>
             </div>
@@ -133,6 +136,11 @@
                                         <div class="form-group position-relative">
                                             <textarea v-model="note" class="form-control text-dark" placeholder="Thông tin gói hàng 1 hàng là 1 tính năng ... " cols="30" rows="4"></textarea>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-4">
+                                        <label class="label text-secondary">Ghi chú</label>
                                     </div>
                                 </div>
 

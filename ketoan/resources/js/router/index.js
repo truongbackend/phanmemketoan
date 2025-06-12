@@ -23,7 +23,6 @@ router.beforeEach(async (to, from, next) => {
         const { data } = await axios.get('/api/profile');
         globalState.currentUser = data.user;
         globalState.permissions = data.permissions;
-        console.log(globalState.permissions);
       } catch (err) {
         Cookies.remove('token');
         return next({ name: 'login' });

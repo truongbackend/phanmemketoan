@@ -77,7 +77,7 @@
                                 <div class="form-group mb-4">
                                     <label class="label">Phần mềm hỗ trợ</label>
                                     <div class="form-group position-relative">
-                                        <input type="text" class="form-control text-dark ps-5 h-55" placeholder="Amis" disabled>
+                                        <input type="text" class="form-control text-dark ps-5  h-55" placeholder="Amis" disabled>
                                         <i class="ri-cake-3-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                     </div>
                                 </div>
@@ -112,15 +112,18 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mb-4">
                                         <label class="label">File mã hàng hoá</label>
-                                        <input type="file" class="form-control text-gray-light h-55" @change="handleFileUpload($event, 'file_data_product')">
+                                        <input type="file" class="form-control text-gray-light h-55" @change="handleFileUpload($event, 'file_data_product')" :class="{'is-invalid': !file_data_productValid}">
+                                        <div v-if="!file_data_productValid" class="invalid-feedback">File mã hàng hoá không được để trống</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group mb-4">
                                         <label class="label">Từ ngày</label>
                                         <div class="form-group position-relative">
-                                            <input v-model="reporting_date_from" type="datetime-local" class="form-control ps-5 text-gray-light h-55" placeholder="Enter number">
-                                            <i class="ri-calendar-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input v-model="reporting_date_from" :class="{'is-invalid': !reporting_date_fromValid}" type="datetime-local" class="form-control  text-gray-light h-55" placeholder="Chọn ngày bắt đầu">
+                                            <div v-if="!reporting_date_fromValid" class="invalid-feedback">
+                                                Ngày bắt đầu không được để trống
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -128,8 +131,10 @@
                                     <div class="form-group mb-4">
                                         <label class="label">Đến ngày</label>
                                         <div class="form-group position-relative">
-                                            <input type="datetime-local" v-model="reporting_date_to" class="form-control ps-5 text-gray-light h-55" placeholder="Enter number">
-                                            <i class="ri-calendar-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input type="datetime-local" v-model="reporting_date_to" :class="{'is-invalid': !reporting_date_toValid}" class="form-control text-gray-light h-55" placeholder="Enter number">
+                                            <div v-if="!reporting_date_toValid" class="invalid-feedback">
+                                                Đến ngày không được để trống
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -137,25 +142,31 @@
                                     <div class="form-group mb-4">
                                         <label class="label">Số phiếu xuất</label>
                                         <div class="form-group position-relative">
-                                            <input type="text" v-model="export_receipt_number" class="form-control ps-5 text-gray-light h-55" placeholder="Số phiếu">
-                                            <i class="ri-input-field position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input type="text" v-model="export_receipt_number" class="form-control  text-gray-light h-55" placeholder="Số phiếu">
+
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-lg-4">
                                     <label class="label">Ngày hạch toán</label>
-                                    <div class="form-check mb-3">
+
+                                    <div class="form-check mb-1">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="ngayhoachtoan1" :value="1" v-model="posting_date">
                                         <label class="form-check-label" for="ngayhoachtoan1">
                                             Lấy theo ngày giao hàng
                                         </label>
                                     </div>
 
-                                    <div class="form-check mb-3">
+                                    <div class="form-check mb-1">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="ngayhoachtoan2" :value="2" v-model="posting_date">
                                         <label class="form-check-label" for="ngayhoachtoan2">
                                             Lấy ngày hiện tại
                                         </label>
+                                    </div>
+
+                                    <div v-if="!posting_dateValid" class="invalid-feedback d-block">
+                                        Vui lòng chọn ngày hạch toán
                                     </div>
                                 </div>
 
@@ -182,13 +193,18 @@
                                             Tên người mua
                                         </label>
                                     </div>
+                                    <div v-if="!submission_reasonValid" class="invalid-feedback d-block">
+                                        Vui lòng chọn Diễn giải lý do nộp
+                                    </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group mb-4">
                                         <label class="label">Mã khách hàng</label>
                                         <div class="form-group position-relative">
-                                            <input v-model="customer_code" type="text" class="form-control ps-5 text-gray-light h-55" placeholder="Mã khách hàng">
-                                            <i class="ri-input-field position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input v-model="customer_code" type="text" class="form-control  text-gray-light h-55" placeholder="Mã khách hàng" :class="{'is-invalid': !customer_codeValid}">
+                                            <div v-if="!customer_codeValid" class="invalid-feedback d-block">
+                                                Vui lòng điền mã khách hàng
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -197,8 +213,8 @@
                                     <div class="form-group mb-4">
                                         <label class="label">TK Tiền/Chi phí/Nợ</label>
                                         <div class="form-group position-relative">
-                                            <input v-model="account_cash_expense_debt" type="text" class="form-control ps-5 text-gray-light h-55" placeholder="Số phiếu" value="131">
-                                            <i class="ri-input-field position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input v-model="account_cash_expense_debt" type="text" class="form-control  text-gray-light h-55" placeholder="Số phiếu" value="131">
+
                                         </div>
                                     </div>
                                 </div>
@@ -206,8 +222,8 @@
                                     <div class="form-group mb-4">
                                         <label class="label">TK Doanh thu/Có</label>
                                         <div class="form-group position-relative">
-                                            <input v-model="account_revenue_credit" type="text" class="form-control ps-5 text-gray-light h-55" placeholder="Số phiếu" value="5111">
-                                            <i class="ri-input-field position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input v-model="account_revenue_credit" type="text" class="form-control  text-gray-light h-55" placeholder="Số phiếu" value="5111">
+
                                         </div>
                                     </div>
                                 </div>
@@ -215,8 +231,8 @@
                                     <div class="form-group mb-4">
                                         <label class="label">TK thuế GTGT</label>
                                         <div class="form-group position-relative">
-                                            <input type="text" v-model="account_vat_tax" class="form-control ps-5 text-gray-light h-55" placeholder="Số phiếu" value="33311">
-                                            <i class="ri-input-field position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input type="text" v-model="account_vat_tax" class="form-control  text-gray-light h-55" placeholder="Số phiếu" value="33311">
+
                                         </div>
                                     </div>
                                 </div>
@@ -224,9 +240,12 @@
                                     <div class="form-group mb-4">
                                         <label class="label">Mã kho</label>
                                         <div class="form-group position-relative">
-                                            <input type="text" v-model="warehouse_code" class="form-control ps-5 text-gray-light h-55" placeholder="Mã kho">
-                                            <i class="ri-input-field position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input type="text" v-model="warehouse_code" :class="{'is-invalid': !warehouse_codeValid}" class="form-control  text-gray-light h-55" placeholder="Mã kho">
+                                            <div v-if="!warehouse_codeValid" class="invalid-feedback d-block">
+                                                Vui lòng không để trống Mã kho
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -234,8 +253,8 @@
                                     <div class="form-group mb-4">
                                         <label class="label">TK giá vốn</label>
                                         <div class="form-group position-relative">
-                                            <input type="text" v-model="account_cost_of_goods_sold" class="form-control ps-5 text-gray-light h-55" placeholder="Số phiếu" value="632">
-                                            <i class="ri-input-field position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input type="text" v-model="account_cost_of_goods_sold" class="form-control  text-gray-light h-55" placeholder="Số phiếu" value="632">
+
                                         </div>
                                     </div>
                                 </div>
@@ -243,8 +262,8 @@
                                     <div class="form-group mb-4">
                                         <label class="label">TK Kho</label>
                                         <div class="form-group position-relative">
-                                            <input type="text" v-model="account_inventory" class="form-control ps-5 text-gray-light h-55" placeholder="Số phiếu" value="1561">
-                                            <i class="ri-input-field position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                            <input type="text" v-model="account_inventory" class="form-control  text-gray-light h-55" placeholder="Số phiếu" value="1561">
+
                                         </div>
                                     </div>
                                 </div>
@@ -359,6 +378,15 @@ export default defineComponent({
         const file_push_sale = ref(null);
         const file_data_product = ref(null);
         const order = ref([]);
+        const FileInfoValid = ref(true);
+        const file_push_saleValid = ref(true);
+        const file_data_productValid = ref(true);
+        const reporting_date_fromValid = ref(true);
+        const reporting_date_toValid = ref(true);
+        const posting_dateValid = ref(true);
+        const submission_reasonValid = ref(true);
+        const warehouse_codeValid = ref(true);
+        const customer_codeValid = ref(true);
         const handleFileUpload = (event, fileType) => {
             const file = event.target.files[0];
             if (file) {
@@ -391,13 +419,29 @@ export default defineComponent({
         };
 
         const sendFileDelivery = async () => {
-            if (!reporting_date_from.value || !reporting_date_to.value || !posting_date.value ||
-                !account_cash_expense_debt.value || !account_revenue_credit.value ||
-                !customer_code.value || !account_cost_of_goods_sold.value || !account_inventory.value) {
-                toast.error('Vui lòng điền đầy đủ các trường có dấu (*)');
+            FileInfoValid.value = !!file_info.value;
+            file_push_saleValid.value = !!file_push_sale.value;
+            file_data_productValid.value = !!file_data_product.value;
+            reporting_date_fromValid.value = !!reporting_date_from.value;
+            reporting_date_toValid.value = !!reporting_date_to.value;
+            posting_dateValid.value = posting_date.value === 1 || posting_date.value === 2;
+            submission_reasonValid.value = submission_reason.value.length > 0;
+            warehouse_codeValid.value = !!warehouse_code.value.trim();
+            customer_codeValid.value = !!customer_code.value.trim();
+            if (
+                !FileInfoValid.value ||
+                !file_push_saleValid.value ||
+                !file_data_productValid.value ||
+                !reporting_date_fromValid.value ||
+                !reporting_date_toValid.value ||
+                !posting_dateValid.value ||
+                !submission_reasonValid.value ||
+                !warehouse_codeValid.value ||
+                !customer_codeValid.value
+            ) {
+                toast.error('Vui lòng điền đầy đủ thông tin trước khi gửi.');
                 return;
             }
-
             const formData = new FormData();
             const formatDateTime = (isoDateTimeString) => {
                 if (!isoDateTimeString) return '';
@@ -481,7 +525,20 @@ export default defineComponent({
             file_info,
             file_push_sale,
             file_data_product,
-            order
+            order,
+            FileInfoValid,
+            file_push_saleValid,
+            file_data_productValid,
+            reporting_date_fromValid,
+            reporting_date_toValid,
+            posting_dateValid,
+            submission_reasonValid,
+            warehouse_codeValid,
+            customer_codeValid,
+
+            handleFileUpload,
+            sendFileDelivery,
+            goToTab
         };
     },
 });
