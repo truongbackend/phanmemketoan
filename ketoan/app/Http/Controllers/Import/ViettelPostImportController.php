@@ -343,15 +343,11 @@ class ViettelPostImportController extends Controller
                 $zip->close();
             } else {
                 throw new \Exception('Không thể tạo file zip: ' . $zipPath);
-            }
+           }
 
             Storage::delete($filePath);
-            $downloadUrl = Storage::url('exports/' . $zipFileName);
-
-            return response()->json([
-                'status' => true,
-                'download_url' => $downloadUrl
-            ]);
+            
+            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error data import',
