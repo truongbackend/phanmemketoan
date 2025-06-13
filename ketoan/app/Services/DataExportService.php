@@ -102,7 +102,7 @@ class DataExportService
 
                 $arrDataGenerateOrderPricingSummary = [
                     'order_code' => $dataInput[2],
-                    'order_total_amount' => $pushSalesFirstItem[11],
+                    'order_total_amount' => $pushSalesFirstItem[8],
                     'order_total_discount' => $pushSalesFirstItem[9],
                     'order_cod_amount' => empty($pushSalesFirstItem[10]) ? 0 : $pushSalesFirstItem[10],
                     'product_item' => [
@@ -117,13 +117,12 @@ class DataExportService
 
                 $bonus_product = "";
 
-                if($pushSaleItemDetail[6] * $pricingSummary['unit_price'] = 0){
+                if($pushSaleItemDetail[6] * $pricingSummary['unit_price'] == 0){
                     $bonus_product = "Có";
                 }
                 if ($pushSaleItemDetail[6] * $pricingSummary['unit_price'] > 0){
                     $bonus_product = "Không";
                 }
-
 
                 $rowsItem[] = [
                     "A" => "Bán hàng hóa trong nước",
@@ -404,7 +403,7 @@ class DataExportService
 
     public function generateOrderPricingSummary($productOrder, $manyProduct = false){
         try{
-             $revenue = 0;
+            $revenue = 0;
             $unit_price = 0;
             $subtotal_amount = 0;
             $tax_amount = 0;
@@ -447,6 +446,10 @@ class DataExportService
                 $unit_price = $revenue / $productItem['product_quantity'] / (1 + $productItem['tax_fee'] / 100);
                 $unit_price = round($unit_price);
 
+                // if($productOrder['order_code'] == "WB00151458917PS"){
+                //     dd($productOrder);
+                // }
+
                 $subtotal_amount = $unit_price * $productItem['product_quantity'];
                 $tax_amount = $revenue - $subtotal_amount;
             }
@@ -455,7 +458,7 @@ class DataExportService
                 'revenue' => $revenue,
                 'unit_price' => $unit_price,
                 'subtotal_amount' =>    $subtotal_amount,
-                'tax_amount' => $tax_amount,
+                'tax_amount' => round($tax_amount),
             ];
         }catch (\Exception $e) {
             dd($e);

@@ -64,7 +64,7 @@ return [
         'BH' => 'Mã công trình',
         'BI' => 'Số đơn đặt hàng',
         'BJ' => 'Số hợp đồng bán',
-        'AK' => 'Mã thống kê',
+        'BK' => 'Mã thống kê',
         'BL' => 'CP không hợp lý',
         'BM' => 'Mã kho',
         'BN' => 'TK giá vốn',

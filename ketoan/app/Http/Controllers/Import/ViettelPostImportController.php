@@ -316,7 +316,7 @@ class ViettelPostImportController extends Controller
             $dataExportService = new \App\Services\DataExportService();
             $headingsExportSales  = $dataExportService->getExportHead('sales');
             $headingsExportServices = $dataExportService->getExportHead('services');
-            
+            //dd($dataExportSalesOutput);
             array_unshift($dataExportSalesOutput, $headingsExportSales);
             
             $filename = 'export_' . date('Ymd_His') . '.' . 'xlsx';
