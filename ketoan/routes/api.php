@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\packageController;
 use App\Http\Controllers\Admin\notificationController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Import\ViettelPostImportController;
 
 
@@ -39,6 +40,7 @@ Route::post('register', [AuthController::class, 'register']);
 Route::get('profile', [AuthController::class, 'userProfile']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::resource('packages', packageController::class);
+Route::resource('product', ProductController::class);
 Route::resource('notification', notificationController::class);
 Route::get('user', [UserController::class, 'index']);
 Route::post('user', [UserController::class, 'store']);

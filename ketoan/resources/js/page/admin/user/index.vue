@@ -393,7 +393,15 @@ export default defineComponent({
                         return { ...u, duration };
                     });
                     packageList.value = response.data.packages;
+                    const defaultPkg = packageList.value.find(p => p.default_packages === 1);
+                    if (defaultPkg) {
+                        selectedPackageId.value = defaultPkg.id;
+                    }
                     role.value = response.data.role;
+                    const defaultRole = role.value.find(r => r.default_role === 1);
+                    if (defaultRole) {
+                        selectedRole.value = defaultRole.id;
+                    }
                     totalPages.value = pagination.last_page;
                 })
                 .catch((error) => {
@@ -413,7 +421,7 @@ export default defineComponent({
                     address: address.value,
                     email: email.value,
                     expiration_package: expiration_package.value,
-                    package_id: selectedPackageId.value,
+                    packages_id: selectedPackageId.value,
                     status: selectedStatus.value,
                     note: note.value,
                 })
@@ -451,10 +459,10 @@ export default defineComponent({
                     address: address.value,
                     email: email.value,
                     expiration_package: expiration_package.value,
-                    package_id: selectedPackageId.value,
+                    packages_id: selectedPackageId.value,
                     status: selectedStatus.value,
                     note: note.value,
-                    role_id: selectedRole.value
+                    role_id: selectedRole.value,
                 })
                 .then(() => {
                     getUser();
@@ -510,9 +518,10 @@ export default defineComponent({
                     address.value = data.address;
                     expiration_package.value = data.expiration_package;
                     note.value = data.note;
-                    selectedPackageId.value = data.packages_id;
+                    selectedPackageId.value = data.packages_id ?? null;
                     selectedStatus.value = data.status;
                     userId.value = data.id;
+                    selectedRole.value = data.role_id ?? null;
                 })
                 .catch((error) => {
                     toast.error('Lấy thông tin người dùng thất bại');

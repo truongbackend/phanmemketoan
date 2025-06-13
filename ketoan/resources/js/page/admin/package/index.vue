@@ -63,9 +63,9 @@
                                 {{ index + 1 }}
                             </td>
                             <td>{{ Items.name }}</td>
-                            <td class="text-secondary">{{ Items.price }}</td>
-                            <td class="text-secondary">{{ Items.discould}} %</td>
-                            <td class="text-secondary">{{ Items.expiration_time}}</td>
+                            <td class="text-secondary">{{ formatPrice(Items.price) }} đ</td>
+                            <td class="text-secondary">{{ Items.discould}}%</td>
+                            <td class="text-secondary">{{ Items.expiration_time}} Ngày</td>
                             <td v-if="Items.status === 1" class="text-secondary">
                                 <span class="badge bg-success bg-opacity-10 text-success fw-normal">Hoạt động</span>
                             </td>
@@ -125,8 +125,8 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Thời hạn(tháng)</label>
-                                        <input type="text" v-model="expiration_time" class="form-control h-60 border-border-color" placeholder="1 tháng" :class="{'is-invalid': !expirationValid}">
+                                        <label class="label text-secondary">Thời hạn sử dụng gói (Ngày)</label>
+                                        <input type="text" v-model="expiration_time" class="form-control h-60 border-border-color" placeholder="1 ngày" :class="{'is-invalid': !expirationValid}">
                                         <div v-if="!expirationValid" class="invalid-feedback">Thời hạn không hợp lệ</div>
                                     </div>
                                 </div>
@@ -183,7 +183,7 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Thời hạn(tháng)</label>
+                                        <label class="label text-secondary">Thời hạn sử dụng gói (Ngày)</label>
                                         <input type="text" v-model="expiration_time" class="form-control h-60 border-border-color" placeholder="1 tháng" :class="{'is-invalid': !expirationValid}">
                                         <div v-if="!expirationValid" class="invalid-feedback">Thời hạn không hợp lệ</div>
                                     </div>
@@ -276,7 +276,7 @@ export default defineComponent({
         const formatPrice = (value) => {
             if (!value) return '';
             const cleaned = value.toString().replace(/[^\d]/g, '');
-            return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         };
 
         const cleanInput = (value) => {
@@ -453,7 +453,8 @@ export default defineComponent({
             updatePackage,
             deleteId,
             confirmDelete,
-            default_packages
+            default_packages,
+            formatPrice
         };
     },
 });

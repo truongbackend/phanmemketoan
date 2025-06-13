@@ -41,7 +41,7 @@
                             Nhóm quyền
                         </router-link>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item" v-if="hasPermission('user')">
                         <router-link :to="{ name: 'admin-user' }" class="menu-link">
                             Người dùng
                         </router-link>

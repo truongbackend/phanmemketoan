@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\package;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -86,12 +87,13 @@ class AuthController extends Controller
         ], [
             'email.unique' => 'Email đã tồn tại',
         ]);
-        $package = Package::where('default_packages', 1)->first();
+        $role = Role::where('default_role', 1)->first();
 
+
+        $package = Package::where('default_packages', 1)->first();
         if (!$package) {
             return response()->json(['error' => 'Không tìm thấy gói mặc định'], 400);
         }
-
         $expiration_days = $package->expiration_time;
         $expiration_package = Carbon::now()->addDays($expiration_days);
         $now = Carbon::now();
@@ -104,7 +106,9 @@ class AuthController extends Controller
             'expiration_package' => $expiration_package,
 
         ]);
-
+        if ($role) {
+            $user->roles()->attach($role->id);
+        }
         $token = auth()->login($user);
         return response()->json([
             'access_token' => $token,

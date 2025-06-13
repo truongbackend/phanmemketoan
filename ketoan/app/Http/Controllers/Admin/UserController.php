@@ -80,17 +80,26 @@ class UserController extends Controller
         $users = User::findOrFail($id);
         $users->name = $request->name;
         $users->phone = $request->phone;
+        $users->packages_id = $request->packages_id;
         $users->address = $request->address;
         $users->expiration_package = $request->expiration_package;
         $users->note = $request->note;
         $users->status = $request->status;
         $users->save();
+        if ($request->filled('role_id')) {
+            $role = Role::find($request->input('role_id'));
+            if ($role) {
+                $users->syncRoles([$role->name]);
+            }
+        }
         return response()->json(['message' => 'Cập nhật thành công']);
     }
 
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+        $role = $user->roles()->first();
+        $user->role_id = $role ? $role->id : null;
         return response()->json($user, 200);
     }
     public function destroy($id)

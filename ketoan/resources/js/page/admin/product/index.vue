@@ -21,10 +21,10 @@
     <div class="card-body p-25">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
             <form class="position-relative table-src-form me-0">
-                <input type="text" class="form-control border-0" placeholder="Tìm kiếm người dùng...." v-model="searchKeyword" />
+                <input type="text" class="form-control border-0" placeholder="Tìm kiếm mã sàn , mã hệ thống kế toán , ...." v-model="searchKeyword" />
                 <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
             </form>
-            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal" v-if="hasPermission('user create')">
+            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal">
                 <span class="d-flex align-items-center" style="gap: 5px;">
                     <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
                     <span>Thêm mới</span>
@@ -37,55 +37,61 @@
                 <table class="table align-middle">
                     <thead>
                         <tr>
+                            <th class="text-center bg-info text-white" colspan="6">
+                                Tổng hợp
+                            </th>
+                            <th class="text-center bg-warning text-white" colspan="5">
+                                Tổng hợp
+                            </th>
+                        </tr>
+                        <tr>
                             <th scope="col">
                                 STT
                             </th>
                             <th scope="col">
-                                Họ và tên
+                               Mã sàn
                             </th>
                             <th scope="col">
-                                Email
+                                Mã hệ thống kế toán
                             </th>
                             <th scope="col">
-                                Số điện thoại
+                                Tên hàng
                             </th>
                             <th scope="col">
-                                Địa chỉ
+                                DVT
                             </th>
                             <th scope="col">
-                                Ngày đăng ký
+                                Thuế suất
                             </th>
                             <th scope="col">
-                                Ngày hết hạn
+                                Mã chi tiết combo
                             </th>
                             <th scope="col">
-                                Thời gian
+                                Tên
                             </th>
                             <th scope="col">
-                                Trạng thái
+                                DVT
                             </th>
-
+                             <th scope="col">
+                                Số lượng
+                            </th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(Items, index) in user" :key="index">
+                        <tr v-for="(Items, index) in productList" :key="index">
                             <td>
                                 {{ index + 1 }}
                             </td>
-                            <td>{{ Items.name }}</td>
-                            <td class="text-secondary">{{ Items.email }}</td>
-                            <td class="text-secondary">{{ Items.phone}}</td>
-                            <td class="text-secondary">{{ Items.address}}</td>
-                            <td class="text-secondary">{{ Items.create_package}}</td>
-                            <td class="text-secondary">{{ Items.expiration_package}}</td>
-                            <td class="text-secondary">{{ Items.duration }}</td>
-                            <td v-if="Items.status === 1" class="text-secondary">
-                                <span class="badge bg-success bg-opacity-10 text-success fw-normal">Hoạt động</span>
-                            </td>
-                            <td v-else class="text-secondary">
-                                <span class="badge bg-danger bg-opacity-10 text-danger fw-normal">Ngưng hoạt động</span>
-                            </td>
+                            <td>{{ Items.market_code }}</td>
+                            <td class="text-secondary">{{ Items.accounting_system_code }}</td>
+                            <td class="text-secondary">{{ Items.product_name}}</td>
+                            <td class="text-secondary">{{ Items.unit}}</td>
+                            <td class="text-secondary">{{ Items.tax_rate}}</td>
+                            <td class="text-secondary">{{ Items.combo_detail_code}}</td>
+                            <td class="text-secondary">{{ Items.combo_name }}</td>
+                            <td class="text-secondary">{{ Items.combo_unit }}</td>
+                            <td class="text-secondary">{{ Items.quantity }}</td>
                             <td class="text-secondary">
                                 <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getUserID(Items.id)">
                                     <i class="material-symbols-outlined fs-16 text-body">edit</i>
@@ -125,7 +131,7 @@
             </div>
         </div>
         <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 845px;">
                 <div class="modal-content rounded-0">
                     <div class="modal-header border-0 p-4 border-bottom">
                         <h1 class="modal-title fs-18" id="createModal">Thêm mới</h1>
@@ -133,79 +139,66 @@
                     </div>
                     <div class="modal-body p-4">
                         <form>
+                            <h3 class="fs-16 fw-semibold mb-20">Tổng hợp</h3>
                             <div class="row">
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Họ và tên</label>
-                                        <input v-model="name" type="text" class="form-control h-60 border-border-color" placeholder="Họ và tên ...." :class="{'is-invalid': !nameValid}">
+                                        <label class="label text-secondary">Mã sàn</label>
+                                        <input v-model="market_code" type="text" class="form-control h-60 border-border-color" placeholder="Mã sàn ...." :class="{'is-invalid': !nameValid}">
                                         <div v-if="!nameValid" class="invalid-feedback">Họ và tên không được để trống</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Email</label>
-                                        <input v-model="email" type="email" class="form-control h-60 border-border-color" placeholder="abc@gmail.com" :class="{'is-invalid': !emailValid}">
-                                        <div v-if="!email" class="invalid-feedback">Email không được để trống</div>
+                                        <label class="label text-secondary">Mã hệ thống kế toán</label>
+                                        <input v-model="accounting_system_code" type="text" class="form-control h-60 border-border-color" placeholder="Họ và tên ...." :class="{'is-invalid': !nameValid}">
+                                        <div v-if="!nameValid" class="invalid-feedback">Họ và tên không được để trống</div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Số điện thoại</label>
-                                        <input v-model="phone" type="text" class="form-control h-60 border-border-color" placeholder="012345678" :class="{'is-invalid': !phoneValid}">
+                                        <label class="label text-secondary">Tên hàng</label>
+                                        <input v-model="product_name" type="text" class="form-control h-60 border-border-color" placeholder="012345678" :class="{'is-invalid': !phoneValid}">
                                         <div v-if="!phoneValid" class="invalid-feedback">Số điện thoại không hợp lệ</div>
                                     </div>
                                 </div>
                                  <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Địa chỉ</label>
-                                        <input v-model="address" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                        <label class="label text-secondary">DVT</label>
+                                        <input v-model="unit" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ngày hết hạn</label>
-                                        <input v-model="expiration_package" type="date" class="form-control h-60 border-border-color" placeholder="10%" :class="{'is-invalid': !expirationValid}">
-                                        <div v-if="!expirationValid" class="invalid-feedback">Ngày hết hạn không hợp lệ</div>
+                                        <label class="label text-secondary">Thuế suất</label>
+                                        <input v-model="tax_rate" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                    </div>
+                                </div>
+                                <h3 class="fs-16 fw-semibold mb-20">Chi tiết</h3>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-4">
+                                        <label class="label text-secondary">Mã chi tiết combo</label>
+                                        <input v-model="combo_detail_code" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Gói dịch vụ</label>
-                                        <select v-model="selectedPackageId" class="form-select form-control h-60">
-                                            <option v-for="pkg in packageList" :key="pkg.id" :value="pkg.id">
-                                                {{ pkg.name }}
-                                            </option>
-                                        </select>
+                                        <label class="label text-secondary">Tên</label>
+                                        <input v-model="combo_name" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Trạng thái</label>
-                                        <select v-model="selectedStatus" class="form-select form-control h-60" aria-label="Default select example">
-                                            <option value="1" class="text-dark">Hoạt động</option>
-                                            <option value="0" class="text-dark">Ngưng hoạt động</option>
-                                        </select>
+                                        <label class="label text-secondary">DVT</label>
+                                        <input v-model="combo_unit" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Nhóm quyền</label>
-                                        <select v-model="selectedRole" class="form-select form-control h-60">
-                                            <option v-for="roles in role" :key="roles.id" :value="roles.id">
-                                                {{ roles.name }}
-                                            </option>
-                                        </select>
+                                        <label class="label text-secondary">Số lượng</label>
+                                        <input v-model="quantity" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ghi chú</label>
-                                        <div class="form-group position-relative">
-                                            <textarea v-model="note" class="form-control text-dark" placeholder="Ghi chú ... " cols="30" rows="4"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="col-lg-12">
                                     <div class="d-flex justify-content-end flex-wrap gap-3">
                                         <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
@@ -335,7 +328,7 @@ import { inject } from 'vue';
 import { hasPermission } from '@/utils/permission';
 export default defineComponent({
     setup() {
-        const packageList = ref([]);
+        const productList = ref([]);
         const role = ref([]);
         const user = ref([]);
         const name = ref('');
@@ -361,7 +354,7 @@ export default defineComponent({
         const selectedPackageId = ref(null);
         const selectedStatus = ref(1);
         const selectedRole = ref('');
-        const getUser = () => {
+        const getProduct = () => {
             const params = {
                 page: currentPage.value,
                 per_page: perPage.value
@@ -369,25 +362,9 @@ export default defineComponent({
             if (searchKeyword.value.trim() !== '') {
                 params.search = searchKeyword.value.trim();
             }
-            axios.get(`${baseUrl}/api/user`, { params })
+            axios.get(`${baseUrl}/api/product`, { params })
                 .then((response) => {
-                    const usersData = response.data.users.data;
-                    const pagination = response.data.users;
-                    user.value = usersData.map(u => {
-                        const start = u.create_package ? new Date(u.create_package) : null;
-                        const end = u.expiration_package ? new Date(u.expiration_package) : null;
-                        let duration = '';
-                        if (start && end) {
-                            const diffTime = end.getTime() - start.getTime();
-                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                            const diffMonths = Math.floor(diffDays / 30);
-                            duration = diffMonths > 0 ? `${diffMonths} tháng` : `${diffDays} ngày`;
-                        }
-                        return { ...u, duration };
-                    });
-                    packageList.value = response.data.packages;
-                    role.value = response.data.role;
-                    totalPages.value = pagination.last_page;
+                    productList.value = response.data;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -514,9 +491,9 @@ export default defineComponent({
         };
         watch(searchKeyword, () => {
             currentPage.value = 1;
-            getUser();
+            getProduct();
         });
-        getUser();
+        getProduct();
         return {
             user,
             name,
@@ -537,7 +514,7 @@ export default defineComponent({
             currentPage,
             totalPages,
             changePage,
-            packageList,
+            productList,
             selectedPackageId,
             selectedStatus,
             getUserID,
