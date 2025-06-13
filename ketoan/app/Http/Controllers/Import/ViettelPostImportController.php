@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use App\Exports\SimpleArrayExport;
 
 use App\Traits\LoggerTrait;
 use Dflydev\DotAccessData\Data;
@@ -326,16 +327,11 @@ class ViettelPostImportController extends Controller
                 mkdir($exportsDir, 0777, true);
             }
 
-            $fileToZip = $exportsDir . '/' . $filename;
-            $handle = fopen($fileToZip, 'w+');
-            foreach ($dataExportSalesOutput as $row) {
-                fputcsv($handle, $row);
-            }
-            fclose($handle);
+            Excel::store(new SimpleArrayExport($dataExportSalesOutput), $filePath, 'local');
 
             $zipFileName = 'export_' . date('Ymd_His') . '.zip';
             $zipPath = storage_path('app/exports/' . $zipFileName);
-
+            $fileToZip = $exportsDir . '/' . $filename;
             $zip = new \ZipArchive;
             if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
                 $zip->addFile($fileToZip, $filename);
