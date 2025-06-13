@@ -50,7 +50,7 @@ class ImportDataRequest extends FormRequest
             'account_inventory' => 'required|string|max:255',
 
             'warehouse_code' => 'required|string|max:255',
-            'customer_code' => 'require|string|max:255',
+            'customer_code' => 'required|string|max:255',
 
 
             'trigger_product_name' => 'required|numeric|in:1,2',
