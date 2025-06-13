@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Cache;
 use App\Traits\LoggerTrait;
 use Dflydev\DotAccessData\Data;
 use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
+use Illuminate\Support\Facades\Storage;
 
+use ZipArchive;
 class ViettelPostImportController extends Controller
 {
     use LoggerTrait;
@@ -58,6 +60,7 @@ class ViettelPostImportController extends Controller
                 'warehouse_code' =>        $validated['warehouse_code'] ?? null,
                 'account_cost_of_goods_sold' =>     $validated['account_cost_of_goods_sold'] ?? null,
                 'account_inventory' =>     $validated['account_inventory'] ?? null,
+                'trigger_product_name' =>     $validated['trigger_product_name'] ?? null,
             ];
 
             $fileInfoData = Excel::toArray([], $request->file('file_info'));
@@ -261,50 +264,100 @@ class ViettelPostImportController extends Controller
 
     public function downloadExport(DownLoadExportViettelPostRequest $request)
     {
-        $validated = $request->validated();
-        $exportInstanceId = $validated['export_instance_id'];
-        $arrDeliveryCodeExportSale = $request->input('arr_delivery_code_export_sale', []);
-        $arrDeliveryCodeExportSale = is_array($arrDeliveryCodeExportSale) ? $arrDeliveryCodeExportSale : [];
-        $arrDeliveryCodeExportService = $request->input('arr_delivery_code_export_service', []);
-        $arrDeliveryCodeExportService = is_array($arrDeliveryCodeExportService) ? $arrDeliveryCodeExportService : [];
+        try{
+            $validated = $request->validated();
+            $exportInstanceId = $validated['export_instance_id'];
+            $arrDeliveryCodeExportSale = $request->input('arr_delivery_code_export_sale', []);
+            $arrDeliveryCodeExportSale = is_array($arrDeliveryCodeExportSale) ? $arrDeliveryCodeExportSale : [];
+            $arrDeliveryCodeExportService = $request->input('arr_delivery_code_export_service', []);
+            $arrDeliveryCodeExportService = is_array($arrDeliveryCodeExportService) ? $arrDeliveryCodeExportService : [];
+            
+            $dataNormal = Cache::get("viettelpost.normal.{$exportInstanceId}", []);
+            $dataException = Cache::get("viettelpost.exception.{$exportInstanceId}", []);
+            $dataMerged = Cache::get("viettelpost.merged.{$exportInstanceId}", []);
+            $dataProducts = Cache::get("viettelpost.product.{$exportInstanceId}", []);
+            $dataSetting = Cache::get("viettelpost.setting.{$exportInstanceId}", []);
         
-        $dataNormal = Cache::get("viettelpost.normal.{$exportInstanceId}", []);
-        $dataException = Cache::get("viettelpost.exception.{$exportInstanceId}", []);
-        $dataMerged = Cache::get("viettelpost.merged.{$exportInstanceId}", []);
-        $dataProducts = Cache::get("viettelpost.product.{$exportInstanceId}", []);
-        $dataSetting = Cache::get("viettelpost.setting.{$exportInstanceId}", []);
-    
-        $dataExportSales = [];
-        $dataExportServices = [];
+            $dataExportSales = [];
+            $dataExportServices = [];
 
-        $dataExportSales = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportSale) {
-                            return in_array($item[1], $arrDeliveryCodeExportSale);
-                        })->values();
+            $dataExportSales = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportSale) {
+                                return in_array($item[1], $arrDeliveryCodeExportSale);
+                            })->values();
 
-        $dataExportSales = $dataExportSales->merge($dataNormal)->values();
+            $dataExportSales = $dataExportSales->merge($dataNormal)->values();
+            
 
-        foreach($dataExportSales as $key => $itemExportSales) {
-            $productCodeOfPushSaleProduct = array_column($itemExportSales['push_sale_details'], 4);
-            $filteredProductsOfPushSaleProduct = collect($dataProducts)->filter(function ($item) use ($productCodeOfPushSaleProduct) {
-                                    return in_array($item[0], $productCodeOfPushSaleProduct);
-                                })->values();
-            $this->dataExportService->exportTemplateSales($itemExportSales, $dataSetting, $filteredProductsOfPushSaleProduct);
+            $dataExportSalesOutput = [];
+            
+            foreach($dataExportSales as $key => $itemExportSales) {
+                $productCodeOfPushSaleProduct = array_column($itemExportSales['push_sale_details'], 4);
+                $filteredProductsOfPushSaleProduct = collect($dataProducts)->filter(function ($item) use ($productCodeOfPushSaleProduct) {
+                                        return in_array($item[0], $productCodeOfPushSaleProduct);
+                                    })->values();
+                $dataRowDetail = $this->dataExportService->exportTemplateSales($itemExportSales, $dataSetting, $filteredProductsOfPushSaleProduct);
+
+                if($dataRowDetail['status'] == false) {
+                    return response()->json([
+                        'message' => $dataRowDetail['message'],
+                        'status' => false,
+                    ], 500);
+                }
+
+                $dataRowDetail = $dataRowDetail['data'];
+
+                $dataExportSalesOutput = array_merge($dataExportSalesOutput, $dataRowDetail);
+            }
+
+            $dataExportServices = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportService) {
+                                return in_array($item[1], $arrDeliveryCodeExportService);
+                            })->values();
+            
+            $dataExportService = new \App\Services\DataExportService();
+            $headingsExportSales  = $dataExportService->getExportHead('sales');
+            $headingsExportServices = $dataExportService->getExportHead('services');
+            
+            array_unshift($dataExportSalesOutput, $headingsExportSales);
+            
+            $filename = 'export_' . date('Ymd_His') . '.' . 'xlsx';
+            $filePath = 'exports/' . $filename;
+
+            $exportsDir = storage_path('app/exports');
+            if (!file_exists($exportsDir)) {
+                mkdir($exportsDir, 0777, true);
+            }
+
+            $fileToZip = $exportsDir . '/' . $filename;
+            $handle = fopen($fileToZip, 'w+');
+            foreach ($dataExportSalesOutput as $row) {
+                fputcsv($handle, $row);
+            }
+            fclose($handle);
+
+            $zipFileName = 'export_' . date('Ymd_His') . '.zip';
+            $zipPath = storage_path('app/exports/' . $zipFileName);
+
+            $zip = new \ZipArchive;
+            if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+                $zip->addFile($fileToZip, $filename);
+                $zip->close();
+            } else {
+                throw new \Exception('Không thể tạo file zip: ' . $zipPath);
+            }
+
+            Storage::delete($filePath);
+            $downloadUrl = Storage::url('exports/' . $zipFileName);
+
+            return response()->json([
+                'status' => true,
+                'download_url' => $downloadUrl
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error data import',
+                'status' => false,
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $dataExportServices = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportService) {
-                            return in_array($item[1], $arrDeliveryCodeExportService);
-                        })->values();
-        
-        return response()->json($dataExportSales);
-        
-        $dataExportService = new \App\Services\DataExportService();
-        $headingsExportSales  = $dataExportService->getExportHead('sales');
-        $headingsExportServices = $dataExportService->getExportHead('services');
-
-        $columnsExportSales= array_keys($headingsExportSales);
-        $headerRowExportSales = array_values($headingsExportSales);
-
-        $columnsExportService = array_keys($headingsExportServices);
-        $headerRowExportService = array_values($headingsExportServices);
     }
 }
