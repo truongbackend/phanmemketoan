@@ -280,9 +280,8 @@ class ViettelPostImportController extends Controller
         
             $dataExportSales = [];
             $dataExportServices = [];
-
             $dataExportSales = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportSale) {
-                                return in_array($item[1], $arrDeliveryCodeExportSale);
+                                return in_array($item[2], $arrDeliveryCodeExportSale);
                             })->values();
 
             $dataExportSales = $dataExportSales->merge($dataNormal)->values();
