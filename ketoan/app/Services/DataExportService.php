@@ -286,7 +286,6 @@ class DataExportService
                 "data" => $rowsItem
             ];
         }catch (\Exception $e) {
-            dd($e->getMessage(), $dataInput);
             return [
                 "status" => false,
                 "message" => "Lỗi khi xuất file: " . $e->getMessage()
