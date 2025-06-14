@@ -348,17 +348,17 @@ class ViettelPostImportController extends Controller
             array_unshift($dataExportSalesOutput, $headingsExportSales);
             array_unshift($dataExportServiceOutput, $headingsExportServices);
             
-            $filenameTemplateSale = 'export_sale' . date('Ymd_His') . '.' . 'xlsx';
+            $filenameTemplateSale = 'Tep_xuat_hoa_don_ban_hang_' . date('Ymd_His') . '.' . 'xlsx';
             $filePathTemplateSale = 'exports/' . $filenameTemplateSale;
 
-            $filenameTemplateService = 'export_service' . date('Ymd_His') . '.' . 'xlsx';
+            $filenameTemplateService = 'Tep_xuat_hoa_don_dich_vu' . date('Ymd_His') . '.' . 'xlsx';
             $filePathTemplateService = 'exports/' . $filenameTemplateService;
 
             Excel::store(new SimpleArrayExport($dataExportSalesOutput), $filePathTemplateSale, 'local');
             Excel::store(new SimpleArrayExport($dataExportServiceOutput), $filePathTemplateService, 'local');
 
             //ZIP
-            $zipFileName = 'export_' . date('Ymd_His') . '.zip';
+            $zipFileName = 'Tep_xuat_hoa_don_' . date('Ymd_His') . '.zip';
             $zipPath = storage_path('app/exports/' . $zipFileName);
             $fileToZip1 = $exportsDir . '/' . $filenameTemplateSale;
             $fileToZip2 = $exportsDir . '/' . $filenameTemplateService;
