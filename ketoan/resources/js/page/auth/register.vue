@@ -4,14 +4,13 @@
         <div class="m-auto m-1230">
             <div class="row align-items-center">
                 <div class="col-lg-6 d-none d-lg-block">
-                    <img src="assets/images/register.jpg" class="rounded-3" alt="register">
-
+                    <img src="assets/avatar/register.jpg" class="rounded-3" alt="register">
                 </div>
                 <div class="col-lg-6">
                     <div class="mw-480 ms-lg-auto">
                         <div class="d-inline-block mb-4">
                         </div>
-                        <h3 class="fs-28 mb-2">Đăng kí tài khoản với Pnl International </h3>
+                        <h3 class="fs-28 mb-2">Đăng kí với Pnl International </h3>
                         <p class="fw-medium fs-16 mb-4">Đăng ký bằng tài khoản mạng xã hội hoặc nhập thông tin của bạn</p>
                         <div class="row justify-content-center">
                             <div class="col-lg-4 col-sm-4">
@@ -61,7 +60,7 @@
                             </div>
 
                             <div class="form-group">
-                                <p>Bạn đồng ý với Điều khoản Dịch vụ của chúng tôi và xác nhận rằng bạn đã đọc và hiểu <a href="terms-conditions.html" class="fw-medium text-decoration-none">Chính sách Bảo mật</a></p>
+
                                 <p>Bạn đã có tài khoản. <router-link :to="{ name: 'login' }" class="fw-medium text-primary text-decoration-none">Đăng nhập</router-link></p>
                             </div>
                         </form>

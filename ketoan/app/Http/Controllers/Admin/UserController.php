@@ -78,6 +78,12 @@ class UserController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $users = User::findOrFail($id);
+        if ($request->filled('old_password') && $request->filled('new_password')) {
+            if (!Hash::check($request->old_password, $users->password)) {
+                return response()->json(['error' => 'Mật khẩu cũ không đúng'], 400);
+            }
+            $users->password = Hash::make($request->new_password);
+        }
         $users->name = $request->name;
         $users->phone = $request->phone;
         $users->packages_id = $request->packages_id;

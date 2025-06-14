@@ -4,14 +4,14 @@
             <div class="m-auto m-1230">
                 <div class="row align-items-center">
                     <div class="col-lg-6 d-none d-lg-block">
-                        <img src="assets/images/login.jpg" class="rounded-3" alt="login">
+                        <img src="assets/avatar/login.jpg" class="rounded-3" alt="login">
                     </div>
                     <div class="col-lg-6">
                         <div class="mw-480 ms-lg-auto">
                             <div class="d-inline-block mb-4">
                                 <img src="assets/images/white-logo.svg" class="rounded-3 for-dark-logo" alt="login">
                             </div>
-                            <h3 class="fs-28 mb-2">Xin chào bạn đến với phần mềm kế toán Pnl International !</h3>
+                            <h3 class="fs-28 mb-2">Phần mềm kế toán Pnl International</h3>
                             <p class="fw-medium fs-16 mb-4">Giải pháp kinh doanh cho thương mại điện tử</p>
                             <form @submit.prevent="login">
                                 <div class="form-group mb-4">
@@ -23,7 +23,7 @@
                                     <input v-model="password" type="password" class="form-control h-55" placeholder="Mật khẩu">
                                 </div>
                                 <div class="form-group mb-4">
-                                    <a href="forget-password.html" class="text-decoration-none text-primary fw-semibold">Quên mật khẩu?</a>
+                                    <router-link :to="{ name: 'forget-password' }" class="text-decoration-none text-primary fw-semibold">Quên mật khẩu?</router-link>
                                 </div>
                                 <div class="form-group mb-4">
                                     <button type="submit" class="btn btn-primary fw-medium py-2 px-3 w-100">

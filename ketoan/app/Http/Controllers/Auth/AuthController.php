@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -26,7 +27,6 @@ class AuthController extends Controller
             'password.required' => 'Hãy nhập mật khẩu',
         ]);
 
-        // Kiểm tra xác thực
         if (!$token = Auth::attempt($credentials)) {
             return response()->json(['error' => 'Email hoặc mật khẩu không đúng'], 401);
         }
@@ -117,6 +117,32 @@ class AuthController extends Controller
             'user' => $user,
         ]);
     }
+
+
+    public function resetPassword(Request $request)
+    {
+        $validatedData = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+        ], [
+            'email.exists' => 'Email không tồn tại trong hệ thống',
+            'email.required' => 'Vui lòng nhập email',
+            'email.email' => 'Email không hợp lệ',
+        ]);
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            $newPassword = Str::random(16); 
+            $symbols = ['-', '_', '[', ']', ';', '(', ')', '@', '!'];
+            $newPassword = substr_replace($newPassword, $symbols[random_int(0, count($symbols)-1)], random_int(0, strlen($newPassword)-1), 0);
+
+            $user->password = Hash::make($newPassword);
+            $user->save();
+
+            return response()->json(['message' => 'Mật khẩu đã được đặt lại thành công']);
+        }
+        return response()->json(['message' => 'Không tìm thấy người dùng.'], 404);
+    }
+
 
 
 

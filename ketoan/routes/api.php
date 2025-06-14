@@ -39,6 +39,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::get('profile', [AuthController::class, 'userProfile']);
 Route::post('logout', [AuthController::class, 'logout']);
+Route::post('resetPassword', [AuthController::class, 'resetPassword']);
 Route::resource('packages', packageController::class);
 Route::resource('product', ProductController::class);
 Route::resource('notification', notificationController::class);

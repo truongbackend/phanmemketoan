@@ -66,6 +66,11 @@ const adminRoutes = [
             component: () => import("../page/auth/login.vue"),
         },
         {
+            path: "forget-password",
+            name: "forget-password",
+            component: () => import("../page/auth/forgetPassword.vue"),
+        },
+        {
             path: "register",
             name: "register",
             component: () => import("../page/auth/register.vue"),
