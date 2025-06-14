@@ -272,13 +272,15 @@ class ViettelPostImportController extends Controller
             $arrDeliveryCodeExportSale = is_array($arrDeliveryCodeExportSale) ? $arrDeliveryCodeExportSale : [];
             $arrDeliveryCodeExportService = $request->input('arr_delivery_code_export_service', []);
             $arrDeliveryCodeExportService = is_array($arrDeliveryCodeExportService) ? $arrDeliveryCodeExportService : [];
-            
+          
             $dataNormal = Cache::get("viettelpost.normal.{$exportInstanceId}", []);
             $dataException = Cache::get("viettelpost.exception.{$exportInstanceId}", []);
             $dataMerged = Cache::get("viettelpost.merged.{$exportInstanceId}", []);
             $dataProducts = Cache::get("viettelpost.product.{$exportInstanceId}", []);
             $dataSetting = Cache::get("viettelpost.setting.{$exportInstanceId}", []);
-        
+            $dataSetting['shipping_service_tax'] = isset($validated['shipping_service_tax']) ? $validated['shipping_service_tax'] : "";
+            
+            //HANDLE SALES
             $dataExportSales = [];
             $dataExportServices = [];
             $dataExportSales = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportSale) {
@@ -287,9 +289,7 @@ class ViettelPostImportController extends Controller
 
             $dataExportSales = $dataExportSales->merge($dataNormal)->values();
             
-
             $dataExportSalesOutput = [];
-            
             foreach($dataExportSales as $key => $itemExportSales) {
                 $productCodeOfPushSaleProduct = array_column($itemExportSales['push_sale_details'], 4);
                 $filteredProductsOfPushSaleProduct = collect($dataProducts)->filter(function ($item) use ($productCodeOfPushSaleProduct) {
@@ -309,38 +309,70 @@ class ViettelPostImportController extends Controller
                 $dataExportSalesOutput = array_merge($dataExportSalesOutput, $dataRowDetail);
             }
 
+            //HANDLE SERVICE
             $dataExportServices = collect($dataException)->filter(function ($item) use ($arrDeliveryCodeExportService) {
-                                return in_array($item[1], $arrDeliveryCodeExportService);
+                                return in_array($item[2], $arrDeliveryCodeExportService);
                             })->values();
-            
+
+            $dataRowDetail = [];
+            $dataExportServiceOutput = [];
+            foreach($dataExportServices as $key => $itemExportServices) {
+                $productCodeOfPushSaleProduct = array_column($itemExportServices['push_sale_details'], 4);
+                $filteredProductsOfPushSaleProduct = collect($dataProducts)->filter(function ($item) use ($productCodeOfPushSaleProduct) {
+                                        return in_array($item[0], $productCodeOfPushSaleProduct);
+                                    })->values();
+                $dataRowDetail = $this->dataExportService->exportTemplateServices($itemExportServices, $dataSetting, $filteredProductsOfPushSaleProduct);
+
+                if($dataRowDetail['status'] == false) {
+                    return response()->json([
+                        'message' => $dataRowDetail['message'],
+                        'status' => false,
+                    ], 500);
+                }
+
+                $dataRowDetail = $dataRowDetail['data'];
+
+                $dataExportServiceOutput = array_merge($dataExportServiceOutput, $dataRowDetail);
+            }
+
+            //EXPORT XLSX
             $dataExportService = new \App\Services\DataExportService();
             $headingsExportSales  = $dataExportService->getExportHead('sales');
             $headingsExportServices = $dataExportService->getExportHead('services');
-            //dd($dataExportSalesOutput);
-            array_unshift($dataExportSalesOutput, $headingsExportSales);
-            
-            $filename = 'export_' . date('Ymd_His') . '.' . 'xlsx';
-            $filePath = 'exports/' . $filename;
 
             $exportsDir = storage_path('app/exports');
             if (!file_exists($exportsDir)) {
                 mkdir($exportsDir, 0777, true);
             }
 
-            Excel::store(new SimpleArrayExport($dataExportSalesOutput), $filePath, 'local');
+            array_unshift($dataExportSalesOutput, $headingsExportSales);
+            array_unshift($dataExportServiceOutput, $headingsExportServices);
+            
+            $filenameTemplateSale = 'export_sale' . date('Ymd_His') . '.' . 'xlsx';
+            $filePathTemplateSale = 'exports/' . $filenameTemplateSale;
 
+            $filenameTemplateService = 'export_service' . date('Ymd_His') . '.' . 'xlsx';
+            $filePathTemplateService = 'exports/' . $filenameTemplateService;
+
+            Excel::store(new SimpleArrayExport($dataExportSalesOutput), $filePathTemplateSale, 'local');
+            Excel::store(new SimpleArrayExport($dataExportServiceOutput), $filePathTemplateService, 'local');
+
+            //ZIP
             $zipFileName = 'export_' . date('Ymd_His') . '.zip';
             $zipPath = storage_path('app/exports/' . $zipFileName);
-            $fileToZip = $exportsDir . '/' . $filename;
+            $fileToZip1 = $exportsDir . '/' . $filenameTemplateSale;
+            $fileToZip2 = $exportsDir . '/' . $filenameTemplateService;
             $zip = new \ZipArchive;
             if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
-                $zip->addFile($fileToZip, $filename);
+                $zip->addFile($fileToZip1, $filenameTemplateSale);
+                $zip->addFile($fileToZip2, $filenameTemplateService);
                 $zip->close();
             } else {
-                throw new \Exception('Không thể tạo file zip: ' . $zipPath);
+                throw new \Exception('Không thể tạo file');
            }
 
-            Storage::delete($filePath);
+            Storage::delete($filePathTemplateSale);
+            Storage::delete($filePathTemplateService);
             
             return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
         } catch (\Exception $e) {

@@ -294,100 +294,155 @@ class DataExportService
         }
     }
 
-    public function exportTemplateServices($dataInput, $dataSetting){
-        $rowsDataExport = [];
-
-        foreach ($dataInput as $keyInput => $itemInput) {
-            $pushSaleItem = $itemInput['push_sale_details'] ?? [];
-
-            if(empty($pushSaleItem)) continue;
-            
+    public function exportTemplateServices($dataInput, $dataSetting, $productsOfPushSaleProduct){
+        try {
+            $pushSaleItem = $dataInput['push_sale_details'] ?? [];
+            $manyRecordPushSale = count($pushSaleItem) !== 1;
             $pushSalesFirstItem = $pushSaleItem[0] ?? [];
-
-            if(empty($pushSalesFirstItem)) continue;
-
-            $is_discounted_item = "Không";
-
-            if($pushSalesFirstItem[8] == 0 || empty($pushSalesFirstItem[8])){
-                $is_discounted_item = "Có";
-            }
-
+            
+            $rowsItem = [];
             foreach ($pushSaleItem as $indexPushSaleItem => $pushSaleItemDetail) {
-                $rowsItem = [
-                                "A" => "Bán hàng hóa trong nước",
-                                "B" => "Chưa thu tiền",
-                                "C" => "Có",
-                                "D" => "Có",
-                                "E" => "Đã lập",
-                                "F" => "Có",
-                                "G" => "????",
-                                "H" => "????",
-                                "I" => $pushSaleItemDetail[2],
-                                "J" => "???? tinh toan",
-                                "K" => "",
-                                "L" => "",
-                                "M" => "",
-                                "N" => "????",
-                                "O" => "????",
-                                "P" => $pushSalesFirstItem[13],
-                                "Q" => "",
-                                "R" => "",
-                                "S" => "",
-                                "T" => "",
-                                "U" => "",
-                                "V" => "????",
-                                "W" => "????",
-                                "X" => "",
-                                "Y" => "",
-                                "Z" => "",
-                                "AA" => "",
-                                "AB" => "VND",
-                                "AC" => "TM/CK",
-                                "AD" => "",
-                                "AE" => "????",
-                                "AF" => "????",
-                                "AG" => "????",
-                                "AH" => "",
-                                "AI" => $is_discounted_item,
-                                "AJ" => "???? input",
-                                "AK" => "???? input",
-                                "AL" => "????",
-                                "AM" => $pushSalesFirstItem[6],
-                                "AN" => "???? tinh toan",
-                                "AO" => "????",
-                                "AP" => "",
-                                "AQ" => "",
-                                "AR" => "",
-                                "AS" => "",
-                                "AT" => "",
-                                "AU" => "",
-                                "AV" => "",
-                                "AW" => "",
-                                "AX" => "",
-                                "AY" => "????",
-                                "AZ" => "",
-                                "BA" => "???? tinh toan sheet 2",
-                                "BB" => "",
-                                "BC" => "???? input",
-                                "BD" => "Không",
-                                "BE" => "",
-                                "BF" => "",
-                                "BG" => "",
-                                "BH" => "",
-                                "BI" => "",
-                                "BJ" => "",
-                                "BK" => "", 
-                                "BL" => "",
-                                "BM" => "???? input",
-                                "BN" => "???? input",
-                                "BO" => "???? input",
-                                "BP" => "",
-                                "BQ" => "",
-                                "BR" => "",
-                                "BS" => "Không chọn",
-                                "BT" => "???? tinh toan AO + BA",
-                            ];
+                //
+                $posting_date = "";
+                if($dataSetting['posting_date'] == 1){
+                    if (!empty($dataInput[42])) {
+                        $dateObj = \DateTime::createFromFormat('d/m/Y H:i:s', $dataInput[42]);
+                        if ($dateObj) {
+                            $posting_date = $dateObj->format('d/m/Y');
+                        }
+                    }
+                } else {
+                    $posting_date = now()->format('d/m/Y');
+                }
+
+                //
+                $export_receipt_number = $dataSetting['export_receipt_number'] ?? '';
+
+                if(empty($export_receipt_number)){
+                    $export_receipt_number = now()->format('ymd');
+                }else{
+                    $serial = str_pad($indexPushSaleItem + 1, 4, '0', STR_PAD_LEFT);
+                    $export_receipt_number = $export_receipt_number . now()->format('ymd') . $serial;
+                }
+
+                //
+                $value_submit_reason = "";
+                $col_submit_reason_config = config('col_submit_reason.viettel_post');
+                $col_submit_reason_setting = $dataSetting['submission_reason'] ?? [];
+                foreach ($col_submit_reason_setting as $key => $value) {
+                    if (isset($col_submit_reason_config[$value])) {
+                        $col_submit_reason_get = $col_submit_reason_config[$value];
+                        if($col_submit_reason_get['file'] == 'push_sales'){
+                            if(isset($col_submit_reason_get['get_parent'])){
+                                $value_submit_reason .= $pushSalesFirstItem[$col_submit_reason_get['index']] ?? '';
+                            } else {
+                                $value_submit_reason .= $pushSaleItemDetail[$col_submit_reason_get['index']] ?? '';
+                            }
+                        } 
+                    }
+                }
+
+                //
+                $productCodeOFPushSaleItem = $pushSaleItemDetail[4];
+
+                $filteredProductOFPushSaleItem = collect($productsOfPushSaleProduct)->filter(function ($item) use ($productCodeOFPushSaleItem) {
+                                                    return $item[0] === $productCodeOFPushSaleItem; 
+                                                });
+                
+                if($filteredProductOFPushSaleItem->isEmpty()){
+                    return [
+                        "status" => false,
+                        "message" => "Mã hàng hóa " .$productCodeOFPushSaleItem. " không tồn tại trong danh sách hàng hóa"
+                    ];
+                }
+
+                $amountOfOrder = round($dataInput[27] / (1 + $filteredProductOFPushSaleItem->first()[4] / 100));
+                
+                $rowsItem[] = [
+                    "A" => "Bán hàng hóa trong nước",
+                    "B" => "Chưa thu tiền",
+                    "C" => "Có",
+                    "D" => "Có",
+                    "E" => "Đã lập",
+                    "F" => "Có",
+                    "G" => $posting_date,
+                    "H" => $posting_date,
+                    "I" => $pushSaleItemDetail[2],
+                    "J" => $export_receipt_number,
+                    "K" => "",
+                    "L" => "",
+                    "M" => "",
+                    "N" => $posting_date,
+                    "O" => $dataSetting['customer_code'] ?? '',
+                    "P" => $dataInput[10],
+                    "Q" => "",
+                    "R" => "",
+                    "S" => "",
+                    "T" => "",
+                    "U" => "",
+                    "V" => $value_submit_reason,
+                    "W" => $value_submit_reason,
+                    "X" => "",
+                    "Y" => "",
+                    "Z" => "",
+                    "AA" => "",
+                    "AB" => "VND",
+                    "AC" => "TM/CK",
+                    "AD" => "",
+                    "AE" => "DVVC",
+                    "AF" => "",
+                    "AG" => "Dịch vụ vận chuyển",
+                    "AH" => "",
+                    "AI" => "Không",
+                    "AJ" => $dataSetting['account_cash_expense_debt'] ?? '',
+                    "AK" => $dataSetting['account_revenue_credit'] ?? '',
+                    "AL" => "",
+                    "AM" => 1,
+                    "AN" => $amountOfOrder,
+                    "AO" => $amountOfOrder,
+                    "AP" => "",
+                    "AQ" => "",
+                    "AR" => "",
+                    "AS" => "",
+                    "AT" => "",
+                    "AU" => "",
+                    "AV" => "",
+                    "AW" => "",
+                    "AX" => "",
+                    "AY" => $dataSetting['shipping_service_tax'],
+                    "AZ" => "",
+                    "BA" => $dataInput[27] - $amountOfOrder,
+                    "BB" => "",
+                    "BC" => $dataSetting['account_vat_tax'] ?? '',
+                    "BD" => "Không",
+                    "BE" => "",
+                    "BF" => "",
+                    "BG" => "",
+                    "BH" => "",
+                    "BI" => "",
+                    "BJ" => "",
+                    "BK" => "", 
+                    "BL" => "",
+                    "BM" => "",
+                    "BN" => "",
+                    "BO" => "",
+                    "BP" => "",
+                    "BQ" => "",
+                    "BR" => "",
+                    "BS" => "Không chọn",
+                    "BT" => $amountOfOrder + ($dataInput[27] - $amountOfOrder),
+                ];   
             }
+            
+            return [
+                "status" => true,
+                "data" => $rowsItem
+            ];
+        }catch (\Exception $e) {
+            return [
+                "status" => false,
+                "message" => "Lỗi khi xuất file: " . $e->getMessage()
+            ];
         }
     }
 
@@ -461,7 +516,6 @@ class DataExportService
                 'tax_amount' => round($tax_amount),
             ];
         }catch (\Exception $e) {
-            dd($e);
             return [
                 "status" => false,
                 "message" => "Lỗi khi xuất file: " . $e->getMessage()

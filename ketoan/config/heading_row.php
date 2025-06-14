@@ -75,7 +75,7 @@ return [
         'BS' => 'Không cập nhật giá xuất',
         'BT' => ' ',
     ],
-    'service' => [
+    'services' => [
         'A' => 'Hình thức bán hàng',
         'B' => 'Phương thức thanh toán',
         'C' => 'Kiêm phiếu xuất kho',
@@ -138,7 +138,7 @@ return [
         'BH' => 'Mã công trình',
         'BI' => 'Số đơn đặt hàng',
         'BJ' => 'Số hợp đồng bán',
-        'AK' => 'Mã thống kê',
+        'BK' => 'Mã thống kê',
         'BL' => 'CP không hợp lý',
         'BM' => 'Mã kho',
         'BN' => 'TK giá vốn',

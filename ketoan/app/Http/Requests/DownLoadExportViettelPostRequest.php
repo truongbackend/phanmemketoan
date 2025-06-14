@@ -29,6 +29,7 @@ class DownLoadExportViettelPostRequest extends FormRequest
             'arr_delivery_code_export_sale.*' => 'string',
             'arr_delivery_code_export_service' => 'sometimes|array',
             'arr_delivery_code_export_service.*' => 'string',
+            'shipping_service_tax' => 'integer|in:8,10',
         ];
     }
 }
