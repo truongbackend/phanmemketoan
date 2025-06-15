@@ -93,7 +93,7 @@
                             <td class="text-secondary">{{ Items.combo_unit }}</td>
                             <td class="text-secondary">{{ Items.quantity }}</td>
                             <td class="text-secondary">
-                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getUserID(Items.id)">
+                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getProductID(Items.id)">
                                     <i class="material-symbols-outlined fs-16 text-body">edit</i>
                                 </button>
                                 <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#deleteModal" @click="deleteId = Items.id">
@@ -107,7 +107,7 @@
             <div class="d-flex justify-content-center justify-content-sm-between align-items-center text-center flex-wrap gap-2 showing-wrap p-4">
                 <span class="fs-13 fw-medium">Hiển thị: 10</span>
                 <div class="d-flex align-items-center">
-                    <span class="fs-13 fw-medium me-2">1 - 10 của 12</span>
+                    <span class="fs-13 fw-medium me-2">1 - 10 of {{ totalProducts }}</span>
                     <nav aria-label="Page navigation">
                         <ul class="pagination mb-0 justify-content-center">
                             <li class="page-item" :class="{ disabled: currentPage === 1 }">
@@ -138,71 +138,71 @@
                         <button type="button" class="btn-close campaigns-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
-                        <form>
-                            <h3 class="fs-16 fw-semibold mb-20">Tổng hợp</h3>
+                        <form @submit.prevent="createProduct">
+                            <h3 class="fs-16 fw-semibold mb-20">Thông tin chung</h3>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Mã sàn</label>
-                                        <input v-model="market_code" type="text" class="form-control h-60 border-border-color" placeholder="Mã sàn ...." :class="{'is-invalid': !nameValid}">
-                                        <div v-if="!nameValid" class="invalid-feedback">Họ và tên không được để trống</div>
+                                        <input v-model="market_code" type="text" class="form-control h-60 border-border-color" placeholder="Mã sàn ...." :class="{'is-invalid': !marketCodeValid}">
+                                        <div v-if="!marketCodeValid" class="invalid-feedback">Mã sàn không được để trống</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Mã hệ thống kế toán</label>
-                                        <input v-model="accounting_system_code" type="text" class="form-control h-60 border-border-color" placeholder="Họ và tên ...." :class="{'is-invalid': !nameValid}">
-                                        <div v-if="!nameValid" class="invalid-feedback">Họ và tên không được để trống</div>
+                                        <input v-model="accounting_system_code" type="text" class="form-control h-60 border-border-color" placeholder="Mã hệ thống kế toán ...." :class="{'is-invalid': !accountingSystemCodeValid}">
+                                        <div v-if="!accountingSystemCodeValid" class="invalid-feedback">Mã hệ thống kế toán không được để trống</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Tên hàng</label>
-                                        <input v-model="product_name" type="text" class="form-control h-60 border-border-color" placeholder="012345678" :class="{'is-invalid': !phoneValid}">
-                                        <div v-if="!phoneValid" class="invalid-feedback">Số điện thoại không hợp lệ</div>
+                                        <input v-model="product_name" type="text" class="form-control h-60 border-border-color" placeholder="Tên hàng" :class="{'is-invalid': !productNameValid}">
+                                        <div v-if="!productNameValid" class="invalid-feedback">Tên hàng không được để trống</div>
                                     </div>
                                 </div>
                                  <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">DVT</label>
-                                        <input v-model="unit" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                        <label class="label text-secondary">Đơn vị tính</label>
+                                        <input v-model="unit" type="text" class="form-control h-60 border-border-color" placeholder="Đơn vị tính ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Thuế suất</label>
-                                        <input v-model="tax_rate" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                        <input v-model="tax_rate" type="number" class="form-control h-60 border-border-color" placeholder="Thuế suất ...">
                                     </div>
                                 </div>
-                                <h3 class="fs-16 fw-semibold mb-20">Chi tiết</h3>
+                                <h3 class="fs-16 fw-semibold mb-20">Chi tiết combo</h3>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Mã chi tiết combo</label>
-                                        <input v-model="combo_detail_code" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                        <input v-model="combo_detail_code" type="text" class="form-control h-60 border-border-color" placeholder="Mã chi tiết combo ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Tên</label>
-                                        <input v-model="combo_name" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                        <label class="label text-secondary">Tên chi tiết combo</label>
+                                        <input v-model="combo_name" type="text" class="form-control h-60 border-border-color" placeholder="Tên chi tiết combo ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">DVT</label>
-                                        <input v-model="combo_unit" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                        <label class="label text-secondary">Đơn vị tính chi tiết combo</label>
+                                        <input v-model="combo_unit" type="text" class="form-control h-60 border-border-color" placeholder="Đơn vị tính chi tiết combo ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Số lượng</label>
-                                        <input v-model="quantity" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                        <label class="label text-secondary">Số lượng chi tiết combo</label>
+                                        <input v-model="quantity" type="number" class="form-control h-60 border-border-color" placeholder="Số lượng chi tiết combo ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="d-flex justify-content-end flex-wrap gap-3">
                                         <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
-                                        <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="createUser"> <i class="ri-add-line text-white fw-medium"></i> Tạo mới</button>
+                                        <button type="submit" class="btn btn-primary py-2 px-4 fw-medium fs-16"> <i class="ri-add-line text-white fw-medium"></i> Tạo mới</button>
                                     </div>
                                 </div>
                             </div>
@@ -229,81 +229,78 @@
             </div>
         </div>
         <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 845px;">
                 <div class="modal-content rounded-0">
                     <div class="modal-header border-0 p-4 border-bottom">
                         <h1 class="modal-title fs-18" id="updateModal">Cập nhật</h1>
                         <button type="button" class="btn-close campaigns-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
-                        <form>
+                        <form @submit.prevent="updateProduct">
+                            <h3 class="fs-16 fw-semibold mb-20">Thông tin chung</h3>
                             <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-4">
+                                        <label class="label text-secondary">Mã sàn</label>
+                                        <input v-model="market_code" type="text" class="form-control h-60 border-border-color" placeholder="Mã sàn ...." :class="{'is-invalid': !marketCodeValid}">
+                                        <div v-if="!marketCodeValid" class="invalid-feedback">Mã sàn không được để trống</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-4">
+                                        <label class="label text-secondary">Mã hệ thống kế toán</label>
+                                        <input v-model="accounting_system_code" type="text" class="form-control h-60 border-border-color" placeholder="Mã hệ thống kế toán ...." :class="{'is-invalid': !accountingSystemCodeValid}">
+                                        <div v-if="!accountingSystemCodeValid" class="invalid-feedback">Mã hệ thống kế toán không được để trống</div>
+                                    </div>
+                                </div>
                                 <div class="col-lg-12">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Họ và tên</label>
-                                        <input v-model="name" type="text" class="form-control h-60 border-border-color" placeholder="Họ và tên ...." :class="{'is-invalid': !nameValid}">
-                                        <div v-if="!nameValid" class="invalid-feedback">Họ và tên không được để trống</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Email</label>
-                                        <input disabled v-model="email" type="email" class="form-control h-60 border-border-color" placeholder="abc@gmail.com" :class="{'is-invalid': !emailValid}">
-                                        <div v-if="!email" class="invalid-feedback">Email không được để trống</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Số điện thoại</label>
-                                        <input v-model="phone" type="text" class="form-control h-60 border-border-color" placeholder="012345678" :class="{'is-invalid': !phoneValid}">
-                                        <div v-if="!phoneValid" class="invalid-feedback">Số điện thoại không hợp lệ</div>
+                                        <label class="label text-secondary">Tên hàng</label>
+                                        <input v-model="product_name" type="text" class="form-control h-60 border-border-color" placeholder="Tên hàng" :class="{'is-invalid': !productNameValid}">
+                                        <div v-if="!productNameValid" class="invalid-feedback">Tên hàng không được để trống</div>
                                     </div>
                                 </div>
                                  <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Địa chỉ</label>
-                                        <input v-model="address" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
+                                        <label class="label text-secondary">Đơn vị tính</label>
+                                        <input v-model="unit" type="text" class="form-control h-60 border-border-color" placeholder="Đơn vị tính ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ngày hết hạn</label>
-                                        <input v-model="expiration_package" type="date" class="form-control h-60 border-border-color" placeholder="10%" :class="{'is-invalid': !expirationValid}">
-                                        <div v-if="!expirationValid" class="invalid-feedback">Ngày hết hạn không hợp lệ</div>
+                                        <label class="label text-secondary">Thuế suất</label>
+                                        <input v-model="tax_rate" type="number" class="form-control h-60 border-border-color" placeholder="Thuế suất ...">
+                                    </div>
+                                </div>
+                                <h3 class="fs-16 fw-semibold mb-20">Chi tiết combo</h3>
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-4">
+                                        <label class="label text-secondary">Mã chi tiết combo</label>
+                                        <input v-model="combo_detail_code" type="text" class="form-control h-60 border-border-color" placeholder="Mã chi tiết combo ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Gói dịch vụ</label>
-                                        <select v-model="selectedPackageId" class="form-select form-control h-60">
-                                            <option v-for="pkg in packageList" :key="pkg.id" :value="pkg.id">
-                                                {{ pkg.name }}
-                                            </option>
-                                        </select>
+                                        <label class="label text-secondary">Tên chi tiết combo</label>
+                                        <input v-model="combo_name" type="text" class="form-control h-60 border-border-color" placeholder="Tên chi tiết combo ...">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Trạng thái</label>
-                                        <select v-model="selectedStatus" class="form-select form-control h-60" aria-label="Default select example">
-                                            <option value="1" class="text-dark">Hoạt động</option>
-                                            <option value="0" class="text-dark">Ngưng hoạt động</option>
-                                        </select>
+                                        <label class="label text-secondary">Đơn vị tính chi tiết combo</label>
+                                        <input v-model="combo_unit" type="text" class="form-control h-60 border-border-color" placeholder="Đơn vị tính chi tiết combo ...">
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ghi chú</label>
-                                        <div class="form-group position-relative">
-                                            <textarea v-model="note" class="form-control text-dark" placeholder="Ghi chú ... " cols="30" rows="4"></textarea>
-                                        </div>
+                                        <label class="label text-secondary">Số lượng chi tiết combo</label>
+                                        <input v-model="quantity" type="number" class="form-control h-60 border-border-color" placeholder="Số lượng chi tiết combo ...">
                                     </div>
                                 </div>
-
                                 <div class="col-lg-12">
                                     <div class="d-flex justify-content-end flex-wrap gap-3">
                                         <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
-                                        <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="updateUser"> <i class="ri-add-line text-white fw-medium"></i> Cập nhât mới</button>
+                                        <button type="submit" class="btn btn-primary py-2 px-4 fw-medium fs-16"> <i class="ri-add-line text-white fw-medium"></i> Cập nhật</button>
                                     </div>
                                 </div>
                             </div>
@@ -329,31 +326,34 @@ import { hasPermission } from '@/utils/permission';
 export default defineComponent({
     setup() {
         const productList = ref([]);
-        const role = ref([]);
-        const user = ref([]);
-        const name = ref('');
-        const phone = ref('');
-        const address = ref('');
-        const email = ref('');
-        const expiration_package = ref('');
-        const note = ref('');
         const toast = useToast();
-        const nameValid = ref(true);
-        const emailValid = ref(true);
-        const phoneValid = ref(true);
-        const addressValid = ref(true);
-        const expirationValid = ref(true);
         const searchKeyword = ref('');
-        const userId = ref('');
-        const globalState = inject('globalState');
-        const baseUrl = globalState.baseUrl;
         const deleteId = ref(null);
         const currentPage = ref(1);
         const perPage = ref(10);
         const totalPages = ref(1);
-        const selectedPackageId = ref(null);
-        const selectedStatus = ref(1);
-        const selectedRole = ref('');
+        const totalProducts = ref(0); // New ref for total products count
+
+        // Product fields for create and update
+        const productId = ref(null);
+        const market_code = ref('');
+        const accounting_system_code = ref('');
+        const product_name = ref('');
+        const unit = ref('');
+        const tax_rate = ref(null);
+        const combo_detail_code = ref('');
+        const combo_name = ref('');
+        const combo_unit = ref('');
+        const quantity = ref(null);
+
+        // Validation refs for product fields
+        const marketCodeValid = ref(true);
+        const accountingSystemCodeValid = ref(true);
+        const productNameValid = ref(true);
+
+        const globalState = inject('globalState');
+        const baseUrl = globalState.baseUrl;
+
         const getProduct = () => {
             const params = {
                 page: currentPage.value,
@@ -364,164 +364,176 @@ export default defineComponent({
             }
             axios.get(`${baseUrl}/api/product`, { params })
                 .then((response) => {
-                    productList.value = response.data;
+                    productList.value = response.data.data; // Assuming API returns { data: [], total: N }
+                    totalProducts.value = response.data.total; // Get total count from API response
+                    totalPages.value = Math.ceil(totalProducts.value / perPage.value);
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         };
 
-        const createUser = () => {
-            nameValid.value = name.value.trim() !== '';
-            emailValid.value = email.value.trim() !== '' && /\S+@\S+\.\S+/.test(email.value);
-            phoneValid.value = typeof phone.value === 'string' ? phone.value.trim() === '' || /^\d{9,11}$/.test(phone.value) : true;
-            expirationValid.value = expiration_package.value !== '';
-            if (nameValid.value && emailValid.value && phoneValid.value && addressValid.value && expirationValid.value) {
-                axios.post(`${baseUrl}/api/user`, {
-                    name: name.value,
-                    phone: phone.value,
-                    address: address.value,
-                    email: email.value,
-                    expiration_package: expiration_package.value,
-                    package_id: selectedPackageId.value,
-                    status: selectedStatus.value,
-                    note: note.value,
-                    role_id: selectedRole.value
+        const createProduct = () => {
+            // Validate product fields
+            marketCodeValid.value = market_code.value.trim() !== '';
+            accountingSystemCodeValid.value = accounting_system_code.value.trim() !== '';
+            productNameValid.value = product_name.value.trim() !== '';
+
+            if (marketCodeValid.value && accountingSystemCodeValid.value && productNameValid.value) {
+                axios.post(`${baseUrl}/api/product`, {
+                    market_code: market_code.value,
+                    accounting_system_code: accounting_system_code.value,
+                    product_name: product_name.value,
+                    unit: unit.value,
+                    tax_rate: tax_rate.value,
+                    combo_detail_code: combo_detail_code.value,
+                    combo_name: combo_name.value,
+                    combo_unit: combo_unit.value,
+                    quantity: quantity.value,
                 })
                 .then(() => {
-                    getUser();
-                    toast.success("Tạo người dùng thành công");
+                    getProduct();
+                    toast.success("Tạo sản phẩm thành công");
                     const modal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
                     modal.hide();
-                    name.value = '';
-                    phone.value = '';
-                    address.value = '';
-                    email.value = '';
-                    expiration_package.value = '';
-                    note.value = '';
-                    selectedPackageId.value = null;
-                    selectedStatus.value = 1;
+                    market_code.value = '';
+                    accounting_system_code.value = '';
+                    product_name.value = '';
+                    unit.value = '';
+                    tax_rate.value = null;
+                    combo_detail_code.value = '';
+                    combo_name.value = '';
+                    combo_unit.value = '';
+                    quantity.value = null;
                 })
                 .catch((error) => {
-                    toast.error("Có lỗi xảy ra khi tạo người dùng");
+                    toast.error("Có lỗi xảy ra khi tạo sản phẩm");
                     console.log(error);
                 });
             } else {
-                toast.error("Vui lòng kiểm tra lại các trường dữ liệu");
+                toast.error("Vui lòng kiểm tra lại các trường dữ liệu bắt buộc");
             }
         };
-        const updateUser = () => {
-            nameValid.value = name.value.trim() !== '';
-            emailValid.value = email.value.trim() !== '' && /\S+@\S+\.\S+/.test(email.value);
-            phoneValid.value = typeof phone.value === 'string' ? phone.value.trim() === '' || /^\d{9,11}$/.test(phone.value) : true;
-            expirationValid.value = expiration_package.value !== '';
-            if (nameValid.value && emailValid.value && phoneValid.value && expirationValid.value) {
-                axios.put(`${baseUrl}/api/user/${userId.value}`, {
-                    name: name.value,
-                    phone: phone.value,
-                    address: address.value,
-                    email: email.value,
-                    expiration_package: expiration_package.value,
-                    package_id: selectedPackageId.value,
-                    status: selectedStatus.value,
-                    note: note.value,
+
+        const updateProduct = () => {
+            // Validate product fields
+            marketCodeValid.value = market_code.value.trim() !== '';
+            accountingSystemCodeValid.value = accounting_system_code.value.trim() !== '';
+            productNameValid.value = product_name.value.trim() !== '';
+
+            if (marketCodeValid.value && accountingSystemCodeValid.value && productNameValid.value) {
+                axios.put(`${baseUrl}/api/product/${productId.value}`, {
+                    market_code: market_code.value,
+                    accounting_system_code: accounting_system_code.value,
+                    product_name: product_name.value,
+                    unit: unit.value,
+                    tax_rate: tax_rate.value,
+                    combo_detail_code: combo_detail_code.value,
+                    combo_name: combo_name.value,
+                    combo_unit: combo_unit.value,
+                    quantity: quantity.value,
                 })
                 .then(() => {
-                    getUser();
-                    toast.success("Cập nhật người dùng thành công");
+                    getProduct();
+                    toast.success("Cập nhật sản phẩm thành công");
                     const modal = bootstrap.Modal.getInstance(document.getElementById('updateModal'));
                     modal.hide();
-                    name.value = '';
-                    phone.value = '';
-                    address.value = '';
-                    email.value = '';
-                    expiration_package.value = '';
-                    note.value = '';
-                    selectedPackageId.value = null;
-                    selectedStatus.value = '';
+                    // Clear form fields
+                    market_code.value = '';
+                    accounting_system_code.value = '';
+                    product_name.value = '';
+                    unit.value = '';
+                    tax_rate.value = null;
+                    combo_detail_code.value = '';
+                    combo_name.value = '';
+                    combo_unit.value = '';
+                    quantity.value = null;
                 })
                 .catch((error) => {
-                    toast.error("Có lỗi xảy ra khi tạo người dùng");
+                    toast.error("Có lỗi xảy ra khi cập nhật sản phẩm");
                     console.log(error);
                 });
             } else {
-                toast.error("Vui lòng kiểm tra lại các trường dữ liệu");
+                toast.error("Vui lòng kiểm tra lại các trường dữ liệu bắt buộc");
             }
         };
 
         const confirmDelete = () => {
             if (!deleteId.value) return;
-            axios.delete(`${baseUrl}/api/user/${deleteId.value}`)
+            axios.delete(`${baseUrl}/api/product/${deleteId.value}`)
                 .then(() => {
-                    toast.success('Xoá người dùng thành công');
-                    getUser();
+                    toast.success('Xoá sản phẩm thành công');
+                    getProduct();
                     deleteId.value = null;
                     const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
                     modal.hide();
                 })
                 .catch((error) => {
-                    toast.error('Xoá người dùng thất bại');
+                    toast.error('Xoá sản phẩm thất bại');
                     console.log(error);
                 });
         };
 
         const changePage = (page) => {
             currentPage.value = page;
-            getUser();
+            getProduct();
         };
-        const getUserID = (id) => {
+
+        const getProductID = (id) => {
             axios
-                .get(`${baseUrl}/api/user/${id}`)
+                .get(`${baseUrl}/api/product/${id}`)
                 .then((response) => {
                     const data = response.data;
-                    name.value = data.name;
-                    phone.value = data.phone;
-                    email.value = data.email;
-                    address.value = data.address;
-                    expiration_package.value = data.expiration_package;
-                    note.value = data.note;
-                    selectedPackageId.value = data.packages_id;
-                    selectedStatus.value = data.status;
-                    userId.value = data.id;
+                    productId.value = data.id;
+                    market_code.value = data.market_code;
+                    accounting_system_code.value = data.accounting_system_code;
+                    product_name.value = data.product_name;
+                    unit.value = data.unit;
+                    tax_rate.value = data.tax_rate;
+                    combo_detail_code.value = data.combo_detail_code;
+                    combo_name.value = data.combo_name;
+                    combo_unit.value = data.combo_unit;
+                    quantity.value = data.quantity;
                 })
                 .catch((error) => {
-                    toast.error('Lấy thông tin người dùng thất bại');
+                    toast.error('Lấy thông tin sản phẩm thất bại');
                     console.log(error);
                 });
         };
+
         watch(searchKeyword, () => {
             currentPage.value = 1;
             getProduct();
         });
+
         getProduct();
+
         return {
-            user,
-            name,
-            phone,
-            address,
-            email,
-            expiration_package,
-            note,
-            nameValid,
-            emailValid,
-            phoneValid,
-            addressValid,
-            expirationValid,
-            createUser,
-            deleteId,
-            confirmDelete,
+            productList,
             searchKeyword,
+            deleteId,
             currentPage,
             totalPages,
+            totalProducts, // return totalProducts
             changePage,
-            productList,
-            selectedPackageId,
-            selectedStatus,
-            getUserID,
-            userId,
-            updateUser,
-            role,
-            selectedRole
+            getProductID,
+            confirmDelete,
+            createProduct,
+            updateProduct,
+            // Product data properties
+            market_code,
+            accounting_system_code,
+            product_name,
+            unit,
+            tax_rate,
+            combo_detail_code,
+            combo_name,
+            combo_unit,
+            quantity,
+            // Validation properties
+            marketCodeValid,
+            accountingSystemCodeValid,
+            productNameValid,
         };
     },
     methods: {

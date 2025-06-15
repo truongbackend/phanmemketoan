@@ -381,17 +381,25 @@ export default defineComponent({
                     const usersData = response.data.users.data;
                     const pagination = response.data.users;
                     user.value = usersData.map(u => {
-                        const start = u.create_package ? new Date(u.create_package) : null;
+                        const now = new Date();
                         const end = u.expiration_package ? new Date(u.expiration_package) : null;
                         let duration = '';
-                        if (start && end) {
-                            const diffTime = end.getTime() - start.getTime();
+
+                        if (end) {
+                            const diffTime = end.getTime() - now.getTime();
                             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                            const diffMonths = Math.floor(diffDays / 30);
-                            duration = diffMonths > 0 ? `${diffMonths} tháng` : `${diffDays} ngày`;
+
+                            if (diffDays < 0) {
+                                duration = `Hết hạn ${Math.abs(diffDays)} ngày`;
+                            } else {
+                                const diffMonths = Math.floor(diffDays / 30);
+                                duration = diffMonths > 0 ? `${diffMonths} tháng` : `${diffDays} ngày`;
+                            }
                         }
+
                         return { ...u, duration };
                     });
+
                     packageList.value = response.data.packages;
                     const defaultPkg = packageList.value.find(p => p.default_packages === 1);
                     if (defaultPkg) {

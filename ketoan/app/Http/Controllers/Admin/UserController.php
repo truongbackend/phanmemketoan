@@ -64,12 +64,11 @@ class UserController extends Controller
 
         return response()->json($user, 201);
     }
-    public function update(Request $request, $id)
+   public function update(Request $request, $id)
     {
         $messages = [
             'email.unique' => 'Email đã tồn tại, chọn email khác nhé.',
         ];
-
         $validator = Validator::make($request->all(), [
             'email' => 'required|unique:users,email,' . $id,
         ], $messages);
@@ -77,29 +76,49 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        $users = User::findOrFail($id);
+
+        $user = User::findOrFail($id);
+        $updated = false;
+
+        // Kiểm tra và update password nếu có yêu cầu đổi
         if ($request->filled('old_password') && $request->filled('new_password')) {
-            if (!Hash::check($request->old_password, $users->password)) {
+            if (!Hash::check($request->old_password, $user->password)) {
                 return response()->json(['error' => 'Mật khẩu cũ không đúng'], 400);
             }
-            $users->password = Hash::make($request->new_password);
+            $user->password = Hash::make($request->new_password);
+            $updated = true;
         }
-        $users->name = $request->name;
-        $users->phone = $request->phone;
-        $users->packages_id = $request->packages_id;
-        $users->address = $request->address;
-        $users->expiration_package = $request->expiration_package;
-        $users->note = $request->note;
-        $users->status = $request->status;
-        $users->save();
-        if ($request->filled('role_id')) {
-            $role = Role::find($request->input('role_id'));
-            if ($role) {
-                $users->syncRoles([$role->name]);
+
+        // Danh sách các field cần kiểm tra
+        $fields = [
+            'name', 'email', 'phone', 'packages_id',
+            'address', 'expiration_package', 'note', 'status'
+        ];
+
+        foreach ($fields as $field) {
+            if ($request->has($field) && $request->$field != $user->$field) {
+                $user->$field = $request->$field;
+                $updated = true;
             }
         }
-        return response()->json(['message' => 'Cập nhật thành công']);
+
+        if ($updated) {
+            $user->save();
+        }
+
+        // Update role nếu có yêu cầu và khác role hiện tại
+        if ($request->filled('role_id')) {
+            $role = Role::find($request->input('role_id'));
+            if ($role && !$user->hasRole($role->name)) {
+                $user->syncRoles([$role->name]);
+            }
+        }
+
+        return response()->json([
+            'message' => $updated ? 'Cập nhật thành công' : 'Không có thay đổi nào'
+        ]);
     }
+
 
     public function edit($id)
     {

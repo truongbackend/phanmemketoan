@@ -51,15 +51,6 @@
                             </div>
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link p-0 d-flex align-items-center" id="step8-tab" data-bs-toggle="tab" data-bs-target="#step8-tab-pane" type="button" role="tab" aria-controls="step8-tab-pane" aria-selected="false">
-                            <span class="fs-20 fw-bold text-primary wh-48 bg-primary bg-opacity-10 rounded-circle d-inline-block">4</span>
-                            <div class="text-start ms-3">
-                                <h4 class="fs-18 fw-semibold">Kết quả</h4>
-                                <p class="text-gray-light mb-0">Trả kết quả</p>
-                            </div>
-                        </button>
-                    </li>
                 </ul>
                 <div class="tab-content" id="myTabstep2Content">
                     <div class="tab-pane fade show active" id="step5-tab-pane" role="tabpanel" aria-labelledby="step5-tab" tabindex="0">
@@ -267,7 +258,28 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <label class="label">Tên hàng</label>
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="tenhang1" :value="1" v-model="trigger_product_name">
+                                        <label class="form-check-label" for="tenhang1">
+                                            Lấy tên theo mã hàng hóa
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="tenhang2" :value="2" v-model="trigger_product_name">
+                                        <label class="form-check-label" for="tenhang2">
+                                            Lấy tên theo dữ liệu sàn
+                                        </label>
+                                    </div>
+
+                                    <div v-if="!trigger_product_nameValid" class="invalid-feedback d-block">
+                                        Vui lòng chọn tên sản phẩm
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 mt-3">
                                     <div class="form-group d-flex gap-3">
                                         <button type="button" class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">Quay lại</button>
                                         <button type="submit" class="btn btn-primary py-3 px-5 fw-semibold text-white">Tiếp tục</button>
@@ -278,7 +290,6 @@
                     </div>
                     <div class="tab-pane fade" id="step7-tab-pane" role="tabpanel" aria-labelledby="step7-tab" tabindex="0">
                         <h4 class="fs-18 fw-semibold">Đơn hàng xuất hoá đơn</h4>
-                        <p class="text-gray-light mb-4">Cài đặt xuất hoá đơn và Diễn giải lý do nộp</p>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="default-table-area recent-orders">
@@ -323,11 +334,36 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <template v-if="showShippingTaxOptions">
+                                <div class="col-lg-4 mt-3">
+                                    <label class="label">Chọn thuế dịch vụ vận chuyển</label>
+                                </div>
+                                <div class="col-lg-4 mt-3">
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" type="radio" name="chonthuevanchuyeh" id="chonthuevanchuyeh_8" :value="8" v-model="shipping_service_tax">
+                                        <label class="form-check-label" for="chonthuevanchuyeh_8">
+                                            8%
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 mt-3">
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" type="radio" name="chonthuevanchuyeh" id="chonthuevanchuyeh_10" :value="10" v-model="shipping_service_tax">
+                                        <label class="form-check-label" for="chonthuevanchuyeh_10">
+                                            10%
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div v-if="!shipping_service_taxValid" class="invalid-feedback d-block">
+                                        Vui lòng chọn thuế dịch vụ vận chuyển
+                                    </div>
+                                </div>
+                            </template>
                             <div class="col-md-12 mt-3">
                                 <div class="form-group d-flex gap-3">
                                     <button class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">Quay lại</button>
-                                    <button @click="goToTab('step8-tab')" class="btn btn-primary py-3 px-5 fw-semibold text-white">Tiếp tục</button>
+                                    <button @click="processOrdersAndGoToNextStep" class="btn btn-primary py-3 px-5 fw-semibold text-white">Tiếp tục</button>
                                 </div>
 
                             </div>
@@ -342,6 +378,7 @@
     </div>
 </div>
 
+
 </template>
 
 <script>
@@ -350,7 +387,8 @@ import {
     ref,
     watch,
     inject,
-    onMounted
+    onMounted,
+    computed
 } from 'vue';
 import axios from 'axios';
 import {
@@ -374,7 +412,9 @@ export default defineComponent({
         const customer_code = ref('');
         const account_inventory = ref('1561');
         const submission_reason = ref([]);
-
+        const trigger_product_name = ref('');
+        const export_instance_id = ref(null);
+        const shipping_service_tax = ref(null);
         const file_info = ref(null);
         const file_push_sale = ref(null);
         const file_data_product = ref(null);
@@ -388,6 +428,10 @@ export default defineComponent({
         const submission_reasonValid = ref(true);
         const warehouse_codeValid = ref(true);
         const customer_codeValid = ref(true);
+        const shipping_service_taxValid = ref(true);
+        const trigger_product_nameValid = ref(true);
+
+        const isLoading = ref(false);
         const handleFileUpload = (event, fileType) => {
             const file = event.target.files[0];
             if (file) {
@@ -418,8 +462,13 @@ export default defineComponent({
                 console.warn(`Tab with ID '${tabId}' not found.`);
             }
         };
+        const showShippingTaxOptions = computed(() => {
+            return order.value.some(item => item.is_service_invoice_checked);
+        });
 
         const sendFileDelivery = async () => {
+            document.getElementById('preloader').style.display = 'block';
+            isLoading.value = false;
             FileInfoValid.value = !!file_info.value;
             file_push_saleValid.value = !!file_push_sale.value;
             file_data_productValid.value = !!file_data_product.value;
@@ -429,6 +478,7 @@ export default defineComponent({
             submission_reasonValid.value = submission_reason.value.length > 0;
             warehouse_codeValid.value = !!warehouse_code.value.trim();
             customer_codeValid.value = !!customer_code.value.trim();
+            trigger_product_nameValid.value = trigger_product_name.value === 1 || trigger_product_name.value === 2;
             if (
                 !FileInfoValid.value ||
                 !file_push_saleValid.value ||
@@ -438,9 +488,11 @@ export default defineComponent({
                 !posting_dateValid.value ||
                 !submission_reasonValid.value ||
                 !warehouse_codeValid.value ||
-                !customer_codeValid.value
+                !customer_codeValid.value ||
+                !trigger_product_nameValid.value
             ) {
                 toast.error('Vui lòng điền đầy đủ thông tin trước khi gửi.');
+                document.getElementById('preloader').style.display = 'none';
                 return;
             }
             const formData = new FormData();
@@ -466,6 +518,7 @@ export default defineComponent({
             formData.append('export_receipt_number', export_receipt_number.value);
             formData.append('posting_date', posting_date.value);
             formData.append('customer_code', customer_code.value);
+            formData.append('trigger_product_name', trigger_product_name.value);
             formData.append('account_cash_expense_debt', account_cash_expense_debt.value);
             formData.append('account_revenue_credit', account_revenue_credit.value);
             formData.append('account_vat_tax', account_vat_tax.value);
@@ -497,13 +550,94 @@ export default defineComponent({
                 if (response) {
                     toast.success('Dữ liệu giao hàng đã được gửi thành công!');
                     order.value = response.data.case_data;
+                    isLoading.value = true;
+                    export_instance_id.value = response.data.export_instance_id;
+                    console.log(response.data);
                     goToTab('step7-tab');
+                    document.getElementById('preloader').style.display = 'none';
 
                 } else {
                     toast.error(`Lỗi: ${response.data.message || 'Không thể gửi dữ liệu.'}`);
                 }
             } catch (error) {
+                document.getElementById('preloader').style.display = 'none';
                 toast.error('Có lỗi xảy ra khi gửi dữ liệu. Vui lòng thử lại.');
+            }
+        };
+        const processOrdersAndGoToNextStep = async () => {
+            isLoading.value = true;
+            const arr_delivery_code_export_sale = [];
+            const arr_delivery_code_export_service = [];
+
+            order.value.forEach(item => {
+                if (item.is_sale_invoice_checked) {
+                    arr_delivery_code_export_sale.push(item.delivery_code);
+                }
+                if (item.is_service_invoice_checked) {
+                    arr_delivery_code_export_service.push(item.delivery_code);
+
+                }
+            });
+            if (showShippingTaxOptions.value) {
+                shipping_service_taxValid.value = !!shipping_service_tax.value;
+                if (!shipping_service_taxValid.value) {
+                    toast.error('Vui lòng chọn thuế dịch vụ vận chuyển.');
+                    isLoading.value = false;
+                    return;
+                }
+            }
+            if (!export_instance_id.value) {
+                toast.error('Không tìm thấy ID phiên xuất. Vui lòng thử lại bước trước đó.');
+                isLoading.value = false;
+                return;
+            }
+
+            const payload = {
+                arr_delivery_code_export_sale: arr_delivery_code_export_sale,
+                arr_delivery_code_export_service: arr_delivery_code_export_service,
+                export_instance_id: export_instance_id.value,
+                ...(showShippingTaxOptions.value && !!shipping_service_tax.value && { shipping_service_tax: shipping_service_tax.value })
+            };
+            try {
+                const response = await axios.post(`${baseUrl}/api/accounting/invoice-processing/viettel-post/export`, payload, {
+                    responseType: 'blob',
+                });
+                if (response.data && response.data.type) {
+                    const blob = new Blob([response.data], { type: response.data.type });
+                    const filename = response.headers['content-disposition']
+    ? response.headers['content-disposition'].split('filename=')[1].split(';')[0].replace(/"/g, '')
+    : 'processed_report.zip';
+
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+
+                    toast.success('Đã xuất hoá đơn thành công tệp đã được tải xuống!');
+                } else {
+                    toast.error('Không nhận được dữ liệu tệp hợp lệ từ máy chủ sau khi xử lý đơn hàng.');
+                }
+            } catch (error) {
+                console.error("Lỗi khi xử lý đơn hàng và tải xuống tệp:", error);
+                if (error.response && error.response.data) {
+                    const reader = new FileReader();
+                    reader.onload = function() {
+                        try {
+                            const errorJson = JSON.parse(reader.result);
+                            toast.error(`Lỗi: ${errorJson.message || 'Không thể xử lý đơn hàng hoặc tải xuống tệp.'}`);
+                        } catch (e) {
+                            toast.error('Đã xảy ra lỗi khi xử lý đơn hàng hoặc tải xuống tệp.');
+                        }
+                    };
+                    reader.readAsText(error.response.data);
+                } else {
+                    toast.error('Đã xảy ra lỗi khi xử lý đơn hàng hoặc tải xuống tệp.');
+                }
+            } finally {
+                isLoading.value = false;
             }
         };
 
@@ -518,7 +652,9 @@ export default defineComponent({
             warehouse_code,
             account_cost_of_goods_sold,
             customer_code,
+            trigger_product_name,
             account_inventory,
+            shipping_service_tax,
             submission_reason,
             handleFileUpload,
             sendFileDelivery,
@@ -536,10 +672,15 @@ export default defineComponent({
             submission_reasonValid,
             warehouse_codeValid,
             customer_codeValid,
+            shipping_service_taxValid,
+            trigger_product_nameValid,
 
             handleFileUpload,
             sendFileDelivery,
-            goToTab
+            goToTab,
+            export_instance_id,
+            processOrdersAndGoToNextStep,
+            showShippingTaxOptions,
         };
     },
 });

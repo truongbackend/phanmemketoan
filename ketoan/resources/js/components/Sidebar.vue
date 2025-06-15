@@ -1,9 +1,8 @@
 <template>
 <div class="sidebar-area" id="sidebar-area">
     <div class="logo position-relative">
-        <a href="" class="d-block text-decoration-none position-relative">
-            <img src="assets/avatar/logo.webp" alt="logo-icon" />
-            <span class="logo-text fw-bold text-dark">PNL</span>
+        <a href="#" class="d-block text-decoration-none position-relative">
+            <span class="fs-5 fw-bold text-dark">PNL INTERNATIONAL</span>
         </a>
         <button class="sidebar-burger-menu bg-transparent p-0 border-0 opacity-0 z-n1 position-absolute top-50 end-0 translate-middle-y" id="sidebar-burger-menu">
             <i data-feather="x"></i>
@@ -18,13 +17,13 @@
                     <span class="title">Xuất hoá đơn giao hàng</span>
                 </router-link>
             </li>
-            <li class="menu-item" >
+            <li class="menu-item" v-if="hasPermission('package.list')">
                 <router-link :to="{ name: 'admin-package' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">local_activity</span>
-                    <span class="title">Gói</span>
+                    <span class="title">Gói dịch vụ</span>
                 </router-link>
             </li>
-            <li class="menu-item">
+            <li class="menu-item" v-if="hasPermission('product.list')">
                 <router-link :to="{ name: 'admin-product' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">dataset</span>
                     <span class="title">Hàng hoá</span>
@@ -36,12 +35,12 @@
                     <span class="title">Hệ thống</span>
                 </a>
                 <ul class="menu-sub">
-                    <li class="menu-item">
-                        <router-link :to="{ name: 'admin-role' }" class="menu-link">
+                    <li class="menu-item" v-if="hasPermission('role.list')">
+                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
                             Nhóm quyền
                         </router-link>
                     </li>
-                    <li class="menu-item" v-if="hasPermission('user')">
+                    <li class="menu-item" v-if="hasPermission('user.list')">
                         <router-link :to="{ name: 'admin-user' }" class="menu-link">
                             Người dùng
                         </router-link>
@@ -54,19 +53,19 @@
 
                 </ul>
             </li>
-            <li class="menu-item">
+            <li class="menu-item" v-if="hasPermission('report.list')">
                 <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">pie_chart</span>
                     <span class="title">Báo cáo</span>
                 </router-link>
             </li>
-            <li class="menu-item">
+            <li class="menu-item" v-if="hasPermission('notification.list')">
                 <router-link :to="{ name: 'admin-notification' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">notifications</span>
                     <span class="title">Thông báo</span>
                 </router-link>
             </li>
-            <li class="menu-item">
+            <li class="menu-item" v-if="hasPermission('complaints.list')">
                 <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">forum</span>
                     <span class="title">Khiếu nại</span>

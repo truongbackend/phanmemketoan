@@ -8,68 +8,34 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
                         <li class="nav-item">
                             <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4 active" href="landing-page.html">Trang chủ</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4" href="features.html">Features</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4" href="our-team.html">Our Team</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4" href="faqs.html">FAQ’s</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4" href="contact.html">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4" href="index.html">Admin</a>
-                        </li>
                     </ul>
                     <div class="othres">
                         <a href="login.html" class="btn btn-outline-primary-div py-2 px-4 fw-medium fs-16 rounded-3">
                             <i class="ri-login-box-line fs-18 position-relative top-2"></i>
-                            <span class="ms-1">Login</span>
+                            <span class="ms-1">Đăng nhập</span>
                         </a>
                         <a href="register.html" class="btn btn-primary-div py-2 px-4 fw-medium fs-16 text-white ms-3 rounded-3">
                             <i class="ri-user-line fs-18"></i>
-                            <span class="ms-1">Register</span>
+                            <span class="ms-1">Đăng ký</span>
                         </a>
                     </div>
                 </div>
             </div>
         </nav>
-        <div class="banner-area bg-img pb-0" id="home">
-            <div class="container position-relative z-1">
-                <div class="banner-content text-center pb-75">
-                    <h1 class="fs-60 mb-3 pb-md-3">Giải pháp bán hàng thông minh, gói gọn trong một nền tảng.</h1>
-                    <p class="fs-18 m-auto mb-3 pb-md-3 mw-740">Từ đơn hàng đến hóa đơn, PNL giúp doanh nghiệp kế toán mọi giao dịch dễ dàng, kết nối liền mạch với các sàn thương mại điện tử.</p>
-                </div>
-                <div class="banner-img-wrap text-center">
-                    <img src="assets/images/landing/banner-img.png" alt="banner-img">
-                </div>
-
-                <img src="assets/images/landing/shape-3.png" class="shape shape-7" alt="shape">
-                <img src="assets/images/landing/shape-4.png" class="shape shape-8" alt="shape">
-                <img src="assets/images/landing/shape-5.png" class="shape shape-9" alt="shape">
-                <img src="assets/images/landing/shape-6.png" class="shape shape-10" alt="shape">
-            </div>
-        </div>
         <div class="tailor-area position-relative z-1 pt-150">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6">
-                        <div class="tailor-img">
-                            <img src="assets/images/landing/tailor-img.png" alt="tailor">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
                         <div class="tailor-content">
-                            <button type="button" class="btn btn-outline-light fw-medium py-2 px-4 hover-white rounded-pill">Giới thiệu về PNL</button>
-                            <h2 class="mt-2">Được xây dựng để tăng tốc mọi hoạt động kế toán mỗi ngày</h2>
-                            <p>Hệ thống quản lý trọn gói.</p>
+                            <h2>Nền tảng quản trị doanh nghiệp hợp nhất</h2>
+                            <p>Giải pháp chuyển đổi số nhanh chóng - dễ dàng - chi phí hợp lý cho mọi doanh nghiệp.</p>
                             <ul class="ps-0 mb-0 list-unstyled">
                                 <li>
                                     <div class="d-flex">
@@ -101,235 +67,20 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <i class="material-symbols-outlined fs-20 text-primary">done_outline</i>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h3>Xử lý dữ liệu dễ dàng</h3>
-                                        </div>
-                                    </div>
-                                </li>
                             </ul>
 
                         </div>
                         <a href="contact.html" class="btn btn-primary-div py-2 px-4 fs-16 fw-medium rounded-3 text-white mt-3"><i class="ri-user-line fs-18"></i><span class="ms-1">Bắt đầu dùng thử miễn phí của bạn</span></a>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="tailor-img">
+                            <img src="assets/images/landing/tailor-img.png" alt="tailor">
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <img src="assets/images/landing/shape-1.png" class="shape shape-1" alt="shape">
-            <img src="assets/images/landing/shape-2.png" class="shape shape-2" alt="shape">
         </div>
-        <!-- End Tailor Area -->
-
-        <!-- End Testimonials Area -->
-        <div class="testimonials-area pt-150" id="testimonials">
-            <div class="container">
-                <div class="section-title mw-630">
-                    <span class="top-title">
-                        <span>Lời chứng thực</span>
-                    </span>
-                    <h2>Inspiring Feedback: What Users Love About Trezo Dashboard</h2>
-                </div>
-                <div class="masonrow">
-					<div class="item">
-						<div class="single-testimonials">
-							<ul class="reating ps-0 list-unstyled">
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-							</ul>
-							<p>Trezo Dashboard Template has transformed how we manage our data. Its intuitive design and customizable features have streamlined our analytics process, enabling us to make informed decisions faster than ever before.</p>
-
-							<div class="d-flex align-items-center review-info">
-								<div class="review">
-									<img src="assets/images/landing/testimonial-1.jpg" class="rounded-circle wh-50" alt="testimonial">
-								</div>
-								<div class="ms-3">
-									<h4>Sarah Thompson</h4>
-									<span>Data Analyst</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="single-testimonials">
-							<ul class="reating ps-0 list-unstyled">
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-half-fill"></i>
-								</li>
-							</ul>
-							<p>As a developer, I appreciate the flexibility and robustness of Trezo Dashboard Template. It offers a wide range of features that cater to our diverse needs, and its clean codebase has made customization a breeze. Highly recommended!</p>
-
-							<div class="d-flex align-items-center review-info">
-								<div class="review">
-									<img src="assets/images/landing/testimonial-2.jpg" class="rounded-circle wh-50" alt="testimonial">
-								</div>
-								<div class="ms-3">
-									<h4>John Smith</h4>
-									<span>Software Engineer</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="single-testimonials">
-							<ul class="reating ps-0 list-unstyled">
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-line"></i>
-								</li>
-							</ul>
-							<p>Trezo Dashboard Template has been a lifesaver for our organization. It's helped us streamline our reporting processes and communicate insights effectively across departments. The time saved has allowed us to focus more on strategic initiatives.</p>
-
-							<div class="d-flex align-items-center review-info">
-								<div class="review">
-									<img src="assets/images/landing/testimonial-3.jpg" class="rounded-circle wh-50" alt="testimonial">
-								</div>
-								<div class="ms-3">
-									<h4>Alex Rodriguez</h4>
-									<span>Marketing Director</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="single-testimonials">
-							<ul class="reating ps-0 list-unstyled">
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-half-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-line"></i>
-								</li>
-							</ul>
-							<p>I can't recommend Trezo Dashboard Template enough. It's helped us gain a deeper understanding of our business metrics and identify areas for improvement. The responsive support team is an added bonus, always ready to assist whenever we need it.</p>
-
-							<div class="d-flex align-items-center review-info">
-								<div class="review">
-									<img src="assets/images/landing/testimonial-4.jpg" class="rounded-circle wh-50" alt="testimonial">
-								</div>
-								<div class="ms-3">
-									<h4>Kevin Brown</h4>
-									<span>Jessica Martinez</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="single-testimonials">
-							<ul class="reating ps-0 list-unstyled">
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-							</ul>
-							<p>Using Trezo Dashboard Template has been a game-changer for our team. The ability to customize widgets to suit our specific needs has allowed us to gain deeper insights into our performance metrics and drive business growth.</p>
-
-							<div class="d-flex align-items-center review-info">
-								<div class="review">
-									<img src="assets/images/landing/testimonial-5.jpg" class="rounded-circle wh-50" alt="testimonial">
-								</div>
-								<div class="ms-3">
-									<h4>Olivia Adams</h4>
-									<span>Marketing Coordinator</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="single-testimonials">
-							<ul class="reating ps-0 list-unstyled">
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-fill"></i>
-								</li>
-								<li>
-									<i class="ri-star-line"></i>
-								</li>
-								<li>
-									<i class="ri-star-line"></i>
-								</li>
-							</ul>
-							<p>As a startup, we needed a dashboard solution that was both powerful and cost-effective. Trezo Dashboard Template checked all the boxes for us. It's helped us stay agile and competitive in a fast-paced market.</p>
-
-							<div class="d-flex align-items-center review-info">
-								<div class="review">
-									<img src="assets/images/landing/testimonial-6.jpg" class="rounded-circle wh-50" alt="testimonial">
-								</div>
-								<div class="ms-3">
-									<h4>Daniel Lee</h4>
-									<span>Co-founder, StartupX</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-            </div>
-        </div>
-
-        <!-- Start FAQ Area -->
         <div class="faq-arae position-relative z-1 pt-125" id="fqss">
             <div class="container">
                 <div class="section-title mw-630">
@@ -500,9 +251,6 @@
                     </div>
                 </div>
             </div>
-
-            <img src="assets/images/landing/shape-1.png" class="shape shape-5" alt="shape">
-            <img src="assets/images/landing/shape-2.png" class="shape shape-6" alt="shape">
         </div>
         <!-- End Unlock Area -->
 
@@ -512,9 +260,15 @@
                 <div class="row">
                     <div class="col-lg-3 col-sm-6">
                         <div class="footer-single-item mb-4">
-                            <a href="#" class="footer-logo d-inline-block mb-4">
-                                <img src="assets/images/landing/logo.svg" alt="logo">
-                            </a>
+                            <div class="d-flex align-items-center mb-3 mb-sm-0">
+                <div class="flex-shrink-0">
+                    <img src="assets/avatar/logo.webp" class="wh-60 rounded-circle" alt="user">
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h4 class="fs-16 fw-semibold mb-1">Andrew Burns</h4>
+                    <span class="fs-14">Programmer</span>
+                </div>
+            </div>
                             <p class="mb-4 pb-lg-2">With customizable dashboards tailored to your needs, collaborate effortlessly with your team and stay ahead with real-time updates.</p>
 
                             <ul class="ps-0 mb-0 list-unstyled d-flex flex-wrap gap-3">

@@ -1,21 +1,40 @@
 <template>
 <div>
-    <div class="row justify-content-center">
-        <div class="col-lg-12">
-            <div class="card bg-primary border-0 rounded-3 welcome-box style-two mb-4 position-relative">
-                <div class="card-body py-38 px-4">
-                    <div class="mb-2">
-                        <h3 class="text-white fw-semibold">
-                            Xin chào, <span class="text-danger-div">{{ userName }} !</span>
-                        </h3>
-                        <p class="text-light">
-                            Đã gia hạn gói dịch vụ vào ngày {{ formattedDate }}.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="card bg-primary border-0 rounded-3 welcome-box mb-4">
+                                <div class="card-body p-4">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <div class="border-bottom position-relative top-5">
+                                                <h3 class="text-white fw-semibold mb-1">Xin chào, <span class="text-danger-div">{{ userName }}</span></h3>
+                                                <p class="text-light">Đã gia hạn gói dịch vụ vào ngày 20-7-2024..</p>
+                                            </div>
+
+                                            <div class="d-flex align-items-center flex-wrap gap-4 gap-xxl-5">
+                                                <div class="d-flex align-items-center welcome-status-item">
+                                                    <div class="flex-shrink-0">
+                                                        <i class="material-symbols-outlined">shopping_bag</i>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h5 class="text-white fw-semibold mb-0">1 đơn hàng</h5>
+                                                        <p class="text-light">Đơn hàng hệ thống</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex align-items-center welcome-status-item">
+                                                    <div class="flex-shrink-0">
+                                                        <i class="material-symbols-outlined icon-bg">chat_error</i>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h5 class="text-white fw-semibold mb-0">1 sản phẩm</h5>
+                                                        <p class="text-light">Out of stock</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
 
     <div class="row justify-content-center">
         <div class="col-lg-712">
@@ -66,10 +85,13 @@
                                     <div class="form-group mb-4">
                                         <label class="label text-secondary">Mật khẩu mới</label>
                                         <div class="form-group">
+                                            <div class="form-group">
                                             <div class="password-wrapper position-relative">
                                                 <input type="password" id="password" class="form-control h-55 text-dark" value="@password#" v-model="passwordNew" />
                                                 <i style="color: #a9a9c8; font-size: 16px; right: 15px" class="ri-eye-off-line password-toggle-icon translate-middle-y top-50 position-absolute" aria-hidden="true"></i>
                                             </div>
+                                        </div>
+
                                         </div>
                                     </div>
                                 </div>

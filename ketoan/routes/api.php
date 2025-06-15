@@ -42,7 +42,6 @@ Route::post('logout', [AuthController::class, 'logout']);
 Route::post('resetPassword', [AuthController::class, 'resetPassword']);
 Route::resource('packages', packageController::class);
 Route::resource('product', ProductController::class);
-Route::resource('notification', notificationController::class);
 Route::get('user', [UserController::class, 'index']);
 Route::post('user', [UserController::class, 'store']);
 Route::get('user/{id}', [UserController::class, 'edit']);
@@ -60,3 +59,8 @@ Route::delete('user/{id}', [UserController::class, 'destroy']);
 //     Route::post('/packages', [PackageController::class, 'store']);
 //     // các route cần bảo vệ
 // });
+Route::get('notifications', [NotificationController::class, 'index']);
+Route::get('notifications/{notification}', [NotificationController::class, 'show']);
+Route::put('notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead']);
+Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
+Route::post('notifications', [NotificationController::class, 'store']); // For creating new notifications (e.g., from an admin panel)

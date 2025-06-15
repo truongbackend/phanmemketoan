@@ -1,6 +1,6 @@
 <template>
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-    <h3 class="mb-0">Thông báo</h3>
+    <h3 class="mb-0">Gói dịch vụ</h3>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb align-items-center mb-0 lh-1">
@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                <span class="fw-medium">Thông báo</span>
+                <span class="fw-medium">Gói dịch vụ</span>
             </li>
         </ol>
     </nav>
@@ -24,7 +24,7 @@
                 <input type="text" class="form-control border-0" placeholder="Tìm kiếm gói...." v-model="searchKeyword" />
                 <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
             </form>
-            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal">
+            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal" v-if="hasPermission('package.list')">
                 <span class="d-flex align-items-center" style="gap: 5px;">
                     <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
                     <span>Thêm mới</span>
@@ -73,23 +73,19 @@
                                 <span class="badge bg-danger bg-opacity-10 text-danger fw-normal">Ngưng hoạt động</span>
                             </td>
                             <td class="text-secondary">
-                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
+                                <button v-if="hasPermission('package.edit')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
                                     <i class="material-symbols-outlined fs-16 text-body">edit</i>
                                 </button>
-                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
+                                <button v-if="hasPermission('package.delete')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
                                         data-bs-toggle="modal" data-bs-target="#deleteModal"
                                         @click="deleteId = Items.id">
                                     <i class="material-symbols-outlined fs-16 text-danger">delete</i>
                                 </button>
                             </td>
                         </tr>
-
-
-
                     </tbody>
                 </table>
             </div>
-
         </div>
 
         <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
