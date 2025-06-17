@@ -14,6 +14,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use App\Exports\SimpleArrayExport;
 
+use OpenSpout\Reader\XLSX\Reader;
+
+
+
 use App\Traits\LoggerTrait;
 use Dflydev\DotAccessData\Data;
 use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
@@ -50,7 +54,6 @@ class ViettelPostImportController extends Controller
             $export_instance_id = Str::random(40);
 
             $validated = $request->validated();
-            
             $inputSetting = [
                 'export_receipt_number' => $validated['export_receipt_number'] ?? null,
                 'posting_date' => $validated['posting_date'],
@@ -65,8 +68,32 @@ class ViettelPostImportController extends Controller
             ];
 
             $fileInfoData = Excel::toArray([], $request->file('file_info'));
+            $fileInfoData = array_map(function($sheet) {
+                return array_filter($sheet, function($row) {
+                    // Loại bỏ dòng rỗng hoàn toàn
+                    return collect($row)->filter(function($cell) {
+                        return $cell !== null && $cell !== '';
+                    })->isNotEmpty();
+                });
+            }, $fileInfoData);
+
             $filePushSaleData = Excel::toArray([], $request->file('file_push_sale'));
+            $filePushSaleData = array_map(function($sheet) {
+                return array_filter($sheet, function($row) {
+                    return collect($row)->filter(function($cell) {
+                        return $cell !== null && $cell !== '';
+                    })->isNotEmpty();
+                });
+            }, $filePushSaleData);
+
             $fileDataProductData = Excel::toArray([], $request->file('file_data_product'));
+            $fileDataProductData = array_map(function($sheet) {
+                return array_filter($sheet, function($row) {
+                    return collect($row)->filter(function($cell) {
+                        return $cell !== null && $cell !== '';
+                    })->isNotEmpty();
+                });
+            }, $fileDataProductData);
 
             $dateFrom = \DateTime::createFromFormat('d/m/Y H:i:s', $validated['reporting_date_from']);
             $dateTo = \DateTime::createFromFormat('d/m/Y H:i:s', $validated['reporting_date_to']);
@@ -91,12 +118,6 @@ class ViettelPostImportController extends Controller
                 })
                 ->values()
                 ->all();
-            
-                // dd($fileInfoDataFiltered[513]);
-            // $this->loggerDataRequest([
-            //     'file' => "viettel_post_file_info",
-            //     'data' => $fileInfoDataFiltered
-            // ]);
 
             $filePushSaleFiltered = collect($filePushSaleData[0])
                 ->filter(function($row) {
@@ -126,11 +147,6 @@ class ViettelPostImportController extends Controller
                 })
                 ->values()
                 ->all();
-
-            // $this->loggerDataRequest([
-            //     'file' => "product_data_file_info",
-            //     'data' => $fileDataProductDataFiltered
-            // ]);
             
             $fileInfoDataMerged = collect($fileInfoDataFiltered)->map(function($infoRow) use ($filePushSaleFiltered) {
                 $matchingPushSales = collect($filePushSaleFiltered)
