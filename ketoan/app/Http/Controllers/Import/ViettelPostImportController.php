@@ -13,14 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use App\Exports\SimpleArrayExport;
-
-use OpenSpout\Reader\XLSX\Reader;
-
-
-
 use App\Traits\LoggerTrait;
-use Dflydev\DotAccessData\Data;
-use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
 use Illuminate\Support\Facades\Storage;
 
 use ZipArchive;
@@ -85,7 +78,7 @@ class ViettelPostImportController extends Controller
                     })->isNotEmpty();
                 });
             }, $filePushSaleData);
-
+            
             $fileDataProductData = Excel::toArray([], $request->file('file_data_product'));
             $fileDataProductData = array_map(function($sheet) {
                 return array_filter($sheet, function($row) {
@@ -130,11 +123,6 @@ class ViettelPostImportController extends Controller
                 })
                 ->values()
                 ->all();
-
-            $this->loggerDataRequest([
-                'file' => "push_sale_file_info",
-                'data' => $filePushSaleFiltered
-            ]);
 
             $fileProductDataFiltered = collect($fileDataProductData[0])
                 ->filter(function($row) {
