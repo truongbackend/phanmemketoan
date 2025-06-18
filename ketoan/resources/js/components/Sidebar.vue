@@ -66,6 +66,12 @@
                 </router-link>
             </li>
             <li class="menu-item" v-if="hasPermission('complaints.list')">
+                <router-link :to="{ name: 'admin-storedProcedure' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">move_down</span>
+                    <span class="title">Hóa đơn đã xuất</span>
+                </router-link>
+            </li>
+            <li class="menu-item" v-if="hasPermission('complaints.list')">
                 <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">forum</span>
                     <span class="title">Khiếu nại</span>

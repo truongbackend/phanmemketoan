@@ -143,14 +143,14 @@
                                     <label class="label">Ngày hạch toán</label>
 
                                     <div class="form-check mb-1">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="ngayhoachtoan1" :value="1" v-model="posting_date">
+                                        <input class="form-check-input" type="radio" name="ngayhachtoan" id="ngayhoachtoan1" :value="1" v-model="posting_date">
                                         <label class="form-check-label" for="ngayhoachtoan1">
                                             Lấy theo ngày giao hàng
                                         </label>
                                     </div>
 
                                     <div class="form-check mb-1">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="ngayhoachtoan2" :value="2" v-model="posting_date">
+                                        <input class="form-check-input" type="radio" name="ngayhachtoan" id="ngayhoachtoan2" :value="2" v-model="posting_date">
                                         <label class="form-check-label" for="ngayhoachtoan2">
                                             Lấy ngày hiện tại
                                         </label>
@@ -261,14 +261,14 @@
                                 <div class="col-lg-4">
                                     <label class="label">Tên hàng</label>
                                     <div class="form-check mb-1">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="tenhang1" :value="1" v-model="trigger_product_name">
+                                        <input class="form-check-input" type="radio" name="tenhang" id="tenhang1" :value="1" v-model="trigger_product_name">
                                         <label class="form-check-label" for="tenhang1">
                                             Lấy tên theo mã hàng hóa
                                         </label>
                                     </div>
 
                                     <div class="form-check mb-1">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="tenhang2" :value="2" v-model="trigger_product_name">
+                                        <input class="form-check-input" type="radio" name="tenhang" id="tenhang2" :value="2" v-model="trigger_product_name">
                                         <label class="form-check-label" for="tenhang2">
                                             Lấy tên theo dữ liệu sàn
                                         </label>

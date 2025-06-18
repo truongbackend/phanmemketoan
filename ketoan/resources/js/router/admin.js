@@ -49,6 +49,11 @@ const adminRoutes = [
                 name: "admin-setting",
                 component: () =>import ("../page/admin/setting/index.vue"),
             },
+             {
+                path: "storedProcedure",
+                name: "admin-storedProcedure",
+                component: () =>import ("../page/admin/storedProcedure/index.vue"),
+            },
         ]
     },
     {

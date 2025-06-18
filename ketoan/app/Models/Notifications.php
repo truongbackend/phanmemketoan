@@ -5,16 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class notification extends Model
+class Notifications extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'type',
+        'notification',
         'content',
+        'type',
+        'status',
         'is_read',
     ];
     protected $casts = [
+        'status'  => 'boolean',
         'is_read' => 'boolean',
-        'timestamp' => 'datetime', // Cast timestamp to Carbon instance
     ];
 }

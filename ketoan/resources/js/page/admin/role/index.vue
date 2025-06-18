@@ -59,7 +59,7 @@
                                 <td class="text-secondary">{{ role.name }}</td>
                                 <td class="text-secondary">{{ role.note || '—' }}</td>
                                 <td class="text-secondary">
-                                    <span class="badge" :class="role.status ? 'bg-success' : 'bg-secondary'">
+                                    <span class="badge bg-opacity-10 text-success fw-normal" :class="role.status ? 'bg-success' : 'bg-secondary'">
                                         {{ role.status ? 'Hoạt động' : 'Ẩn' }}
                                     </span>
                                 </td>

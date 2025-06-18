@@ -9,7 +9,7 @@ class Product extends Model
 {
 
     use HasFactory;
-    protected $table = 'product';
+    protected $table = 'products';
     protected $fillable = [
         'market_code',
         'accounting_system_code',
@@ -20,5 +20,6 @@ class Product extends Model
         'combo_name',
         'combo_unit',
         'quantity',
+        'user_id',
     ];
 }

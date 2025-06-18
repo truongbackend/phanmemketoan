@@ -6,7 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Support\Facades\Auth;
 class ProductController extends Controller
 {
     /**
@@ -51,32 +51,33 @@ class ProductController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'market_code' => 'required|string|max:255|unique:products,market_code',
+                'market_code'            => 'required|string|max:255|unique:products,market_code',
                 'accounting_system_code' => 'required|string|max:255',
-                'product_name' => 'required|string|max:255',
-                'unit' => 'nullable|string|max:50',
-                'tax_rate' => 'nullable|numeric|min:0|max:100',
-                'combo_detail_code' => 'nullable|string|max:255',
-                'combo_name' => 'nullable|string|max:255',
-                'combo_unit' => 'nullable|string|max:50',
-                'quantity' => 'nullable|integer|min:0',
+                'product_name'           => 'required|string|max:255',
+                'unit'                   => 'nullable',
+                'tax_rate'               => 'required',
             ]);
+
+            // Lấy user_id và gán vào data
+            $validatedData['user_id'] = auth()->id();
 
             $product = Product::create($validatedData);
 
-            return response()->json($product, 201); // 201 Created
+            return response()->json($product, 201);
+
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Lỗi xác thực dữ liệu.',
-                'errors' => $e->errors()
-            ], 422); // 422 Unprocessable Entity
+                'errors'  => $e->errors(),
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Đã xảy ra lỗi khi tạo sản phẩm.',
-                'error' => $e->getMessage()
-            ], 500); // 500 Internal Server Error
+                'error'   => $e->getMessage(),
+            ], 500);
         }
     }
+
 
     /**
      * Hiển thị thông tin của một sản phẩm cụ thể.
@@ -116,7 +117,7 @@ class ProductController extends Controller
                 'accounting_system_code' => 'required|string|max:255',
                 'product_name' => 'required|string|max:255',
                 'unit' => 'nullable|string|max:50',
-                'tax_rate' => 'nullable|numeric|min:0|max:100',
+                'tax_rate' => 'nullable|numeric',
                 'combo_detail_code' => 'nullable|string|max:255',
                 'combo_name' => 'nullable|string|max:255',
                 'combo_unit' => 'nullable|string|max:50',
