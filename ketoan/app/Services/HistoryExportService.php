@@ -78,6 +78,9 @@ class HistoryExportService
         if ($value === mb_strtolower('Không xuất hóa đơn')) {
             return 0;
         }
+        if (empty($value)) {
+            return 0;
+        }
         return null;
     }
 

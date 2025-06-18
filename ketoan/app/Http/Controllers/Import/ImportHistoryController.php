@@ -28,7 +28,7 @@ class ImportHistoryController extends Controller
 
             $fileHistoryData = array_map(function($sheet) {
                 $filtered = array_filter($sheet, function($row) {
-                    for ($i = 0; $i <= 5; $i++) {
+                    for ($i = 0; $i <= 4; $i++) {
                         if (!isset($row[$i]) || $row[$i] === null || $row[$i] === '') {
                             return false;
                         }
