@@ -72,11 +72,12 @@
                 </router-link>
             </li>
             <li class="menu-item" v-if="hasPermission('complaints.list')">
-                <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+                <router-link :to="{ name: 'admin-complaints' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">forum</span>
                     <span class="title">Khiếu nại</span>
                 </router-link>
             </li>
+
             <li class="menu-item">
                 <router-link :to="{ name: 'admin-profile' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">contact_page</span>

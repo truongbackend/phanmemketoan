@@ -5,6 +5,7 @@ import router from './router';
 import globalState from './api.js';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import '@bhplugin/vue3-datatable/dist/style.css';
 // import PrimeVue from 'primevue/config';
 // import DataTable from 'primevue/datatable';
 // import Column from 'primevue/column';

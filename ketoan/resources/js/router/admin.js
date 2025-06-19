@@ -54,6 +54,11 @@ const adminRoutes = [
                 name: "admin-storedProcedure",
                 component: () =>import ("../page/admin/storedProcedure/index.vue"),
             },
+             {
+                path: "complaints",
+                name: "admin-complaints",
+                component: () =>import ("../page/admin/complaints/index.vue"),
+            },
         ]
     },
     {
