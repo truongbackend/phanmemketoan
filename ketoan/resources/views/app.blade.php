@@ -14,7 +14,6 @@
         <link rel="stylesheet" href="{{ asset('assets/css/remixicon.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/lightpick.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-
 		<link rel="icon" type="image/png" href="assets/images/favicon.png">
 		<title>PNL INTERNATIONAL </title>
         @vite('../resources/js/app.js')
@@ -34,9 +33,8 @@
     </body>
 </html>
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('assets/js/sidebar-menu.js') }}"></script>
+
 <script src="{{ asset('assets/js/dragdrop.js') }}"></script>
-<script src="{{ asset('assets/js/rangeslider.min.js') }}"></script>
 <script src="{{ asset('assets/js/quill.min.js') }}"></script>
 <script src="{{ asset('assets/js/prism.js') }}"></script>
 <script src="{{ asset('assets/js/clipboard.min.js') }}"></script>

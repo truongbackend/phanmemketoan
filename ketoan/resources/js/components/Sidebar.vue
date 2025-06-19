@@ -93,4 +93,11 @@
 export default {
     name: "Sidebar",
 };
+
 </script>
+<style scope>
+a.router-link-active.router-link-exact-active.menu-link {
+  background-color: #ECF0FF;
+  color:rgb(12, 120, 243);
+}
+</style>
