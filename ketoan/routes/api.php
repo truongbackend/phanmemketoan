@@ -66,7 +66,7 @@ Route::delete('user/{id}', [UserController::class, 'destroy']);
 //     // các route cần bảo vệ
 // });
 Route::get('notifications', [NotificationController::class, 'index']);
-Route::get('notifications/{notification}', [NotificationController::class, 'show']);
-Route::put('notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead']);
-Route::delete('notifications/{notification}', [NotificationController::class, 'destroy']);
-Route::post('notifications', [NotificationController::class, 'store']); // For creating new notifications (e.g., from an admin panel)
+Route::post('notifications', [NotificationController::class, 'store']);
+Route::post('notifications/broadcast', [NotificationController::class, 'broadcast']);
+Route::post('notifications/mark-read-all', [NotificationController::class, 'markAllRead']);
+Route::post('notifications/{id}/mark-read', [NotificationController::class, 'markRead']);

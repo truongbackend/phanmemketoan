@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\notification;
-use Illuminate\Http\Request;
 use App\Models\Notifications;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification as NotificationFacade;
+use App\Notifications\BroadcastNotification;
 class notificationController extends Controller
 {
     /**
@@ -16,44 +19,70 @@ class notificationController extends Controller
      public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-
-        // Order theo created_at thay vì timestamp
         $notifications = Notifications::orderBy('created_at', 'desc')
                                      ->paginate($perPage);
 
         return response()->json($notifications);
     }
+    // app/Http/Controllers/Api/NotificationController.php
 
-    public function show(Notifications $notification)
-    {
-        return response()->json($notification);
-    }
-    public function markAsRead(Notifications $notification)
-    {
-        $notification->is_read = true;
-        $notification->save();
+        public function store(Request $request)
+        {
+            // 1) Validate đủ 3 field: notification, content, type
+            $data = $request->validate([
+                'notification' => 'required|string|max:255',
+                'content'      => 'required|string',
+                'type'         => 'required|string', // hoặc 'required|integer' nếu bạn để type là số
+            ]);
 
-        return response()->json(['message' => 'Notification marked as read.']);
-    }
-    public function destroy(Notifications $notification)
-    {
-        $notification->delete();
+            // 2) Tạo record với cả 3 field
+            $notification = Notifications::create($data);
 
-        return response()->json(['message' => 'Notification deleted successfully.']);
-    }
-    public function store(Request $request)
+            // 3) Trả về JSON
+            return response()->json([
+                'data'    => $notification,
+                'message' => 'Notification created.'
+            ], 201);
+        }
+
+
+    public function broadcast(Request $request)
     {
-        $request->validate([
-            'type' => 'required|string|max:255',
-            'content' => 'required|string',
+        $data = $request->validate([
+            'notification_id' => 'required|integer|exists:notifications,id',
         ]);
-
-        $notification = Notifications::create([
-            'type' => $request->type,
-            'content' => $request->content,
-            'is_read' => false,
-        ]);
-
-        return response()->json($notification, 201); // 201 Created
+        $notification = Notifications::findOrFail($data['notification_id']);
+        $users = User::all();
+        NotificationFacade::send($users, new BroadcastNotification($notification));
+        return response()->json([
+            'message' => 'Broadcast sent to all users.'
+        ], 200);
     }
+    public function markAllRead(Request $request)
+    {
+        $request->user()
+            ->unreadNotifications
+            ->markAsRead();
+
+        return response()->json([
+            'message' => 'All notifications marked as read.'
+        ], 200);
+    }
+
+    public function markRead(Request $request, $id)
+    {
+        $notification = $request->user()
+            ->unreadNotifications()
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $notification->markAsRead();
+
+        return response()->json([
+            'message' => 'Notification marked as read.'
+        ], 200);
+    }
+
+
+
 }
