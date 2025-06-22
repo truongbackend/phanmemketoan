@@ -6,8 +6,9 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\packageController;
-use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ComplaintController;
+use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ViettelPostImportController;
 
@@ -65,8 +66,21 @@ Route::delete('user/{id}', [UserController::class, 'destroy']);
 //     Route::post('/packages', [PackageController::class, 'store']);
 //     // các route cần bảo vệ
 // });
-Route::get('notifications', [NotificationController::class, 'index']);
-Route::post('notifications', [NotificationController::class, 'store']);
-Route::post('notifications/broadcast', [NotificationController::class, 'broadcast']);
-Route::post('notifications/mark-read-all', [NotificationController::class, 'markAllRead']);
-Route::post('notifications/{id}/mark-read', [NotificationController::class, 'markRead']);
+// Route::get('notifications', [NotificationController::class, 'index']);
+// Route::post('notifications', [NotificationController::class, 'store']);
+// Route::post('notifications/broadcast', [NotificationController::class, 'broadcast']);
+// Route::post('notifications/mark-read-all', [NotificationController::class, 'markAllRead']);
+// Route::post('notifications/{id}/mark-read', [NotificationController::class, 'markRead']);
+Route::middleware('auth:api')->group(function(){
+    Route::get   ('notifications',                    [NotificationController::class,'index']);
+    Route::post  ('notifications',                    [NotificationController::class,'store']);
+    Route::put   ('notifications/{id}',               [NotificationController::class,'update']);
+    Route::delete('notifications/{id}',               [NotificationController::class,'destroy']);
+    Route::post  ('notifications/{id}/broadcast',     [NotificationController::class,'broadcast']);
+    Route::post  ('notifications/{id}/mark-read',     [NotificationController::class,'markRead']);
+    Route::post  ('notifications/{id}/mark-unread',   [NotificationController::class,'markUnread']);
+    Route::post  ('notifications/mark-read-all',      [NotificationController::class,'markAllRead']);
+    Route::get('complaints', [ComplaintController::class, 'index']);
+    Route::post('complaints', [ComplaintController::class, 'store']);
+    Route::patch('complaints/{complaint}', [ComplaintController::class, 'update']);
+});

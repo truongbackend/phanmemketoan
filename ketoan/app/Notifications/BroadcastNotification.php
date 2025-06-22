@@ -6,20 +6,19 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Notifications as NotificationModel;
 
 class BroadcastNotification extends Notification
 {
     use Queueable;
-    protected $notif;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-     public function __construct(NotificationModel $notif)
+    public function __construct()
     {
-        $this->notif = $notif;
+        //
     }
 
     /**
@@ -30,17 +29,7 @@ class BroadcastNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['broadcast'];
-    }
-    public function toBroadcast($notifiable)
-    {
-        return new \Illuminate\Notifications\Messages\BroadcastMessage([
-            'id'        => $this->notif->id,
-            'notification'=> $this->notif->notification,
-            'content'   => $this->notif->content,
-            'type'      => $this->notif->type,
-            'created_at'=> $this->notif->created_at->toDateTimeString(),
-        ]);
+        return ['mail'];
     }
 
     /**

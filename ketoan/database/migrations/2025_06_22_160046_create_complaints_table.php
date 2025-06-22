@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('complaints', function (Blueprint $table) {
             $table->id();
-            $table->string('notification');
+            $table->unsignedBigInteger('user_id');
+            $table->string('order_code')->nullable();
             $table->text('content');
-            $table->string('type');
-            $table->boolean('status')->default(1);
-            $table->boolean('is_read')->default(false);
+            $table->enum('status', ['new','in_review','resolved'])->default('new');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('complaints');
     }
 };

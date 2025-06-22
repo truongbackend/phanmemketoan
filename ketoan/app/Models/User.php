@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\package;
+use App\Models\CustomNotification;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -62,5 +63,16 @@ class User extends Authenticatable implements JWTSubject
     public function packages()
     {
         return $this->belongsTo(package::class, 'packages_id');
+    }
+    public function notifications()
+    {
+        return $this->belongsToMany(
+            CustomNotification::class,
+            'notification_user',
+            'user_id',
+            'notification_id'
+        )
+        ->withPivot('read_at')
+        ->withTimestamps();
     }
 }

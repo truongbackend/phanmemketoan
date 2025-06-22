@@ -40,16 +40,16 @@
                                 STT
                             </th>
                             <th scope="col">
-                                Tên gói
-                            </th>
-                            <th scope="col">
-                                Giá tiền
-                            </th>
-                            <th scope="col">
-                                Giảm giá
-                            </th>
-                            <th scope="col">
                                 Thời gian
+                            </th>
+                            <th scope="col">
+                                Người dùng
+                            </th>
+                            <th scope="col">
+                                Tiêu đề
+                            </th>
+                            <th scope="col">
+                                Lý do
                             </th>
                             <th scope="col">
                                 Trạng thái
@@ -58,22 +58,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(Items, index) in packages" :key="index">
+                        <tr v-for="(Items, index) in listComplaints" :key="index">
                             <td>
                                 {{ index + 1 }}
                             </td>
-                            <td>{{ Items.name }}</td>
-                            <td class="text-secondary">{{ formatPrice(Items.price) }} đ</td>
-                            <td class="text-secondary">{{ Items.discould}}%</td>
-                            <td class="text-secondary">{{ Items.expiration_time}} Ngày</td>
-                            <td v-if="Items.status === 1" class="text-secondary">
-                                <span class="badge bg-success bg-opacity-10 text-success fw-normal">Hoạt động</span>
+                            <td>{{ Items.created_at }}</td>
+                            <td>{{ Items.user_id }}</td>
+                            <td>{{ Items.order_code }}</td>
+                            <td class="text-secondary">{{ Items.content }} </td>
+                            <td v-if="Items.status == 'new'" class="text-secondary">
+                                <span class="badge bg-info bg-opacity-10 text-info fw-normal">Tạo mới</span>
                             </td>
                             <td v-else class="text-secondary">
                                 <span class="badge bg-danger bg-opacity-10 text-danger fw-normal">Ngưng hoạt động</span>
                             </td>
                             <td class="text-secondary">
-                                <button v-if="hasPermission('package.edit')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
+                                <button v-if="hasPermission('package.edit')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getComplaintsID(Items.id)">
                                     <i class="material-symbols-outlined fs-16 text-body">edit</i>
                                 </button>
                                 <button v-if="hasPermission('package.delete')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
@@ -231,6 +231,7 @@ import {
 export default defineComponent({
     setup() {
         const packages = ref([]);
+        const listComplaints = ref([]);
         const name = ref('');
         const price = ref('');
         const discount = ref('');
@@ -267,17 +268,16 @@ export default defineComponent({
             formattedPrice.value = formatPrice(newVal);
         });
 
-        const getPackage = () => {
+        const getComplaints = () => {
             const params = {};
 
             if (searchKeyword.value.trim() !== '') {
                 params.search = searchKeyword.value.trim();
             }
             axios
-                .get(`${baseUrl}/api/packages`, {
-                    params
-                })
+                .get(`${baseUrl}/api/complaints`)
                 .then((response) => {
+                    listComplaints.value = response.data.data;
                     packages.value = response.data;
                 })
                 .catch((error) => {
@@ -290,7 +290,7 @@ export default defineComponent({
             axios.delete(`${baseUrl}/api/packages/${deleteId.value}`)
                 .then(() => {
                     toast.success('Xoá gói thành công');
-                    getPackage();
+                    getComplaints();
                     deleteId.value = null;
                     const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
                     modal.hide();
@@ -301,7 +301,7 @@ export default defineComponent({
                 });
         };
 
-        const getPackageID = (id) => {
+        const getComplaintsID = (id) => {
             axios
                 .get(`${baseUrl}/api/packages/${id}/edit`)
                 .then((response) => {
@@ -337,7 +337,7 @@ export default defineComponent({
                         note: note.value,
                     })
                     .then((response) => {
-                        getPackage();
+                        getComplaints();
                         toast.success("Tạo gói mới thành công");
                         const modal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
                         modal.hide();
@@ -380,7 +380,7 @@ export default defineComponent({
                         default_packages:default_packages.value,
                     })
                     .then(() => {
-                        getPackage();
+                        getComplaints();
                         toast.success("Cập nhật gói thành công");
                         const modal = bootstrap.Modal.getInstance(document.getElementById('updateModal'));
                         modal.hide();
@@ -403,9 +403,9 @@ export default defineComponent({
 
         formattedPrice.value = formatPrice(price.value);
 
-        getPackage();
+        getComplaints();
         watch(searchKeyword, (newVal) => {
-            getPackage();
+            getComplaints();
         });
 
         return {
@@ -423,13 +423,14 @@ export default defineComponent({
             createPackage,
             updatePrice,
             searchKeyword,
-            getPackageID,
+            getComplaintsID,
             packagesId,
             updatePackage,
             deleteId,
             confirmDelete,
             default_packages,
-            formatPrice
+            formatPrice,
+            listComplaints
         };
     },
 });

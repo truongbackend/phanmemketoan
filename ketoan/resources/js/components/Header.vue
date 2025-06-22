@@ -57,9 +57,9 @@
                                     </button>
                                 </div>
 
-                                <div class="max-h-217 overflow-auto" data-simplebar>
+                                <div class="overflow-auto" style="max-height: 380px;" data-simplebar>
                                     <div v-for="note in notifications" :key="note.id" class="notification-menu" :class="{ unseen: !note.read_at }">
-                                        <a :href="`/notifications/${note.id}`" class="dropdown-item">
+                                        <router-link :to="{ name: 'admin-notification' }" class="dropdown-item">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <i class="material-symbols-outlined" :class="iconClass(note.type)">{{ iconName(note.type) }}</i>
@@ -69,16 +69,16 @@
                                                     <small class="fs-13 text-muted">{{ formatAgo(note.created_at) }}</small>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </router-link>
                                     </div>
                                     <div v-if="notifications.length === 0" class="p-3 text-center text-muted">
                                         Không có thông báo
                                     </div>
                                 </div>
 
-                                <a href="/notifications" class="dropdown-item text-center text-primary d-block view-all fw-medium rounded-bottom-3">
+                                <router-link :to="{ name: 'admin-notification' }" class="dropdown-item text-center text-primary d-block view-all fw-medium rounded-bottom-3">
                                     Xem tất cả thông báo
-                                </a>
+                                </router-link>
                             </div>
                         </div>
                     </li>
@@ -146,16 +146,11 @@ export default {
     };
   },
   mounted() {
-    // Lấy tên user như cũ
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.name) {
       this.userName = user.name;
     }
-
-    // Fetch notifications
     this.fetchNotifications();
-
-    // Lắng nghe real-time (nếu bạn đã cài Laravel Echo)
     if (window.Echo && user && user.id) {
       Echo.private(`App.Models.User.${user.id}`)
         .notification(() => {
@@ -182,7 +177,8 @@ export default {
         .get("/api/notifications", { params: { per_page: 10 } })
         .then((res) => {
           this.notifications = res.data.data;
-          this.unreadCount = this.notifications.filter(n => !n.read_at).length;
+          console.log(this.notifications);
+          this.unreadCount = this.notifications.filter(n => !n.pivot.read_at).length;
         })
         .catch((err) => {
           console.error("Fetch notifications failed:", err);
