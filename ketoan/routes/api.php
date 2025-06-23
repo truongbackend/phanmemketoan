@@ -23,6 +23,7 @@ use App\Http\Controllers\Import\ViettelPostImportController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -35,52 +36,48 @@ Route::middleware(['auth:api'])->prefix('accounting')->group(function () {
             Route::post('/export', [ViettelPostImportController::class, 'downloadExport'])->name('accounting.invoiceprocessing.viettelpost.export');
         });
     });
-     Route::prefix('receipt-history')->group(function () {
-            Route::post('/import', [ImportHistoryController::class, 'importHistorReceipt'])->name('accounting.receipthistory.import');
-            Route::get('/list', [ImportHistoryController::class, 'getList'])->name('accounting.receipthistory.list');
-            Route::post('/delete/bulk', [ImportHistoryController::class, 'destroy'])->name('accounting.receipthistory.destroy');
+    Route::prefix('receipt-history')->group(function () {
+        Route::post('/import', [ImportHistoryController::class, 'importHistorReceipt'])->name('accounting.receipthistory.import');
+        Route::get('/list', [ImportHistoryController::class, 'getList'])->name('accounting.receipthistory.list');
+        Route::post('/delete/bulk', [ImportHistoryController::class, 'destroy'])->name('accounting.receipthistory.destroy');
     });
 });
 
-Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
-Route::get('profile', [AuthController::class, 'userProfile']);
-Route::post('logout', [AuthController::class, 'logout']);
-Route::post('resetPassword', [AuthController::class, 'resetPassword']);
-Route::resource('packages', packageController::class);
-Route::resource('product', ProductController::class);
-Route::get('user', [UserController::class, 'index']);
-Route::post('user', [UserController::class, 'store']);
-Route::get('user/{id}', [UserController::class, 'edit']);
-Route::put('user/{id}', [UserController::class, 'update']);
-Route::delete('user/{id}', [UserController::class, 'destroy']);
- Route::get('roles', [RoleController::class, 'index']);
+Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('register', [AuthController::class, 'register'])->name('register');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('resetPassword', [AuthController::class, 'resetPassword'])->name('resetPassword');
+
+
+
+
+
+
+Route::middleware(['auth:api', 'check.user.token'])->group(function () {
+    Route::get('profile', [AuthController::class, 'userProfile']);
+    Route::resource('packages', packageController::class);
+    Route::resource('product', ProductController::class);
+    Route::get('user', [UserController::class, 'index']);
+    Route::post('user', [UserController::class, 'store']);
+    Route::get('user/{id}', [UserController::class, 'edit']);
+    Route::put('user/{id}', [UserController::class, 'update']);
+    Route::delete('user/{id}', [UserController::class, 'destroy']);
+    Route::get('roles', [RoleController::class, 'index']);
     Route::post('roles', [RoleController::class, 'store']);
     Route::put('roles/{role}', [RoleController::class, 'update']);
     Route::delete('roles/{role}', [RoleController::class, 'destroy']);
     Route::get('permissions', [RoleController::class, 'permissions']);
-
-// check login 1 thiet bi
-// Route::middleware(['auth:api', 'check.user.token'])->group(function () {
-//     Route::get('/packages', [PackageController::class, 'index']);
-//     Route::post('/packages', [PackageController::class, 'store']);
-//     // các route cần bảo vệ
-// });
-// Route::get('notifications', [NotificationController::class, 'index']);
-// Route::post('notifications', [NotificationController::class, 'store']);
-// Route::post('notifications/broadcast', [NotificationController::class, 'broadcast']);
-// Route::post('notifications/mark-read-all', [NotificationController::class, 'markAllRead']);
-// Route::post('notifications/{id}/mark-read', [NotificationController::class, 'markRead']);
-Route::middleware('auth:api')->group(function(){
-    Route::get   ('notifications',                    [NotificationController::class,'index']);
-    Route::post  ('notifications',                    [NotificationController::class,'store']);
-    Route::put   ('notifications/{id}',               [NotificationController::class,'update']);
-    Route::delete('notifications/{id}',               [NotificationController::class,'destroy']);
-    Route::post  ('notifications/{id}/broadcast',     [NotificationController::class,'broadcast']);
-    Route::post  ('notifications/{id}/mark-read',     [NotificationController::class,'markRead']);
-    Route::post  ('notifications/{id}/mark-unread',   [NotificationController::class,'markUnread']);
-    Route::post  ('notifications/mark-read-all',      [NotificationController::class,'markAllRead']);
-    Route::get('complaints', [ComplaintController::class, 'index']);
-    Route::post('complaints', [ComplaintController::class, 'store']);
+    Route::get('notifications',                    [NotificationController::class, 'index']);
+    Route::post('notifications',                    [NotificationController::class, 'store']);
+    Route::put('notifications/{id}',               [NotificationController::class, 'update']);
+    Route::delete('notifications/{id}',               [NotificationController::class, 'destroy']);
+    Route::post('notifications/{id}/broadcast',     [NotificationController::class, 'broadcast']);
+    Route::post('notifications/{id}/mark-read',     [NotificationController::class, 'markRead']);
+    Route::post('notifications/{id}/mark-unread',   [NotificationController::class, 'markUnread']);
+    Route::post('notifications/mark-read-all',      [NotificationController::class, 'markAllRead']);
+    Route::get('complaints',          [ComplaintController::class, 'index']);
+    Route::post('complaints',          [ComplaintController::class, 'store']);   // ← cho phép POST
+    Route::get('complaints/{complaint}', [ComplaintController::class, 'show']);
     Route::patch('complaints/{complaint}', [ComplaintController::class, 'update']);
+    Route::delete('complaints/{complaint}', [ComplaintController::class, 'destroy']);
 });

@@ -4,7 +4,7 @@
             <h3 class="mb-0">Thông báo</h3>
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal"
-                    data-bs-target="#createModal">
+                    data-bs-target="#createModal" v-if="hasPermission('complaints.create')">
                     <span class="d-flex align-items-center" style="gap:5px">
                         <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
                         <span>Thêm mới</span>
@@ -45,12 +45,12 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <button class="btn btn-sm btn-link p-0" @click="toggleRead(item)"
+                                            <button v-if="hasPermission('complaints.edit')" class="btn btn-sm btn-link p-0" @click="toggleRead(item)"
                                                 :title="item.pivot.read_at ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc'">
                                                 <i class="material-symbols-outlined fs-16"
                                                     :class="item.pivot.read_at ? 'text-secondary' : 'text-primary'">visibility</i>
                                             </button>
-                                            <button class="btn btn-sm btn-link p-0" @click="openDeleteModal(item.id)"
+                                            <button v-if="hasPermission('complaints.delete')" class="btn btn-sm btn-link p-0" @click="openDeleteModal(item.id)"
                                                 title="Xóa">
                                                 <i class="material-symbols-outlined fs-16 text-danger">delete</i>
                                             </button>
@@ -183,18 +183,20 @@ export default {
         };
 
         const createNotification = () => {
-            axios
-                .post(`${baseUrl}/api/notifications`, { ...newNotification })
-                .then(res =>
-                    axios.post(`${baseUrl}/api/notifications/${res.data.data.id}/broadcast`)
-                )
-                .then(() => {
-                    createModalInstance.hide();
-                    Object.assign(newNotification, { title: '', content: '', type: '' });
-                    getNotifications(pagination.value.current_page);
-                })
-                .catch(err => console.error('Create/broadcast failed:', err));
+        axios
+            .post(`${baseUrl}/api/notifications`, { ...newNotification })
+            .then(res => {
+            const id = res.data.data.id;
+            return axios.post(`${baseUrl}/api/notifications/${id}/broadcast`);
+            })
+            .then(() => {
+            createModalInstance.hide();
+            Object.assign(newNotification, { title: '', content: '', type: '' });
+            getNotifications(pagination.value.current_page);
+            })
+            .catch(err => console.error('Create/broadcast failed:', err));
         };
+
 
         const toggleRead = item => {
             const url = item.pivot.read_at

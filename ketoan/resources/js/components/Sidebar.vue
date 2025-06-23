@@ -53,6 +53,12 @@
 
                 </ul>
             </li>
+            <li class="menu-item" v-if="hasPermission('notification.list')">
+                <router-link :to="{ name: 'admin-order' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">shopping_bag</span>
+                    <span class="title">Đơn hàng</span>
+                </router-link>
+            </li>
             <li class="menu-item" v-if="hasPermission('report.list')">
                 <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">pie_chart</span>

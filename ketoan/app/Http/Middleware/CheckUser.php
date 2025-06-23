@@ -15,11 +15,15 @@ class CheckUser
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-     public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
         $user = Auth::user();
-         if (!$user || $request->bearerToken() !== $user->api_token) {
-            return response()->json(['message' => 'Tài khoản chỉ đăng nhập được 1 thiết bị.'], 401);
+        $token = Auth::getToken();
+        if (!$user || !$token) {
+            return $next($request);
+        }
+        if ($user->api_token !== (string)$token) {
+            return response()->json(['error' => 'Thiết bị đã được đăng nhập ở một nơi khác'], 401);
         }
         return $next($request);
     }

@@ -1,37 +1,14 @@
 <template>
 <div>
-    <div class="card bg-primary border-0 rounded-3 welcome-box mb-4">
+    <div class="card bg-info border-0 rounded-3 welcome-box mb-4">
                                 <div class="card-body p-4">
                                     <div class="row align-items-center">
                                         <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <div class="border-bottom position-relative top-5">
+                                            <div class=" position-relative top-5 mt-6 mb-8">
                                                 <h3 class="text-white fw-semibold mb-1">Xin chào, <span class="text-danger-div">{{ userName }}</span></h3>
-                                                <p class="text-light">Đã gia hạn gói dịch vụ vào ngày 20-7-2024..</p>
-                                            </div>
-
-                                            <div class="d-flex align-items-center flex-wrap gap-4 gap-xxl-5">
-                                                <div class="d-flex align-items-center welcome-status-item">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="material-symbols-outlined">shopping_bag</i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h5 class="text-white fw-semibold mb-0">1 đơn hàng</h5>
-                                                        <p class="text-light">Đơn hàng hệ thống</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="d-flex align-items-center welcome-status-item">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="material-symbols-outlined icon-bg">chat_error</i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h5 class="text-white fw-semibold mb-0">1 sản phẩm</h5>
-                                                        <p class="text-light">Out of stock</p>
-                                                    </div>
-                                                </div>
+                                                <p class="text-white">Đã gia hạn gói dịch vụ vào ngày {{expiration_package}}</p>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -75,9 +52,13 @@
                                         <label class="label text-secondary">Mật khẩu cũ</label>
                                         <div class="form-group">
                                             <div class="password-wrapper position-relative">
-                                                <input type="password" id="password" class="form-control h-55 text-dark" value="@password#" v-model="password" />
-                                                <i style="color: #a9a9c8; font-size: 16px; right: 15px" class="ri-eye-off-line password-toggle-icon translate-middle-y top-50 position-absolute" aria-hidden="true"></i>
-                                            </div>
+                                                <input :type="showPassword ? 'text' : 'password'" class="form-control h-55 text-dark" v-model="password" />
+                                                <i @click="showPassword = !showPassword"
+                                                    :class="showPassword ? 'ri-eye-line' : 'ri-eye-off-line'"
+                                                    style="cursor:pointer; color: #a9a9c8; font-size: 16px; right: 15px"
+                                                    class="password-toggle-icon translate-middle-y top-50 position-absolute"></i>
+                                                </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -86,9 +67,12 @@
                                         <label class="label text-secondary">Mật khẩu mới</label>
                                         <div class="form-group">
                                             <div class="form-group">
-                                            <div class="password-wrapper position-relative">
-                                                <input type="password" id="password" class="form-control h-55 text-dark" value="@password#" v-model="passwordNew" />
-                                                <i style="color: #a9a9c8; font-size: 16px; right: 15px" class="ri-eye-off-line password-toggle-icon translate-middle-y top-50 position-absolute" aria-hidden="true"></i>
+                                           <div class="password-wrapper position-relative">
+                                            <input :type="showPasswordNew ? 'text' : 'password'" class="form-control h-55 text-dark" v-model="passwordNew" />
+                                            <i @click="showPasswordNew = !showPasswordNew"
+                                                :class="showPasswordNew ? 'ri-eye-line' : 'ri-eye-off-line'"
+                                                style="cursor:pointer; color: #a9a9c8; font-size: 16px; right: 15px"
+                                                class="password-toggle-icon translate-middle-y top-50 position-absolute"></i>
                                             </div>
                                         </div>
 
@@ -100,8 +84,11 @@
                                         <label class="label text-secondary">Xác nhận mật khẩu</label>
                                         <div class="form-group">
                                             <div class="password-wrapper position-relative">
-                                                <input type="password" id="password" class="form-control h-55 text-dark" value="@password#" v-model="passwordConfirm" />
-                                                <i style="color: #a9a9c8; font-size: 16px; right: 15px" class="ri-eye-off-line password-toggle-icon translate-middle-y top-50 position-absolute" aria-hidden="true"></i>
+                                            <input :type="showPasswordConfirm ? 'text' : 'password'" class="form-control h-55 text-dark" v-model="passwordConfirm" />
+                                            <i @click="showPasswordConfirm = !showPasswordConfirm"
+                                                :class="showPasswordConfirm ? 'ri-eye-line' : 'ri-eye-off-line'"
+                                                style="cursor:pointer; color: #a9a9c8; font-size: 16px; right: 15px"
+                                                class="password-toggle-icon translate-middle-y top-50 position-absolute"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -140,13 +127,18 @@ export default {
         const email = ref('');
         const idUser = ref('');
         const created_at = ref('');
+        const expiration_package = ref('');
         const formattedDate = ref('');
         const password = ref('');
         const passwordNew = ref('');
         const passwordConfirm = ref('');
+        const showPassword = ref(false);
+        const showPasswordNew = ref(false);
+        const showPasswordConfirm = ref(false);
         const toast = useToast();
         onMounted(() => {
             const user = JSON.parse(localStorage.getItem("user"));
+            console.log(user);
             if (user) {
                 userName.value = user.name || '';
                 email.value = user.email || '';
@@ -154,7 +146,7 @@ export default {
                 address.value = user.address || '';
                 idUser.value = user.id || '';
                 created_at.value = user.created_at || '';
-
+                expiration_package.value = user.expiration_package || '';
                 const d = new Date(created_at.value);
                 const day = d.getDate();
                 const month = d.getMonth() + 1;
@@ -207,7 +199,11 @@ export default {
             updateUser,
             password,
             passwordNew,
-            passwordConfirm
+            passwordConfirm,
+            showPassword,
+            showPasswordNew,
+            showPasswordConfirm,
+            expiration_package
         };
     }
 };

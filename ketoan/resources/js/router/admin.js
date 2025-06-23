@@ -7,6 +7,7 @@ const adminRoutes = [
                 path: "accounting",
                 name: "admin-accounting",
                 component: () =>import ("../page/admin/accounting/index.vue"),
+
             },
             {
                 path: "delivery",
@@ -33,6 +34,7 @@ const adminRoutes = [
                 path: "package",
                 name: "admin-package",
                 component: () =>import ("../page/admin/package/index.vue"),
+                meta: { permission: "packages.index" },
             },
              {
                 path: "notification",
@@ -58,6 +60,11 @@ const adminRoutes = [
                 path: "complaints",
                 name: "admin-complaints",
                 component: () =>import ("../page/admin/complaints/index.vue"),
+            },
+            {
+                path: "order",
+                name: "admin-order",
+                component: () =>import ("../page/admin/order/index.vue"),
             },
         ]
     },
@@ -85,9 +92,15 @@ const adminRoutes = [
             name: "register",
             component: () => import("../page/auth/register.vue"),
         },
-    ]
-}
+        {
+            path: "/:pathMatch(.*)*",
+            name: "not-found",
+            component: () => import("../page/errors/404.vue"),
+        },
 
+    ],
+},
 ];
+
 
 export default adminRoutes;

@@ -60,7 +60,7 @@ export default defineComponent({
 
         const login = () => {
             if (!email.value || !password.value) {
-                toast.error("Không được để trống email và mật khẩu");  // Sử dụng toast
+                toast.error("Không được để trống email và mật khẩu");
                 return;
             }
 
@@ -74,7 +74,11 @@ export default defineComponent({
                 } else {
                     const token = data.access_token;
                     const user = data.user;
-                    Cookies.set('token', token, { expires: 7, path: '/' });
+
+                     Cookies.set('token', data.access_token, {
+                        expires: 7,
+                        path: '/'
+                        });
                     localStorage.setItem('user', JSON.stringify(user));
                     router.push('admin');
                     toast.success("Đăng nhập thành công");

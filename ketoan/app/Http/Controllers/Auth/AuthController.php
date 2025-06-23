@@ -44,9 +44,7 @@ class AuthController extends Controller
         if ($user->expiration_package && now()->gt(Carbon::parse($user->expiration_package))) {
             return response()->json(['error' => 'Gói sử dụng của bạn đã hết hạn'], 403);
         }
-
-        // Gán token duy nhất (để login 1 thiết bị duy nhất)
-        $user->api_token = Str::random(60);
+        $user->api_token = $token;
         $user->save();
 
         return response()->json([
@@ -131,7 +129,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
-            $newPassword = Str::random(16); 
+            $newPassword = Str::random(16);
             $symbols = ['-', '_', '[', ']', ';', '(', ')', '@', '!'];
             $newPassword = substr_replace($newPassword, $symbols[random_int(0, count($symbols)-1)], random_int(0, strlen($newPassword)-1), 0);
 

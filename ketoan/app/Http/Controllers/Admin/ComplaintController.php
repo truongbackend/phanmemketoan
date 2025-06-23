@@ -13,9 +13,20 @@ class ComplaintController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('per_page', 10);
-        $complaints = Complaint::with('user')
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+
+        $query = Complaint::with('user')
+            ->orderBy('created_at', 'desc');
+        $isAdmin = Auth::user()
+            ->roles()
+            ->where('name', 'administration')
+            ->exists();
+
+        if (! $isAdmin) {
+            $query->where('user_id', Auth::id());
+        }
+
+        $complaints = $query->paginate($perPage);
+
         return response()->json($complaints);
     }
     public function store(Request $request)
@@ -32,15 +43,26 @@ class ComplaintController extends Controller
     }
     public function update(Request $request, Complaint $complaint)
     {
-        // Chỉ admin mới được update status (giả sử có gate/role)
-        $this->authorize('update', $complaint);
-
         $data = $request->validate([
-            'status' => ['required', Rule::in(['new','in_review','resolved'])],
-        ]);
+        'order_code' => ['sometimes','nullable','string','max:50'],
+        'content'    => ['sometimes','string'],
+        'status'     => ['sometimes', Rule::in(['new','in_review','resolved'])],
+    ]);
 
-        $complaint->update($data);
+    $complaint->update($data);
 
         return response()->json($complaint);
+    }
+     public function show(Complaint $complaint)
+    {
+        $complaint->load('user');
+        return response()->json($complaint);
+    }
+    public function destroy(Complaint $complaint)
+    {
+        $complaint->delete();
+        return response()->json([
+            'message' => 'Xoá khiếu nại thành công'
+        ], 204);
     }
 }
