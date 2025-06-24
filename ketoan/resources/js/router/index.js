@@ -15,7 +15,7 @@ const router = createRouter({
 axios.interceptors.response.use(
   response => response,
   error => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && error.response.status === 408) {
       Cookies.remove('token');
       globalState.currentUser = null;
       globalState.permissions = [];
@@ -30,7 +30,7 @@ router.beforeEach(async (to, from, next) => {
   const token = Cookies.get('token');
   const isAuthenticated = !!token;
   const isAuthPage = to.name === 'login' || to.name === 'register';
-  const isAdminRoute = to.path.startsWith('/admin');
+  const isAdminRoute = to.path.startsWith('/admin/dashboard');
 
   if (isAuthenticated) {
     if (!globalState.permissions.length) {

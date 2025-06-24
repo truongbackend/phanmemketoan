@@ -4,22 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class Product extends Model
 {
-
-    use HasFactory;
-    protected $table = 'products';
-    protected $fillable = [
-        'market_code',
-        'accounting_system_code',
+     protected $fillable = [
+        'sku',
+        'accounting_code',
         'product_name',
         'unit',
         'tax_rate',
-        'combo_detail_code',
-        'combo_name',
-        'combo_unit',
-        'quantity',
-        'user_id',
     ];
+    use HasFactory;
+    public function details(): HasMany
+    {
+        return $this->hasMany(ProductDetail::class);
+    }
+
 }

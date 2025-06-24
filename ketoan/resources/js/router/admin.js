@@ -4,6 +4,12 @@ const adminRoutes = [
         component: () =>import ("../layouts/AdminLayout.vue"),
         children: [
             {
+                path: "dashboard",
+                name: "admin-dashboard",
+                component: () =>import ("../page/admin/dashboard/index.vue"),
+
+            },
+            {
                 path: "accounting",
                 name: "admin-accounting",
                 component: () =>import ("../page/admin/accounting/index.vue"),

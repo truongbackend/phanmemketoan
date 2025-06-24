@@ -80,7 +80,7 @@ export default defineComponent({
                         path: '/'
                         });
                     localStorage.setItem('user', JSON.stringify(user));
-                    router.push('admin');
+                    router.push('admin/dashboard');
                     toast.success("Đăng nhập thành công");
 
                 }

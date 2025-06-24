@@ -87,7 +87,7 @@
                         <div class="dropdown admin-profile">
                             <div class="d-xxl-flex align-items-center bg-transparent border-0 text-start p-0 cursor dropdown-toggle" data-bs-toggle="dropdown">
                                 <div class="flex-shrink-0">
-                                    <img class="rounded-circle wh-40 administrator" src="assets/images/administrator.jpg" alt="admin" />
+                                    <img class="rounded-circle wh-40 administrator" src="/assets/images/administrator.jpg" alt="admin" />
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                     <div class="d-flex align-items-center justify-content-between">
@@ -102,7 +102,7 @@
                             <div class="dropdown-menu border-0 bg-white dropdown-menu-end">
                                 <div class="d-flex align-items-center info">
                                     <div class="flex-shrink-0">
-                                        <img class="rounded-circle wh-30 administrator" src="assets/images/administrator.jpg" alt="admin" />
+                                        <img class="rounded-circle wh-30 administrator" src="/assets/images/administrator.jpg" alt="admin" />
                                     </div>
                                     <div class="flex-grow-1 ms-2">
                                         <h3 class="fw-medium">{{ userName }}</h3>

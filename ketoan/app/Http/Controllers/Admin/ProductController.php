@@ -16,29 +16,17 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::query();
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-
-            $query->where(function ($q) use ($search) {
-                $q->where('market_code', 'like', "%$search%")
-                  ->orWhere('accounting_system_code', 'like', "%$search%")
-                  ->orWhere('product_name', 'like', "%$search%")
-                  ->orWhere('combo_detail_code', 'like', "%$search%");
+        $search  = $request->input('search');
+        $perPage = $request->input('per_page', 10);
+        $query = Product::with('details');
+         if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('sku', 'like', "%{$search}%")
+                ->orWhere('product_name', 'like', "%{$search}%");
             });
         }
-
-        $perPage = $request->input('per_page', 10);
         $products = $query->paginate($perPage);
-
-        return response()->json([
-            'data' => $products->items(),
-            'total' => $products->total(),
-            'per_page' => $products->perPage(),
-            'current_page' => $products->currentPage(),
-            'last_page' => $products->lastPage(),
-        ]);
+        return response()->json($products, 201);
     }
 
     /**

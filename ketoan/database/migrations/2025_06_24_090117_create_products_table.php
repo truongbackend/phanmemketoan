@@ -15,16 +15,11 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('market_code');
-            $table->string('accounting_system_code');
-            $table->string('product_name');
-            $table->string('unit');
-            $table->decimal('tax_rate', 5, 2);
-            $table->string('combo_detail_code')->nullable();
-            $table->string('combo_name')->nullable();
-            $table->string('combo_unit')->nullable();
-            $table->float('quantity')->default(1);
-            $table->string('user_id');
+            $table->string('sku')->unique();
+            $table->string('accounting_code')->nullable();
+             $table->string('product_name');
+            $table->string('unit', 50);
+            $table->string('tax_rate', 50)->default(0);;
             $table->timestamps();
         });
     }
@@ -36,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prodcuts');
+        Schema::dropIfExists('products');
     }
 };

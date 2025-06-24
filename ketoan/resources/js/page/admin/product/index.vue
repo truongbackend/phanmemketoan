@@ -1,5 +1,7 @@
 <template>
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
     <h3 class="mb-0">Danh sách mục hàng hoá</h3>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -16,117 +18,102 @@
         </ol>
     </nav>
 </div>
-<div class="card bg-white border-0 rounded-3 mb-4">
-    <div class="card-body p-25">
+
+  <div class="card bg-white border-0 rounded-3 mb-4">
+    <div class="card bg-white border-0 rounded-3 mb-4">
+      <div class="card-body p-25">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-            <form class="position-relative table-src-form me-0">
-                <input type="text" class="form-control border-0" placeholder="Tìm kiếm mã sàn , mã hệ thống kế toán , ...." v-model="searchKeyword" />
-                <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
-            </form>
-
-        </div>
-        <vue3-datatable
-            :rows="rows"
-            :columns="cols"
-            :loading="loading"
-            :totalRows="total_rows"
-            :isServerMode="true"
-            :pageSize="params.pagesize"
-            :showFirstPage="false"
-            :showLastPage="false"
-            @change="changeServer"
+          <form class="position-relative table-src-form me-0" @submit.prevent="fetchProducts">
+            <input
+              type="text"
+              class="form-control border-0"
+              placeholder="Tìm kiếm mã Sku, tên sản phẩm, …"
+              v-model="searchKeyword"
             />
+            <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
 
+          </form>
+        </div>
+         <vue3-datatable
+          :rows="rows"
+          :columns="cols"
+          :loading="loading"
+          :totalRows="totalRows"
+          :isServerMode="true"
+          :pageSize="params.pagesize"
+          @change="onPageChange"
+        >
+          <template #cell(actions)="{ row }">
+            <button class="btn btn-sm btn-info me-1">
+              <i class="ri-eye-line"></i>
+            </button>
+            <button  class="btn btn-sm btn-primary me-1">
+              <i class="ri-edit-line"></i>
+            </button>
+            <button class="btn btn-sm btn-danger">
+              <i class="ri-delete-bin-6-line"></i>
+            </button>
+          </template>
+        </vue3-datatable>
+      </div>
     </div>
-</div>
-
+  </div>
 </template>
+
 <script setup lang="ts">
-    import { ref,reactive,onMounted, toRaw } from 'vue';
-import Vue3Datatable from '@bhplugin/vue3-datatable'
-import '@bhplugin/vue3-datatable/dist/style.css'
-    const loading: any = ref(true);
-    const total_rows = ref(0);
+import { ref, reactive, watch, onMounted } from 'vue';
+import axios from 'axios';
+import Vue3Datatable from '@bhplugin/vue3-datatable';
+import '@bhplugin/vue3-datatable/dist/style.css';
 
-    const params = reactive({ current_page: 1, pagesize: 10 });
-    const rows: any = ref(null);
+const loading = ref(false);
+const rows = ref<any[]>([]);
+const totalRows = ref(0);
+const searchKeyword = ref('');
 
-    const cols =
-        ref([
-            { field: 'id', title: 'ID', isUnique: true, type: 'number' },
-            { field: 'firstName', title: 'First Name' },
-            { field: 'lastName', title: 'Last Name' },
-            { field: 'email', title: 'Email' },
-            { field: 'age', title: 'Age', type: 'number' },
-            { field: 'dob', title: 'Birthdate', type: 'date' },
-            { field: 'address.city', title: 'City' },
-            { field: 'isActive', title: 'Active', type: 'bool' },
-        ]) || [];
+const params = reactive({
+  current_page: 1,
+  pagesize: 10,
+});
 
-    onMounted(() => {
-        setTimeout(() => {
-            getUsers1();
-        }, 10);
+const cols = ref([
+  { field: 'id', title: 'ID', isUnique: true, type: 'number' },
+  { field: 'sku', title: 'Mã sàn' },
+  { field: 'accounting_code', title: 'Mã hệ thống kế toán' },
+  { field: 'product_name', title: 'Tên hàng' },
+  { field: 'unit', title: 'Đơn vị' },
+  { field: 'tax_rate', title: 'Thuế suất', type: 'number' },
+  { field: 'actions', title: 'Thao tác', slot: true }
+]);
+async function fetchProducts() {
+  loading.value = true;
+  try {
+    const response = await axios.get('/api/products', {
+      params: {
+        page: params.current_page,
+        per_page: params.pagesize,
+        search: searchKeyword.value || undefined,
+      },
     });
-
-    const changeServer = (data: any) => {
-        params.current_page = data.current_page;
-        params.pagesize = data.pagesize;
-    };
-
-    // disable first last pagination
-    const loading1: any = ref(true);
-    const total_rows1 = ref(0);
-
-    const params1 = reactive({ current_page: 1, pagesize: 10 });
-    const rows1: any = ref(null);
-
-    const cols1 =
-        ref([
-            { field: 'id', title: 'ID', isUnique: true, type: 'number' },
-            { field: 'firstName', title: 'First Name' },
-            { field: 'lastName', title: 'Last Name' },
-            { field: 'email', title: 'Email' },
-            { field: 'age', title: 'Age', type: 'number' },
-            { field: 'dob', title: 'Birthdate', type: 'date' },
-            { field: 'address.city', title: 'City' },
-            { field: 'isActive', title: 'Active', type: 'bool' },
-        ]) || [];
-
-   const getUsers1 = async () => {
-    loading.value = true;
-
-    await new Promise(r => setTimeout(r, 500)) // giả lập delay
-
-    rows.value = Array.from({ length: 10 }, (_, i) => ({
-        id: i + 1 + (params.current_page - 1) * params.pagesize,
-        firstName: `Tên ${i + 1}`,
-        lastName: `Họ`,
-        email: `user${i}@example.com`,
-        age: 20 + i,
-        dob: '2000-01-01',
-        address: { city: 'Hà Nội' },
-        isActive: i % 2 === 0,
-    }));
-
-    total_rows.value = 50; 
+    rows.value = response.data.data;
+    totalRows.value = response.data.total;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  } finally {
     loading.value = false;
-};
+  }
+}
 
+function onPageChange({ current_page, pagesize }: any) {
+  params.current_page = current_page;
+  params.pagesize = pagesize;
+}
+
+watch(
+  () => [params.current_page, params.pagesize],
+  () => fetchProducts()
+);
+
+onMounted(() => fetchProducts());
 </script>
-<style>
-    .alt-pagination .bh-pagination .bh-page-item {
-        @apply !w-max min-w-[32px] !rounded;
-    }
 
-    /* next-prev-pagination */
-    .next-prev-pagination .bh-pagination .bh-page-item {
-        @apply !w-max min-w-[100px] !rounded;
-    }
-    .next-prev-pagination .bh-pagination > div:first-child {
-        @apply flex-col font-semibold;
-    }
-    .next-prev-pagination .bh-pagination .bh-pagination-number {
-        @apply mx-auto gap-3;
-    }
-</style>

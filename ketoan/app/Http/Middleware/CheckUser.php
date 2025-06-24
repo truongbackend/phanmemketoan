@@ -23,7 +23,7 @@ class CheckUser
             return $next($request);
         }
         if ($user->api_token !== (string)$token) {
-            return response()->json(['error' => 'Thiết bị đã được đăng nhập ở một nơi khác'], 401);
+            return response()->json(['error' => 'Thiết bị đã được đăng nhập ở một nơi khác'], 408);
         }
         return $next($request);
     }
