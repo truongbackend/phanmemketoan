@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $search  = $request->input('search');
@@ -28,30 +26,37 @@ class ProductController extends Controller
         $products = $query->paginate($perPage);
         return response()->json($products, 201);
     }
-
-    /**
-     * Lưu trữ một sản phẩm mới vào cơ sở dữ liệu.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function store(Request $request)
     {
         try {
             $validatedData = $request->validate([
-                'market_code'            => 'required|string|max:255|unique:products,market_code',
-                'accounting_system_code' => 'required|string|max:255',
-                'product_name'           => 'required|string|max:255',
-                'unit'                   => 'nullable',
-                'tax_rate'               => 'required',
+                'sku'               => 'required|string|max:255|unique:products,sku',
+                'accounting_code'   => 'required|string|max:255',
+                'product_name'      => 'required|string',
+                'unit'              => 'nullable|string|max:50',
+                'tax_rate'          => 'required|integer|min:0|max:100',
+                'details'                       => 'nullable|array',
+                'details.*.combo_detail_code'   => 'nullable|string|max:255',
+                'details.*.detail_name'         => 'required_with:details|string|max:255',
+                'details.*.unit'                => 'required_with:details|string|max:50',
+                'details.*.quantity'            => 'required_with:details|numeric|min:1',
             ]);
-
-            // Lấy user_id và gán vào data
             $validatedData['user_id'] = auth()->id();
-
-            $product = Product::create($validatedData);
-
-            return response()->json($product, 201);
+            $product = DB::transaction(function() use ($validatedData) {
+                $prodData = Arr::only($validatedData, [
+                    'sku', 'accounting_code', 'product_name', 'unit', 'tax_rate', 'user_id'
+                ]);
+                $p = Product::create($prodData);
+                if (!empty($validatedData['details'])) {
+                    $p->details()->createMany($validatedData['details']);
+                }
+                return $p;
+            });
+            $product->load('details');
+            return response()->json([
+                'message' => 'Product created successfully.',
+                'data'    => $product
+            ], 201);
 
         } catch (ValidationException $e) {
             return response()->json([
@@ -65,32 +70,16 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
-
-    /**
-     * Hiển thị thông tin của một sản phẩm cụ thể.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function show($id)
     {
         $product = Product::find($id);
 
         if (!$product) {
-            return response()->json(['message' => 'Không tìm thấy sản phẩm.'], 404); // 404 Not Found
+            return response()->json(['message' => 'Không tìm thấy sản phẩm.'], 404);
         }
 
         return response()->json($product);
     }
-
-    /**
-     * Cập nhật một sản phẩm trong cơ sở dữ liệu.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
@@ -127,13 +116,6 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
-    /**
-     * Xoá một sản phẩm khỏi cơ sở dữ liệu.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function destroy($id)
     {
         $product = Product::find($id);
@@ -141,10 +123,9 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Không tìm thấy sản phẩm.'], 404);
         }
-
         try {
             $product->delete();
-            return response()->json(['message' => 'Sản phẩm đã được xoá thành công.'], 200); // 200 OK
+            return response()->json(['message' => 'Sản phẩm đã được xoá thành công.'], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Đã xảy ra lỗi khi xoá sản phẩm.',
