@@ -11,18 +11,11 @@
       </nav>
     </div>
 
-    <!-- Table and Actions -->
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <input
-            v-model="searchKeyword"
-            @input="fetchProducts"
-            type="text"
-            class="form-control w-50"
-            placeholder="Tìm kiếm SKU, tên sản phẩm..."
-          />
-          <button class="btn btn-primary" @click="openCreateModal">Thêm mới</button>
+          <input v-model="searchKeyword" @input="fetchProducts" type="text" class="form-control w-50" placeholder="Tìm kiếm SKU, tên sản phẩm..." />
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Thêm mới</button>
         </div>
         <vue3-datatable
           :rows="rows"
@@ -33,22 +26,62 @@
           :pageSize="params.pagesize"
           @change="onPageChange"
         >
-          <template #actions="{ row }">
-            <button class="btn btn-sm btn-info me-1" @click="viewDetails(row)"><i class="ri-eye-line"></i></button>
-            <button class="btn btn-sm btn-warning me-1" @click="editProduct(row)"><i class="ri-edit-line"></i></button>
-            <button class="btn btn-sm btn-danger" @click="promptDelete(row)"><i class="ri-delete-bin-line"></i></button>
+          <template #actions="data">
+            <button class="btn btn-sm btn-info me-1" @click="viewDetails(rows)"><i class="ri-eye-line"></i></button>
+            <button class="btn btn-sm btn-warning me-1" @click="editProduct(rows)"><i class="ri-edit-line"></i></button>
+            <button class="btn btn-sm btn-danger" @click="promptDelete(data.value)"><i class="ri-delete-bin-line"></i></button>
           </template>
         </vue3-datatable>
       </div>
     </div>
 
-    <!-- Create/Edit Modal -->
-    <div class="modal fade" id="formModal" tabindex="-1" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" style="max-width:550px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Xóa sản phẩm</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Bạn có chắc chắn muốn xóa sản phẩm <strong>{{ selectedRow?.product_name }}</strong>?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Hủy
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger text-white"
+              @click="confirmDelete"
+            >
+              Xóa
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
-          <form @submit.prevent="isEditMode ? updateProduct() : createProduct()">
+          <form @submit.prevent="createProduct">
             <div class="modal-header">
-              <h5 class="modal-title">{{ isEditMode ? 'Chỉnh sửa sản phẩm' : 'Thêm mới sản phẩm' }}</h5>
+              <h5 class="modal-title">Thêm mới sản phẩm</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -107,28 +140,9 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-              <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Cập nhật' : 'Lưu' }}</button>
+              <button type="submit" class="btn btn-primary">Lưu</button>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" style="max-width:550px">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Xóa sản phẩm</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            Bạn có chắc muốn xóa sản phẩm <strong>{{ selectedRow?.product_name }}</strong>?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button type="button" class="btn btn-danger" @click="confirmDelete">Xóa</button>
-          </div>
         </div>
       </div>
     </div>
@@ -142,10 +156,12 @@ import Vue3Datatable from '@bhplugin/vue3-datatable';
 import '@bhplugin/vue3-datatable/dist/style.css';
 import { useToast } from 'vue-toast-notification';
 
+// Toast & base URL
 const toast = useToast();
 const globalState: any = inject('globalState');
 const baseUrl = globalState.baseUrl || '';
 
+// Table state
 const loading = ref(false);
 const rows = ref<any[]>([]);
 const totalRows = ref(0);
@@ -161,28 +177,21 @@ const cols = ref([
   { field: 'actions', title: 'Thao tác', slot: true }
 ]);
 
-// Modal states
-type Product = any;
-const selectedRow = ref<Product|null>(null);
-const isEditMode = ref(false);
-
-// Form state
-const sku = ref('');
-const accountingCode = ref('');
-const productName = ref('');
-const unit = ref('');
-const taxRate = ref<number|null>(null);
-interface ComboDetail { code: string; name: string; unit: string; qty: number|null; }
-const comboDetails = ref<ComboDetail[]>([{ code: '', name: '', unit: '', qty: null }]);
+// Selected for delete
+const selectedRow = ref<any>(null);
 
 // Fetch products
 async function fetchProducts() {
   loading.value = true;
   try {
-    const res = await axios.get(`${baseUrl}/api/products`, { params: { page: params.current_page, per_page: params.pagesize, search: searchKeyword.value||undefined } });
+    const res = await axios.get(`${baseUrl}/api/products`, { params: { page: params.current_page, per_page: params.pagesize, search: searchKeyword.value || undefined } });
     rows.value = res.data.data;
     totalRows.value = res.data.total;
-  } catch(e){ console.error(e) } finally { loading.value = false }
+  } catch (e) {
+    console.error(e);
+  } finally {
+    loading.value = false;
+  }
 }
 
 function onPageChange({ current_page, pagesize }: any) {
@@ -191,82 +200,90 @@ function onPageChange({ current_page, pagesize }: any) {
   fetchProducts();
 }
 
-// Open create modal
-function openCreateModal() {
-  isEditMode.value = false;
-  selectedRow.value = null;
-  resetForm();
-  new bootstrap.Modal(document.getElementById('formModal')!).show();
+// Create form state
+const sku = ref('');
+const accountingCode = ref('');
+const productName = ref('');
+const unit = ref('');
+const taxRate = ref<number | null>(null);
+interface ComboDetail { code: string; name: string; unit: string; qty: number | null; }
+const comboDetails = ref<ComboDetail[]>([{ code: '', name: '', unit: '', qty: null }]);
+
+function addComboDetail() {
+  comboDetails.value.push({ code: '', name: '', unit: '', qty: null });
 }
 
-// Edit
-function editProduct(row: Product) {
-  isEditMode.value = true;
-  selectedRow.value = row;
-  sku.value = row.sku;
-  accountingCode.value = row.accounting_code;
-  productName.value = row.product_name;
-  unit.value = row.unit;
-  taxRate.value = Number(row.tax_rate);
-  comboDetails.value = row.details.map((d:any) => ({ code: d.combo_detail_code, name: d.detail_name, unit: d.unit, qty: d.quantity }));
-  new bootstrap.Modal(document.getElementById('formModal')!).show();
+function removeComboDetail(idx: number) {
+  comboDetails.value.splice(idx, 1);
 }
 
-// Create product
 async function createProduct() {
-  const payload = buildPayload();
-  try {
-    await axios.post(`${baseUrl}/api/products`, payload);
-    toast.success('Tạo sản phẩm thành công');
-    fetchProducts();
-    bootstrap.Modal.getInstance(document.getElementById('formModal')!)?.hide();
-  } catch(e){ toast.error('Tạo thất bại'); }
-}
-
-// Update product
-async function updateProduct() {
-  if(!selectedRow.value) return;
-  const payload = buildPayload();
-  try {
-    await axios.put(`${baseUrl}/api/products/${selectedRow.value.id}`, payload);
-    toast.success('Cập nhật thành công');
-    fetchProducts();
-    bootstrap.Modal.getInstance(document.getElementById('formModal')!)?.hide();
-  } catch(e){ toast.error('Cập nhật thất bại'); }
-}
-
-function buildPayload() {
-  return {
+  if (!sku.value || !productName.value || taxRate.value === null) {
+    toast.error('Vui lòng nhập đủ thông tin');
+    return;
+  }
+  const payload = {
     sku: sku.value,
     accounting_code: accountingCode.value,
     product_name: productName.value,
     unit: unit.value,
     tax_rate: taxRate.value,
-    details: comboDetails.value.filter(d=>d.name&&d.qty!=null)
-      .map(d=>({ combo_detail_code:d.code, detail_name:d.name, unit:d.unit, quantity:d.qty }))
+    details: comboDetails.value.filter(d => d.name && d.qty != null).map(d => ({ combo_detail_code: d.code, detail_name: d.name, unit: d.unit, quantity: d.qty }))
   };
+  try {
+    await axios.post(`${baseUrl}/api/products`, payload);
+    toast.success('Tạo thành công');
+    fetchProducts();
+    sku.value = '';
+    accountingCode.value = '';
+    productName.value = '';
+    unit.value = '';
+    taxRate.value = null;
+    comboDetails.value = [{ code: '', name: '', unit: '', qty: null }];
+    const modal = document.getElementById('createModal')!;
+    (window as any).bootstrap.Modal.getInstance(modal)?.hide();
+  } catch (err: any) {
+    toast.error(err.response?.data?.message || 'Lỗi');
+  }
 }
 
-// Delete modal
-function promptDelete(row: Product) {
-  selectedRow.value = row;
-  new bootstrap.Modal(document.getElementById('deleteModal')!).show();
+function promptDelete(data: any) {
+  selectedRow.value = data;
+
+  // Show the delete confirmation modal programmatically
+  const modalEl = document.getElementById('deleteModal')!;
+  const bsModal = new (window as any).bootstrap.Modal(modalEl);
+  bsModal.show();
 }
 
+
+// Confirm delete
 async function confirmDelete() {
-  if(!selectedRow.value) return;
+    console.log(selectedRow.value);
+  if (!selectedRow.value) return;
   try {
     await axios.delete(`${baseUrl}/api/products/${selectedRow.value.id}`);
-    toast.success('Xóa thành công'); fetchProducts();
-  } catch(e){ toast.error('Xóa thất bại'); }
-  bootstrap.Modal.getInstance(document.getElementById('deleteModal')!)?.hide();
+    toast.success('Xóa sản phẩm thành công');
+    fetchProducts();
+  } catch (e) {
+    console.error('Error deleting product:', e);
+    toast.error('Xóa sản phẩm thất bại');
+  } finally {
+    const modalEl = document.getElementById('deleteModal')!;
+    const bsModal = (window as any).bootstrap.Modal.getInstance(modalEl);
+    if (bsModal) bsModal.hide();
+    selectedRow.value = null;
+}
 }
 
-// Combo detail
-function addComboDetail(){ comboDetails.value.push({ code:'',name:'',unit:'',qty:null }); }
-function removeComboDetail(i:number){ comboDetails.value.splice(i,1); }
+function viewDetails(row: any) {
+console.log(row);
 
-watch(()=>[params.current_page, params.pagesize], fetchProducts);
+
+ }
+function editProduct(row: any)  { /* ... */ }
+
+watch(() => [params.current_page, params.pagesize], fetchProducts);
 onMounted(fetchProducts);
 </script>
 
