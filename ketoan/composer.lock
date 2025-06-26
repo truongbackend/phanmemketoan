@@ -4,8 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac823149cd7b3a0e14adb472f84dc732",
+    "content-hash": "defe6514ba644f7b1610daf8ccc68161",
     "packages": [
+        {
+            "name": "appolous/lazada-php-sdk",
+            "version": "1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/appolous/lazada-php-sdk.git",
+                "reference": "b1c4cce33043f0cd725010d45a780b5c336ca4c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/appolous/lazada-php-sdk/zipball/b1c4cce33043f0cd725010d45a780b5c336ca4c8",
+                "reference": "b1c4cce33043f0cd725010d45a780b5c336ca4c8",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lazada\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Appolous Team",
+                    "email": "hello@appolous.com",
+                    "homepage": "https://www.appolous.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Lazada PHP SDK for Laravel",
+            "homepage": "https://github.com/appolous/lazada-php-sdk",
+            "keywords": [
+                "Lazada",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/appolous/lazada-php-sdk/issues",
+                "source": "https://github.com/appolous/lazada-php-sdk/tree/1.6"
+            },
+            "time": "2025-02-27T08:53:46+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",

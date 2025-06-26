@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ProductImportController;
 use App\Http\Controllers\Import\ViettelPostImportController;
+use App\Http\Controllers\Lazada\LazopController;
 use App\Http\Controllers\Shopee\AuthShopeeController;
 
 /*
@@ -97,5 +98,11 @@ Route::post('/shopee/token-shop-level', [AuthShopeeController::class, 'getTokenS
 Route::post('/shopee/token-account-level', [AuthShopeeController::class, 'getTokenAccountLevel'])->name('shopee.tokenAccountLevel');
 Route::post('/shopee/access-token-shop-level', [AuthShopeeController::class, 'getAccessTokenShopLevel'])->name('shopee.accessTokenShopLevel');
 Route::post('/shopee/access-token-merchant-level', [AuthShopeeController::class, 'getAccessTokenMerchantLevel'])->name('shopee.accessTokenMerchantLevel');
+
+Route::prefix('lazada')->group(function () {
+    Route::post('/auth-shop', [LazopController::class, 'getAuthShopUrl'])->name('lazada.auth-shop');
+    Route::post('/shop-access-token', [LazopController::class, 'getShopAccessToken'])->name('lazada.shop-access-token');
+    Route::post('/shop-refresh-token', [LazopController::class, 'getShopRefreshtoken'])->name('lazada.shop-refresh-token');
+});
 
 Route::post('products/import', [ProductImportController::class, 'import']);
