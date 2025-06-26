@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'shopee' => [
+        'host' => env('SHOPEE_API_HOST', 'https://partner.test-stable.shopeemobile.com'),
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

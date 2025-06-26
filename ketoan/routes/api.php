@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ViettelPostImportController;
-
+use App\Http\Controllers\Shopee\AuthShopeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +40,12 @@ Route::middleware(['auth:api'])->prefix('accounting')->group(function () {
             Route::post('/delete/bulk', [ImportHistoryController::class, 'destroy'])->name('accounting.receipthistory.destroy');
     });
 });
+
+Route::post('/auth-shopee', [AuthShopeeController::class, 'getAuthShopUrl'])->name('shopee.authshop');
+Route::post('/shopee/token-shop-level', [AuthShopeeController::class, 'getTokenShopLevel'])->name('shopee.tokenShopLevel');
+Route::post('/shopee/token-account-level', [AuthShopeeController::class, 'getTokenAccountLevel'])->name('shopee.tokenAccountLevel');
+Route::post('/shopee/access-token-shop-level', [AuthShopeeController::class, 'getAccessTokenShopLevel'])->name('shopee.accessTokenShopLevel');
+Route::post('/shopee/access-token-merchant-level', [AuthShopeeController::class, 'getAccessTokenMerchantLevel'])->name('shopee.accessTokenMerchantLevel');
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
