@@ -13,11 +13,16 @@ class Product extends Model
         'product_name',
         'unit',
         'tax_rate',
+        'product_user_id'
     ];
     use HasFactory;
     public function details(): HasMany
     {
         return $this->hasMany(ProductDetail::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'product_user_id');
     }
 
 }

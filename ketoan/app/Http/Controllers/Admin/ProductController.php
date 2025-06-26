@@ -16,7 +16,8 @@ class ProductController extends Controller
     {
         $search  = $request->input('search');
         $perPage = $request->input('per_page', 10);
-        $query = Product::with('details');
+        $query = Product::with('details')
+            ->where('product_user_id', auth()->id());
          if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('sku', 'like', "%{$search}%")
@@ -41,10 +42,10 @@ class ProductController extends Controller
                 'details.*.unit'                => 'required_with:details|string|max:50',
                 'details.*.quantity'            => 'required_with:details|numeric|min:1',
             ]);
-            $validatedData['user_id'] = auth()->id();
+            $validatedData['product_user_id'] = auth()->id();
             $product = DB::transaction(function() use ($validatedData) {
                 $prodData = Arr::only($validatedData, [
-                    'sku', 'accounting_code', 'product_name', 'unit', 'tax_rate', 'user_id'
+                    'sku', 'accounting_code', 'product_name', 'unit', 'tax_rate', 'product_user_id'
                 ]);
                 $p = Product::create($prodData);
                 if (!empty($validatedData['details'])) {
@@ -72,50 +73,62 @@ class ProductController extends Controller
     }
     public function show($id)
     {
-        $product = Product::find($id);
+         $products = Product::with('details')->find($id);
 
-        if (!$product) {
+        if (!$products) {
             return response()->json(['message' => 'Không tìm thấy sản phẩm.'], 404);
         }
 
-        return response()->json($product);
+        return response()->json($products);
     }
     public function update(Request $request, $id)
-    {
-        $product = Product::find($id);
+{
+    try {
+        $validatedData = $request->validate([
+            'sku'              => 'required|string|max:255|unique:products,sku,' . $id,
+            'accounting_code'  => 'nullable|string|max:255',
+            'product_name'     => 'required|string|max:255',
+            'unit'             => 'nullable|string|max:50',
+            'tax_rate'         => 'required|numeric',
+            'details'          => 'array',
+            'details.*.combo_detail_code' => 'nullable|string|max:255',
+            'details.*.detail_name'       => 'required|string|max:255',
+            'details.*.unit'              => 'nullable|string|max:50',
+            'details.*.quantity'          => 'required|numeric|min:1',
+        ]);
 
-        if (!$product) {
-            return response()->json(['message' => 'Không tìm thấy sản phẩm.'], 404);
+        $product = Product::findOrFail($id);
+        $product->update($validatedData);
+
+        // Xoá các chi tiết cũ
+        $product->details()->delete();
+
+        // Tạo lại chi tiết combo
+        if (!empty($validatedData['details'])) {
+            foreach ($validatedData['details'] as $detail) {
+                $product->details()->create([
+                    'combo_detail_code' => $detail['combo_detail_code'] ?? null,
+                    'detail_name'       => $detail['detail_name'],
+                    'unit'              => $detail['unit'] ?? null,
+                    'quantity'          => $detail['quantity'],
+                ]);
+            }
         }
 
-        try {
-            $validatedData = $request->validate([
-                'market_code' => 'required|string|max:255|unique:products,market_code,' . $id,
-                'accounting_system_code' => 'required|string|max:255',
-                'product_name' => 'required|string|max:255',
-                'unit' => 'nullable|string|max:50',
-                'tax_rate' => 'nullable|numeric',
-                'combo_detail_code' => 'nullable|string|max:255',
-                'combo_name' => 'nullable|string|max:255',
-                'combo_unit' => 'nullable|string|max:50',
-                'quantity' => 'nullable|integer|min:0',
-            ]);
-
-            $product->update($validatedData);
-
-            return response()->json($product);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Lỗi xác thực dữ liệu.',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Đã xảy ra lỗi khi cập nhật sản phẩm.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json(['message' => 'Cập nhật sản phẩm thành công.']);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'message' => 'Dữ liệu không hợp lệ.',
+            'errors'  => $e->errors(),
+        ], 422);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Đã xảy ra lỗi khi cập nhật sản phẩm.',
+            'error'   => $e->getMessage(),
+        ], 500);
     }
+}
+
     public function destroy($id)
     {
         $product = Product::find($id);

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ComplaintController;
 use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Import\ImportHistoryController;
+use App\Http\Controllers\Import\ProductImportController;
 use App\Http\Controllers\Import\ViettelPostImportController;
 
 
@@ -56,7 +57,7 @@ Route::post('resetPassword', [AuthController::class, 'resetPassword'])->name('re
 Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('profile', [AuthController::class, 'userProfile']);
     Route::resource('packages', packageController::class);
-
+    Route::resource('products', ProductController::class);
     Route::get('user', [UserController::class, 'index']);
     Route::post('user', [UserController::class, 'store']);
     Route::get('user/{id}', [UserController::class, 'edit']);
@@ -76,9 +77,11 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::post('notifications/{id}/mark-unread',   [NotificationController::class, 'markUnread']);
     Route::post('notifications/mark-read-all',      [NotificationController::class, 'markAllRead']);
     Route::get('complaints',          [ComplaintController::class, 'index']);
-    Route::post('complaints',          [ComplaintController::class, 'store']);   // ← cho phép POST
+    Route::post('complaints',          [ComplaintController::class, 'store']);
     Route::get('complaints/{complaint}', [ComplaintController::class, 'show']);
     Route::patch('complaints/{complaint}', [ComplaintController::class, 'update']);
     Route::delete('complaints/{complaint}', [ComplaintController::class, 'destroy']);
 });
- Route::resource('products', ProductController::class);
+
+
+Route::post('products/import', [ProductImportController::class, 'import']);

@@ -37,6 +37,11 @@ const adminRoutes = [
                 component: () =>import ("../page/admin/product/index.vue"),
             },
             {
+                path: "product/:id",
+                name: "admin-product-detail",
+                component: () =>import ("../page/admin/product/detail.vue"),
+            },
+            {
                 path: "package",
                 name: "admin-package",
                 component: () =>import ("../page/admin/package/index.vue"),
