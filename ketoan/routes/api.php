@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ProductImportController;
 use App\Http\Controllers\Import\ViettelPostImportController;
-
+use App\Http\Controllers\Shopee\AuthShopeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,14 +50,23 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('resetPassword', [AuthController::class, 'resetPassword'])->name('resetPassword');
 
 
-
-
-
-
 Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('profile', [AuthController::class, 'userProfile']);
     Route::resource('packages', packageController::class);
     Route::resource('products', ProductController::class);
+    Route::get('user', [UserController::class, 'index']);
+    Route::post('user', [UserController::class, 'store']);
+    Route::get('user/{id}', [UserController::class, 'edit']);
+    Route::put('user/{id}', [UserController::class, 'update']);
+    Route::delete('user/{id}', [UserController::class, 'destroy']);
+    Route::get('roles', [RoleController::class, 'index']);
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('register', [AuthController::class, 'register']);
+    Route::get('profile', [AuthController::class, 'userProfile']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('resetPassword', [AuthController::class, 'resetPassword']);
+    Route::resource('packages', packageController::class);
+    Route::resource('product', ProductController::class);
     Route::get('user', [UserController::class, 'index']);
     Route::post('user', [UserController::class, 'store']);
     Route::get('user/{id}', [UserController::class, 'edit']);
@@ -83,5 +92,10 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::delete('complaints/{complaint}', [ComplaintController::class, 'destroy']);
 });
 
+Route::post('/auth-shopee', [AuthShopeeController::class, 'getAuthShopUrl'])->name('shopee.authshop');
+Route::post('/shopee/token-shop-level', [AuthShopeeController::class, 'getTokenShopLevel'])->name('shopee.tokenShopLevel');
+Route::post('/shopee/token-account-level', [AuthShopeeController::class, 'getTokenAccountLevel'])->name('shopee.tokenAccountLevel');
+Route::post('/shopee/access-token-shop-level', [AuthShopeeController::class, 'getAccessTokenShopLevel'])->name('shopee.accessTokenShopLevel');
+Route::post('/shopee/access-token-merchant-level', [AuthShopeeController::class, 'getAccessTokenMerchantLevel'])->name('shopee.accessTokenMerchantLevel');
 
 Route::post('products/import', [ProductImportController::class, 'import']);
