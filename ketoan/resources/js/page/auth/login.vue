@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref ,  inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toast-notification';
 import Cookies from 'js-cookie';
@@ -57,14 +57,15 @@ export default defineComponent({
         const password = ref('');
         const router = useRouter();
         const toast = useToast();
-
+        const globalState = inject('globalState');
+        const baseUrl = globalState.baseUrl;
         const login = () => {
             if (!email.value || !password.value) {
                 toast.error("Không được để trống email và mật khẩu");
                 return;
             }
 
-            axios.post('/api/login', {
+            axios.post(`${baseUrl}/api/login`, {
                 email: email.value,
                 password: password.value
             })
@@ -73,6 +74,7 @@ export default defineComponent({
                     toast.error(data.error);
                 } else {
                     const token = data.access_token;
+                    console.log(token);
                     const user = data.user;
 
                      Cookies.set('token', data.access_token, {

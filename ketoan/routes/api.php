@@ -59,14 +59,6 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('user/{id}', [UserController::class, 'edit']);
     Route::put('user/{id}', [UserController::class, 'update']);
     Route::delete('user/{id}', [UserController::class, 'destroy']);
-    Route::get('roles', [RoleController::class, 'index']);
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
-    Route::get('profile', [AuthController::class, 'userProfile']);
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('resetPassword', [AuthController::class, 'resetPassword']);
-    Route::resource('packages', packageController::class);
-    Route::resource('product', ProductController::class);
     Route::get('user', [UserController::class, 'index']);
     Route::post('user', [UserController::class, 'store']);
     Route::get('user/{id}', [UserController::class, 'edit']);

@@ -20,7 +20,7 @@ class CheckUser
         $user = Auth::user();
         $token = Auth::getToken();
         if (!$user || !$token) {
-            return $next($request);
+            return response()->json(['error' => 'Chưa đăng nhập hoặc token không hợp lệ'], 401);
         }
         if ($user->api_token !== (string)$token) {
             return response()->json(['error' => 'Thiết bị đã được đăng nhập ở một nơi khác'], 408);
