@@ -110,6 +110,18 @@
                     <span class="title">Thiết lập</span>
                 </router-link>
             </li>
+            <li class="menu-item" v-if="hasPermission('complaints.list')">
+                <router-link :to="{ name: 'admin-saleonlineOrder' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">shopping_bag</span>
+                    <span class="title">Đơn hàng</span>
+                </router-link>
+            </li>
+             <li class="menu-item" v-if="hasPermission('complaints.list')">
+                <router-link :to="{ name: 'admin-setting' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">view_timeline</span>
+                    <span class="title">Công nợ</span>
+                </router-link>
+            </li>
         </ul>
     </aside>
 </div>

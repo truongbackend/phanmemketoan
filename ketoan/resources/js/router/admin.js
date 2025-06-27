@@ -77,6 +77,11 @@ const adminRoutes = [
                 name: "admin-order",
                 component: () =>import ("../page/admin/order/index.vue"),
             },
+            {
+                path: "saleonlineOrder",
+                name: "admin-saleonlineOrder",
+                component: () =>import ("../page/admin/saleonlineOrder/index.vue"),
+            },
         ]
     },
     {
