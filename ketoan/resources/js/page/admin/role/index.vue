@@ -25,10 +25,12 @@
                         class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
                 </form>
                 <button @click="openModal()"  class="btn btn-outline-primary fw-medium rounded-3 hover-bg" v-if="hasPermission('role.create')">
-                    <span class="d-flex align-items-center" style="gap: 5px;">
-                        <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
-                        <span>Thêm mới</span>
-                    </span>
+                    <span class="d-flex align-items-center" style="gap: 5px">
+                        <span class="py-sm-1 d-block">
+                            <i class="ri-add-line d-none d-sm-inline-block"></i>
+                                <span>Thêm nhóm quyền mới</span>
+                            </span>
+                        </span>
                 </button>
             </div>
             <div class="default-table-area recent-orders">
@@ -64,16 +66,12 @@
                                     </span>
                                 </td>
 
-                                <td class="text-secondary">
-                                    <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" v-if="hasPermission('role.edit')"
-                                        @click="openModal(role)">
-                                        <i class="material-symbols-outlined fs-16 text-body">edit</i>
+                                <td class="text-secondary d-flex gap-2">
+                                    <button v-if="hasPermission('role.edit')" type="button" class="btn btn-sm btn-light d-flex align-items-center justify-content-center" @click="openModal(role)" title="Chỉnh sửa">
+                                    <i class="ri-edit-line fs-16 text-info"></i>
                                     </button>
-
-                                    <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" v-if="hasPermission('role.list')"
-                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                        @click="deleteId = role.id">
-                                        <i class="material-symbols-outlined fs-16 text-danger">delete</i>
+                                    <button v-if="hasPermission('role.list')" type="button" class="btn btn-sm btn-light d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#deleteModal" @click="deleteId = role.id">
+                                        <i class="ri-delete-bin-line fs-16 text-danger"></i>
                                     </button>
                                 </td>
                             </tr>

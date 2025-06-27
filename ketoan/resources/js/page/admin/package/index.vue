@@ -25,9 +25,11 @@
                 <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
             </form>
             <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal" v-if="hasPermission('package.list')">
-                <span class="d-flex align-items-center" style="gap: 5px;">
-                    <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
-                    <span>Thêm mới</span>
+                <span class="d-flex align-items-center" style="gap: 5px">
+                <span class="py-sm-1 d-block">
+                    <i class="ri-add-line d-none d-sm-inline-block"></i>
+                        <span>Thêm mới gói dịch vụ</span>
+                    </span>
                 </span>
             </button>
         </div>
@@ -72,15 +74,14 @@
                             <td v-else class="text-secondary">
                                 <span class="badge bg-danger bg-opacity-10 text-danger fw-normal">Ngưng hoạt động</span>
                             </td>
-                            <td class="text-secondary">
-                                <button v-if="hasPermission('package.edit')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
-                                    <i class="material-symbols-outlined fs-16 text-body">edit</i>
+                            <td class="text-secondary d-flex gap-2">
+                                <button v-if="hasPermission('package.edit')" type="button" class="btn btn-sm btn-light d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)" title="Chỉnh sửa">
+                                    <i class="ri-edit-line fs-16 text-info"></i>
                                 </button>
-                                <button v-if="hasPermission('package.delete')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
-                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                        @click="deleteId = Items.id">
-                                    <i class="material-symbols-outlined fs-16 text-danger">delete</i>
+                                <button v-if="hasPermission('package.delete')" type="button" class="btn btn-sm btn-light d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#deleteModal" @click="deleteId = Items.id">
+                                    <i class="ri-delete-bin-line fs-16 text-danger"></i>
                                 </button>
+
                             </td>
                         </tr>
                     </tbody>

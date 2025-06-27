@@ -82,11 +82,11 @@
                             <td v-else class="text-secondary">
                                 <span class="badge bg-danger bg-opacity-10 text-danger fw-normal">Ngưng hoạt động</span>
                             </td>
-                            <td class="text-secondary">
-                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getUserID(Items.id)">
+                            <td class="text-secondary d-flex gap-2">
+                                <button class="btn btn-sm btn-light d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getUserID(Items.id)">
                                     <i class="material-symbols-outlined fs-16 text-body">edit</i>
                                 </button>
-                                <button class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#deleteModal" @click="deleteId = Items.id">
+                                <button class="btn btn-sm btn-light d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#deleteModal" @click="deleteId = Items.id">
                                     <i class="material-symbols-outlined fs-16 text-danger">delete</i>
                                 </button>
                             </td>

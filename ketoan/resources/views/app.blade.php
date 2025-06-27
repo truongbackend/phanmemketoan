@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/remixicon.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/lightpick.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/frontend/style.css') }}">
 		<link rel="icon" type="image/png" href="assets/images/favicon.png">
 		<title>PNL INTERNATIONAL </title>
         @vite('../resources/js/app.js')

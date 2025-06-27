@@ -1,294 +1,631 @@
 <template>
-        <nav class="navbar navbar-expand-lg bg-white bg-opacity-25 fixed-top" id="navbar">
-            <div class="container">
-                <a class="navbar-brand me-xl-5 me-3" href="landing-page.html">
-                    <img src="assets/images/landing/logo.svg" alt="logo">
+<nav class="navbar navbar-expand-lg bg-transparent fixed-top navbar-for-landing-page py-40" id="navbar">
+            <div class="container cmw-1308">
+                <a class="navbar-brand" href="ecommerce-landing-index.html">
+                    <img src="assets/images/logo.svg" alt="logo">
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="navbar_toggler">
+                    <span class="border-bottom border-3 border-white top"></span>
+                    <span class="border-bottom border-3 border-white middle my-5px"></span>
+                    <span class="border-bottom border-3 border-white bottom"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
+                    <ul class="navbar-nav m-auto">
                         <li class="nav-item">
-                            <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4 active" href="landing-page.html">Trang chủ</a>
+                            <a class="nav-link fs-14 fw-medium text-body-bg hover p-0 active" href="ecommerce-landing-index.html">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fs-16 fw-medium text-body hover px-0 px-md-2 mx-1 mx-xl-0 px-xl-4" href="features.html">Features</a>
+                            <a class="nav-link fs-14 fw-medium text-body-bg hover p-0" href="ecommerce-features.html">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-14 fw-medium text-body-bg hover p-0" href="ecommerce-use-cases.html">Use Cases</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-14 fw-medium text-body-bg hover p-0" href="ecommerce-testimonials.html">Testimonials</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-14 fw-medium text-body-bg hover p-0" href="ecommerce-pricing.html">Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-14 fw-medium text-body-bg hover p-0" href="ecommerce-blog.html">Blog</a>
                         </li>
                     </ul>
                     <div class="othres">
-                        <a href="login.html" class="btn btn-outline-primary-div py-2 px-4 fw-medium fs-16 rounded-3">
-                            <i class="ri-login-box-line fs-18 position-relative top-2"></i>
-                            <span class="ms-1">Đăng nhập</span>
+                        <a href="ecommerce-pricing.html" class="btn bg-white fw-medium fs-14 text-primary rounded-pill hover-bg">
+                            Dùng thử
                         </a>
-                        <a href="register.html" class="btn btn-primary-div py-2 px-4 fw-medium fs-16 text-white ms-3 rounded-3">
-                            <i class="ri-user-line fs-18"></i>
-                            <span class="ms-1">Đăng ký</span>
+                        <a href="ecommerce-pricing.html" class="btn bg-white fw-medium fs-14 text-primary rounded-pill hover-bg">
+                            Dùng thử
                         </a>
                     </div>
                 </div>
             </div>
         </nav>
-        <div class="tailor-area position-relative z-1 pt-150">
-            <div class="container">
-                <div class="row align-items-center">
+        <div class="banner-area-ecommerce" style="background: linear-gradient(180deg, #4936F5 0%, #FFFFFF 100%);">
+            <div class="container cmw-1308 position-relative z-1">
+                <div class="banner-content-ecommerce">
+                    <div class="title bg-border-color-50">
+                        <div class="d-flex align-items-center justify-content-center" style="gap: 4px;">
+                            <i class="ri-fire-fill text-primary-50"></i>
+                            <span class="text-primary-50">Giải pháp</span>
+                        </div>
+                    </div>
+                    <h2>Bán hàng thông minh, gói gọn trong một nền tảng</h2>
+                    <p>Từ đơn hàng đến hóa đơn, PNL giúp doanh nghiệp kế toán mọi giao dịch dễ dàng, kết nối liền mạch với các sàn thương mại điện tử.</p>
+                    <div class="d-flex flex-wrap align-items-center justify-content-center banner-btn" style="gap: 15px;">
+                        <a href="ecommerce-pricing.html" class="btn bg-primary text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn">Đăng ký dùng thử</a>
+                        <a href="ecommerce-features.html" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn">Tìm hiểu thêm</a>
+                    </div>
+                </div>
+
+                <div class="banner-img">
+                    <img src="assets/images/banner.png" alt="banner">
+                </div>
+
+                <img src="assets/images/shapes/shape1.png" class="shape1 shape d-none d-lg-inline-block" alt="shape1">
+                <img src="assets/images/shapes/shape2.png" class="shape2 shape d-none d-lg-inline-block" alt="shape2">
+                <img src="assets/images/shapes/shape3.png" class="shape3 shape d-none d-lg-inline-block" alt="shape3">
+                <img src="assets/images/shapes/shape4.png" class="shape4 shape d-none d-lg-inline-block" alt="shape4">
+            </div>
+        </div>
+        <!-- End Banner Area -->
+
+        <!-- Start Partners Area -->
+        <div class="partners-area pb-180">
+            <div class="container cmw-1308">
+                <span class="partners-title fs-20 fw-medium d-block text-center">Trezo is the platform behind some of the fastest-growing online brands.</span>
+                <div class="swiper partners-slide">
+                    <div class="swiper-wrapper align-items-center text-center">
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner1.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner2.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner3.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner4.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner5.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner6.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner1.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner2.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner3.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner4.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner5.svg" alt="partner">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="assets/images/partners/partner6.svg" alt="partner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Partners Area -->
+
+        <!-- Start Why Trezo Area -->
+        <div class="why-trezo-area pb-180">
+            <div class="container cmw-1308">
+                <div class="row align-items-center g-4">
                     <div class="col-lg-6">
-                        <div class="tailor-content">
-                            <h2>Nền tảng quản trị doanh nghiệp hợp nhất</h2>
-                            <p>Giải pháp chuyển đổi số nhanh chóng - dễ dàng - chi phí hợp lý cho mọi doanh nghiệp.</p>
-                            <ul class="ps-0 mb-0 list-unstyled">
-                                <li>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <i class="material-symbols-outlined fs-20 text-primary">done_outline</i>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h3>Giải pháp kế toán tối ưu, đơn giản và hiệu quả.</h3>
+                        <div class="why-trezo-img">
+                            <img src="assets/images/why-trezo.png" alt="why-trezo">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="why-trezo-content">
+                            <span class="top-title2">Về chúng tôi</span>
+                            <h2>Giới thiệu về PNL INTERNATIONAL</h2>
+                            <p>Được xây dựng để tăng tốc mọi hoạt động kế toán mỗi ngày</p>
+                            <p>Hệ thống quản lý trọn gói</p>
+                            <p>Giải pháp kế toán tối ưu, đơn giản và hiệu quả.</p>
+
+                            <div class="why-trezo-single-item-wrap">
+                                <div class="row g-4 g-50">
+                                    <div class="col-6 col-sm-6">
+                                        <div class="why-trezo-single-item">
+                                            <h1>2x</h1>
+                                            <span class="d-block">Faster Sales Monitoring</span>
                                         </div>
                                     </div>
+                                    <div class="col-6 col-sm-6">
+                                        <div class="why-trezo-single-item">
+                                            <h1>98%</h1>
+                                            <span class="d-block">Inventory Accuracy</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6">
+                                        <div class="why-trezo-single-item">
+                                            <h1>3x</h1>
+                                            <span class="d-block">Better Conversion Insights</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6">
+                                        <div class="why-trezo-single-item">
+                                            <h1>5k+</h1>
+                                            <span class="d-block">Orders Automated Weekly</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Why Trezo Area -->
+
+        <!-- Start Top Features Area -->
+        <div class="top-features-area bg-gray-200 ptb-180">
+            <div class="container cmw-1308">
+                <div class="section-title2 mx-auto text-center">
+                    <span class="top-title2">Top Features</span>
+                    <h2>Your eCommerce Toolkit — All in One Place</h2>
+                    <p>Trezo equips you with intelligent tools to run a high-performing online store.</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="top-features-single-item position-relative z-1 mt-35">
+                            <div class="top-features-content">
+                                <img src="assets/images/icons/creativity.svg" alt="creativity">
+                                <h3>Hóa đơn tự động</h3>
+                                <p>Get a clear view of what's selling, when, and to whom — all in real time.</p>
+                            </div>
+                            <img src="assets/images/shapes/shape5.png" class="shape5" alt="shape5">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="top-features-single-item position-relative z-1">
+                            <div class="top-features-content">
+                                <img src="assets/images/icons/bar-chart.svg" alt="bar-chart">
+                                <h3>Hiệu quả về chi phí</h3>
+                                <p>Uncover buyer behavior, repeat purchases, and lifetime value effortlessly.</p>
+                            </div>
+                            <img src="assets/images/shapes/shape5.png" class="shape5" alt="shape5">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="top-features-single-item position-relative z-1 mt-35">
+                            <div class="top-features-content">
+                                <img src="assets/images/icons/edit.svg" alt="edit">
+                                <h3>Xử lý dữ liệu dễ dàng</h3>
+                                <p>Bulk edit items, update inventory, and categorize with just a few clicks.</p>
+                            </div>
+                            <img src="assets/images/shapes/shape5.png" class="shape5" alt="shape5">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="top-features-single-item position-relative z-1">
+                            <div class="top-features-content">
+                                <img src="assets/images/icons/connect.svg" alt="connect">
+                                <h3>Smart Connect</h3>
+                                <p>Connect to Shopify, Stripe, Meta Ads, and more in seconds.</p>
+                            </div>
+                            <img src="assets/images/shapes/shape5.png" class="shape5" alt="shape5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Top Features Area -->
+
+        <!-- Start Dashboard Showcase Area -->
+        <div class="dashboard-showcase-area pt-180 position-relative z-2">
+            <div class="container cmw-1308">
+                <div class="row align-items-center g-4">
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="dashboard-showcase-content">
+                            <span class="top-title2">Dashboard Showcase</span>
+                            <h2>Tính năng phổ biến</h2>
+                            <p>Tính năng mạnh mẽ, dễ sử dụng.</p>
+
+                            <div class="dashboard-showcase-item-wrap">
+                                <div class="row g-4 g-50">
+                                    <div class="col-sm-6">
+                                        <div class="d-flex dashboard-showcase-single-item" style="gap: 20px;">
+                                            <div class="flex-shrink-0">
+                                              <img src="assets/images/icons/check.svg" class="position-relative" style="top: 4px;" alt="check">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h3 class="text-secondary-50">Tính năng phổ biến</h3>
+                                                <p>Chúng tôi đặt trọng tâm vào việc xuất hóa đơn một cách nhanh chóng, chính xác và hiệu quả. Trải nghiệm quy trình xử lý hóa đơn mượt mà, đáng tin cậy và tiết kiệm thời gian cho doanh nghiệp của bạn..</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex dashboard-showcase-single-item" style="gap: 20px;">
+                                            <div class="flex-shrink-0">
+                                              <img src="assets/images/icons/check.svg" class="position-relative" style="top: 4px;" alt="check">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h3 class="text-secondary-50">Tính năng mạnh mẽ, dễ sử dụng</h3>
+                                                <p>Đối soát công nợ</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex dashboard-showcase-single-item" style="gap: 20px;">
+                                            <div class="flex-shrink-0">
+                                              <img src="assets/images/icons/check.svg" class="position-relative" style="top: 4px;" alt="check">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h3 class="text-secondary-50">Mọi thứ dễ dàng</h3>
+                                                <p>Chúng tôi giúp bạn quản lý công nợ dễ dàng và chính xác hơn bao giờ hết. Toàn bộ quy trình được tự động hóa để đảm bảo sự liền mạch, minh bạch và tiết kiệm thời gian.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex dashboard-showcase-single-item" style="gap: 20px;">
+                                            <div class="flex-shrink-0">
+                                              <img src="assets/images/icons/check.svg" class="position-relative" style="top: 4px;" alt="check">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h3 class="text-secondary-50">Dịch vụ xuất hóa đơn</h3>
+                                                <p>Dịch vụ quản lý tình trạng đơn hàng.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-5">
+                        <div class="dashboard-showcase-img">
+                            <img src="assets/images/dashboard-showcase.jpg" alt="dashboard-showcase">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="it-built-for-area ptb-180 position-relative z-1">
+            <div class="container cmw-1308">
+                <div class="section-title2 mx-auto text-center">
+                    <span class="top-title2">It's Built For</span>
+                    <h2>Perfect for Every Kind of Online Seller</h2>
+                    <p>Whether you're just starting or scaling big — Trezo fits your store.</p>
+                </div>
+
+                <div class="row justify-content-center g-4">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="it-built-for-single-item">
+                            <img src="assets/images/arrow-top-right.svg" class="arrow-top-right" alt="arrow-top-right">
+                            <div class="d-flex justify-content-center">
+                                <div class="icon d-flex justify-content-center align-items-center bg-white rounded-circle">
+                                    <img src="assets/images/icons/brand.svg" alt="brand">
+                                </div>
+                            </div>
+                            <h3>D2C Brands</h3>
+                            <p>Control the full customer journey and drive loyalty.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="it-built-for-single-item mt-25">
+                            <img src="assets/images/arrow-bottom-right.svg" class="arrow-bottom-right" alt="arrow-bottom-right">
+                            <div class="d-flex justify-content-center">
+                                <div class="icon d-flex justify-content-center align-items-center bg-white rounded-circle">
+                                    <img src="assets/images/icons/shopify.svg" alt="brand">
+                                </div>
+                            </div>
+                            <h3>Shopify Sellers</h3>
+                            <p>Plug Trezo into your existing setup and enhance capabilities.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="it-built-for-single-item">
+                            <img src="assets/images/arrow-top-right.svg" class="arrow-top-right" alt="arrow-top-right">
+                            <div class="d-flex justify-content-center">
+                                <div class="icon d-flex justify-content-center align-items-center bg-white rounded-circle">
+                                    <img src="assets/images/icons/industry.svg" alt="brand">
+                                </div>
+                            </div>
+                            <h3>Niche Stores</h3>
+                            <p>Run smarter with insights tailored to your audience.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="it-built-for-single-item mt-25">
+                            <div class="d-flex justify-content-center">
+                                <div class="icon d-flex justify-content-center align-items-center bg-white rounded-circle">
+                                    <img src="assets/images/icons/shopping-store.svg" alt="brand">
+                                </div>
+                            </div>
+                            <h3>Multi-Channel Retailers</h3>
+                            <p>Track sales from all platforms, seamlessly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <img src="assets/images/mesh-grad.png" class="position-absolute top-50 start-50 translate-middle z-n1" alt="mesh-grad">
+        </div>
+        <div class="pricing-plans-area bg-gray-200 ptb-180">
+            <div class="container cmw-1308">
+                <div class="section-title2 mx-auto text-center">
+                    <span class="top-title2">Pricing Plans</span>
+                    <h2>Flexible Plans That Scale With You</h2>
+                    <p>Start free and upgrade as you grow. No hidden fees, no surprises.</p>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="pricing-plans-single-item position-relative z-1">
+                            <div class="pricing-header">
+                                <span class="trial">Free Trial</span>
+                                <h1>$0<sub class="text-body">/monthly</sub></h1>
+                                <p>New store owners exploring Trezo</p>
+                            </div>
+                            <div class="pricing-content">
+                                <h3>Features:</h3>
+                                <ul class="p-0 list-unstyled">
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Access to basic dashboard</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Real-time sales tracking</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Inventory overview</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Up to 50 products</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>1 connected store</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Email support</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>No credit card required</span>
+                                    </li>
+                                </ul>
+
+                                <a href="#" class="btn btn-outline-primary fw-medium fs-14 rounded-pill hover-bg landing-page-btn w-100">Get Started</a>
+                            </div>
+                            <img src="assets/images/shapes/shape5.png" class="position-absolute shape5" alt="shape5">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="pricing-plans-single-item position-relative z-1">
+                            <div class="pricing-header">
+                                <span class="trial">Pro</span>
+                                <h1>$39<sub class="text-body">/monthly</sub></h1>
+                                <p>Growing businesses that need more control</p>
+                            </div>
+                            <div class="pricing-content">
+                                <h3>Features:</h3>
+                                <ul class="p-0 list-unstyled">
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Everything in Free</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Unlimited products & orders</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Multi-store dashboard</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Marketing automation tools</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Custom email campaigns</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Analytics & reports</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Chat support</span>
+                                    </li>
+                                </ul>
+
+                                <a href="#" class="btn btn-outline-primary fw-medium fs-14 rounded-pill hover-bg landing-page-btn w-100">Get Started</a>
+                            </div>
+                            <img src="assets/images/shapes/shape5.png" class="position-absolute shape5" alt="shape5">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="pricing-plans-single-item position-relative z-1">
+                            <div class="pricing-header">
+                                <span class="trial">Enterprise</span>
+                                <h1>$79<sub class="text-body">/monthly</sub></h1>
+                                <p>High-volume sellers & teams</p>
+                            </div>
+                            <div class="pricing-content">
+                                <h3>Features:</h3>
+                                <ul class="p-0 list-unstyled">
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Everything in Pro</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Dedicated success manager</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>API access & integrations</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Advanced analytics & forecasting</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Priority support</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>Team roles & permissions</span>
+                                    </li>
+                                    <li class="d-flex align-items-center" style="gap: 12px;">
+                                        <img src="assets/images/icons/check.svg" alt="check">
+                                        <span>SLA-backed uptime guarantee</span>
+                                    </li>
+                                </ul>
+
+                                <a href="#" class="btn btn-outline-primary fw-medium fs-14 rounded-pill hover-bg landing-page-btn w-100">Get Started</a>
+                            </div>
+                            <img src="assets/images/shapes/shape5.png" class="position-absolute shape5" alt="shape5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Pricing Plans Area -->
+
+        <!-- Start From the Blog Area -->
+        <div class="from-the-blog-area ptb-180">
+            <div class="container cmw-1308">
+                <div class="d-flex justify-content-between flex-wrap gap-3 align-items-center mb-65">
+                    <div class="section-title2 m-0">
+                        <span class="top-title2">From the Blog</span>
+                        <h2>Learn to Sell Smarter</h2>
+                        <p>Expert tips, growth guides, and eCommerce trends — fresh every week.</p>
+                    </div>
+
+                    <a href="ecommerce-blog.html" class="btn bg-primary text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn">View All</a>
+                </div>
+
+                <div class="row g-4 justify-content-center">
+                    <div class="col-lg-4 col-md-6">
+                        <a href="ecommerce-blog-details.html" class="from-the-blog-single-item text-decoration-none">
+                            <img src="assets/images/blogs/blog1.jpg" alt="blog1">
+
+                            <ul class="p-0 list-unstyled d-flex align-items-center" style="gap: 25px;">
+                                <li class="d-flex align-items-center" style="gap: 5px;">
+                                    <i class="ri-user-line text-primary fs-18"></i>
+                                    <span class="fs-14 text-body">By: Trezo</span>
                                 </li>
-                                <li>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <i class="material-symbols-outlined fs-20 text-primary">done_outline</i>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h3>Hóa đơn tự động</h3>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <i class="material-symbols-outlined fs-20 text-primary">done_outline</i>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h3>Hiệu quả về chi phí</h3>
-                                        </div>
-                                    </div>
+                                <li class="d-flex align-items-center" style="gap: 5px;">
+                                    <i class="ri-calendar-line text-primary fs-18"></i>
+                                    <span class="fs-14 text-body">April 13, 2025</span>
                                 </li>
                             </ul>
 
-                        </div>
-                        <a href="contact.html" class="btn btn-primary-div py-2 px-4 fs-16 fw-medium rounded-3 text-white mt-3"><i class="ri-user-line fs-18"></i><span class="ms-1">Bắt đầu dùng thử miễn phí của bạn</span></a>
+                            <h3>eCommerce Metrics That Matter in 2025</h3>
+                            <p class="text-body">Understand which numbers to watch and why they matter for growth.</p>
+                        </a>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="tailor-img">
-                            <img src="assets/images/landing/tailor-img.png" alt="tailor">
-                        </div>
-                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <a href="ecommerce-blog-details.html" class="from-the-blog-single-item text-decoration-none">
+                            <img src="assets/images/blogs/blog2.jpg" alt="blog1">
 
-                </div>
-            </div>
-        </div>
-        <div class="faq-arae position-relative z-1 pt-125" id="fqss">
-            <div class="container">
-                <div class="section-title mw-630">
-                    <span class="top-title">
-                        <span>FAQ’s</span>
-                    </span>
-                    <h2>Inspiring Feedback: What Users Love About Trezo Dashboard</h2>
-                </div>
+                            <ul class="p-0 list-unstyled d-flex align-items-center" style="gap: 25px;">
+                                <li class="d-flex align-items-center" style="gap: 5px;">
+                                    <i class="ri-user-line text-primary fs-18"></i>
+                                    <span class="fs-14 text-body">By: Trezo</span>
+                                </li>
+                                <li class="d-flex align-items-center" style="gap: 5px;">
+                                    <i class="ri-calendar-line text-primary fs-18"></i>
+                                    <span class="fs-14 text-body">April 12, 2025</span>
+                                </li>
+                            </ul>
 
-                <div class="accordion faq-wrapper mw-740 m-auto" id="accordionExample">
-                    <div class="accordion-item mb-3 border-0 bg-white">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button text-secondary bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                What is Trezo?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.</p>
-                            </div>
-                        </div>
+                            <h3>How to Design a Product Page That Converts</h3>
+                            <p class="text-body">Boost sales with smarter UX and persuasive content.</p>
+                        </a>
                     </div>
-                    <div class="accordion-item mb-3 border-0 bg-white">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button text-secondary bg-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                What features does Trezo offer?
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item mb-3 border-0 bg-white">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button text-secondary bg-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                How can Trezo benefit my team?
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item mb-3 border-0 bg-white">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button text-secondary bg-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree4" aria-expanded="false" aria-controls="collapseThree4">
-                                Is Trezo suitable for small businesses?
-                            </button>
-                        </h2>
-                        <div id="collapseThree4" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item mb-3 border-0 bg-white">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button text-secondary bg-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree5" aria-expanded="false" aria-controls="collapseThree5">
-                                Can I customize Trezo to fit my team's specific needs?
-                            </button>
-                        </h2>
-                        <div id="collapseThree5" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item mb-3 border-0 bg-white">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button text-secondary bg-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree6" aria-expanded="false" aria-controls="collapseThree6">
-                                Is Trezo cloud-based or on-premises?
-                            </button>
-                        </h2>
-                        <div id="collapseThree6" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item mb-0 border-0 bg-white">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button text-secondary bg-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree7" aria-expanded="false" aria-controls="collapseThree7">
-                                Does Trezo integrate with other tools?
-                            </button>
-                        </h2>
-                        <div id="collapseThree7" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.</p>
-                            </div>
-                        </div>
+                    <div class="col-lg-4 col-md-6">
+                        <a href="ecommerce-blog-details.html" class="from-the-blog-single-item text-decoration-none">
+                            <img src="assets/images/blogs/blog3.jpg" alt="blog1">
+
+                            <ul class="p-0 list-unstyled d-flex align-items-center" style="gap: 25px;">
+                                <li class="d-flex align-items-center" style="gap: 5px;">
+                                    <i class="ri-user-line text-primary fs-18"></i>
+                                    <span class="fs-14 text-body">By: Trezo</span>
+                                </li>
+                                <li class="d-flex align-items-center" style="gap: 5px;">
+                                    <i class="ri-calendar-line text-primary fs-18"></i>
+                                    <span class="fs-14 text-body">April 11, 2025</span>
+                                </li>
+                            </ul>
+
+                            <h3>Avoid These 5 Inventory Mistakes</h3>
+                            <p class="text-body">Save money, reduce churn, and improve operations.</p>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End FAQ Area -->
+        <!-- End From the Blog Area -->
 
-        <!-- Start Contact Us Area -->
-        <div class="contact-us-area pt-150 position-relative z-2" id="contact">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6">
-                        <div class="contact-us-img mb-4 mb-lg-0">
-                            <img src="assets/images/landing/contact-us.jpg" alt="contact-us">
-                        </div>
+        <!-- Start Supercharge Area -->
+        <div class="supercharge-area">
+            <div class="container cmw-1308">
+                <div class="supercharge-content position-relative z-1" style="background: linear-gradient(278deg, #757DFF 23.88%, #4936F5 94.06%)">
+                    <h2>Ready to Supercharge Your Store?</h2>
+                    <p>Start growing with real data, real automation, and real results.</p>
+                    <div class="d-flex flex-wrap justify-content-center mt-40" style="gap: 14px;">
+                        <a href="ecommerce-pricing.html" class="btn bg-white text-primary fw-medium fs-14 rounded-pill hover-bg landing-page-btn">Start Free Trial</a>
+                        <a href="#" class="btn btn-outline-light text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn">Talk to Sales</a>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="contact-us-form ms-xl-4">
-                            <span class="top-title">
-                                <span>Contact Us</span>
-                            </span>
-                            <h2>Introducing Our Exceptional Team. Meet the Minds Driving Our Success</h2>
-                            <form>
-                                <div class="form-group mb-4">
-                                    <label class="label text-secondary">Full Name</label>
-                                    <input type="text" class="form-control bg-transparent h-55" placeholder="Your full name">
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label class="label text-secondary">Email Address</label>
-                                    <input type="email" class="form-control bg-transparent h-55" placeholder="Your email address">
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label class="label text-secondary">Phone Number</label>
-                                    <input type="text" class="form-control bg-transparent h-55" placeholder="Your phone number">
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label class="label text-secondary">Subject</label>
-                                    <select class="form-select form-control bg-transparent h-55" aria-label="Default select example">
-                                        <option selected>Select your subject</option>
-                                        <option value="1">Help Dask</option>
-                                        <option value="2">LMS</option>
-                                        <option value="3">CRM</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label class="label text-secondary">Phone Number</label>
-                                    <textarea rows="5" class="form-control bg-transparent" placeholder="Write your message..."></textarea>
-                                </div>
-                                <div class="form-group mb-0">
-                                    <button type="submit" class="btn btn-primary py-2 px-4 w-100">
-                                        <i class="ri-refresh-line fs-18 text-white position-relative top-1 me-1"></i>
-                                        <span>Send</span>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                    <img src="assets/images/shapes/shape1.png" class="position-absolute d-none d-xl-inline-block" style="bottom: 85px; left: 85px;" alt="shape">
+                    <img src="assets/images/shapes/shape2.png" class="position-absolute d-none d-xl-inline-block" style="bottom: 187px; left: 180px;" alt="shape">
+                    <img src="assets/images/shapes/shape3.png" class="position-absolute d-none d-xl-inline-block" style="top: 88px; right: 106px;" alt="shape">
+                    <img src="assets/images/shapes/shape4.png" class="position-absolute d-none d-xl-inline-block" style="top: 195px; right: 193px;" alt="shape">
                 </div>
             </div>
         </div>
-        <!-- End Contact Us Area -->
+        <!-- End Supercharge Area -->
 
-        <!-- Start Unlock Area -->
-        <div class="unlock-area ptb-150 position-relative z-1" id="admin">
-            <div class="container">
-                <div class="border-bottom pb-150">
-                    <div class="row">
-                        <div class="unlock-content">
-                            <h2>Unlock a world of possibilities with Trezo Dashboard.</h2>
-                            <p>Experience the difference with Trezo Dashboard. Sign up for a free trial today and see how our intuitive platform can revolutionize your data analysis process.</p>
-                            <a href="contact.html" class="btn btn-primary-div py-2 px-4 fs-16 fw-medium rounded-3 text-white">
-                                <i class="ri-user-line fs-18"></i>
-                                <span class="ms-1">Get started - It is free</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Unlock Area -->
-
-        <!-- Start Forter Area -->
-        <div class="footers-area pb-125 position-relative z-2">
-            <div class="container">
-                <div class="row">
+        <!-- Start Footer Area -->
+        <div class="footer-area-ecommerce ptb-180" style="background: linear-gradient(180deg, #FFFFFF 0%, #DDE4FF 100%);">
+            <div class="container cmw-1308">
+                <div class="row g-4 justify-content-center">
                     <div class="col-lg-3 col-sm-6">
-                        <div class="footer-single-item mb-4">
-                            <div class="d-flex align-items-center mb-3 mb-sm-0">
-                <div class="flex-shrink-0">
-                    <img src="assets/avatar/logo.webp" class="wh-60 rounded-circle" alt="user">
-                </div>
-                <div class="flex-grow-1 ms-3">
-                    <h4 class="fs-16 fw-semibold mb-1">Andrew Burns</h4>
-                    <span class="fs-14">Programmer</span>
-                </div>
-            </div>
-                            <p class="mb-4 pb-lg-2">With customizable dashboards tailored to your needs, collaborate effortlessly with your team and stay ahead with real-time updates.</p>
-
-                            <ul class="ps-0 mb-0 list-unstyled d-flex flex-wrap gap-3">
+                        <div class="footer-single-item-ecommerce">
+                            <a href="ecommerce-landing-index.html" class="logo">
+                                <img src="assets/images/black-logo.svg" class="black-logo" alt="black-logo">
+                                <img src="assets/images/white-logo.svg" class="d-none white-logo" alt="white-logo">
+                            </a>
+                            <p class="dec">Your all-in-one marketing command center — built to help you grow, scale, and win smarter.</p>
+                            <ul class="d-flex align-items-center p-0 mb-0 list-unstyled social-link" style="gap: 5px;">
                                 <li>
-                                    <a href="https://www.facebook.com/" target="_blank" class="text-decoration-none fs-20 text-primary">
+                                    <a href="https://www.facebook.com/" target="_blank">
                                         <i class="ri-facebook-fill"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.twitter.com/" target="_blank" class="text-decoration-none fs-20 text-primary">
+                                    <a href="https://www.twitter.com/" target="_blank">
                                         <i class="ri-twitter-x-line"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.linkedin.com/" target="_blank" class="text-decoration-none fs-20 text-primary">
+                                    <a href="https://www.linkedin.com/" target="_blank">
                                         <i class="ri-linkedin-fill"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.dribbble.com/" target="_blank" class="text-decoration-none fs-20 text-primary">
+                                    <a href="https://www.dribbble.com/" target="_blank">
                                         <i class="ri-dribbble-line"></i>
                                     </a>
                                 </li>
@@ -296,58 +633,57 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
-                        <div class="footer-single-item mb-4 ms-lg-5 ps-lg-5">
-                            <h3 class="mb-md-4 mb-3 fw-semibold">Our Products</h3>
-                            <ul class="ps-0 mb-0 list-unstyled">
-                                <li class="mb-2 pb-1">
-                                    <a href="#" class="text-decoration-none">Trezo Dashboard</a>
+                        <div class="footer-single-item-ecommerce pl-130">
+                            <h3>Quick Links</h3>
+                            <ul class="p-0 m-0 list-unstyled import-link">
+                                <li>
+                                    <a href="#">Home</a>
                                 </li>
-                                <li class="mb-2 pb-1">
-                                    <a href="#" class="text-decoration-none">Tagus Admin</a>
+                                <li>
+                                    <a href="#">Features</a>
                                 </li>
-                                <li class="mb-2 pb-1">
-                                    <a href="#" class="text-decoration-none">eCademy LMS</a>
+                                <li>
+                                    <a href="#">Pricing Plans</a>
                                 </li>
-                                <li class="mb-0">
-                                    <a href="#" class="text-decoration-none">Admash Template</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="footer-single-item mb-4 ms-lg-5 ps-lg-4">
-                            <h3 class="mb-md-4 mb-3 fw-semibold">Liên kết nhanh</h3>
-                            <ul class="ps-0 mb-0 list-unstyled">
-                                <li class="mb-2 pb-1">
-                                    <a href="landing-page.html" class="text-decoration-none">Trang chủ</a>
-                                </li>
-                                <li class="mb-2 pb-1">
-                                    <a href="features.html" class="text-decoration-none">Tính năng</a>
-                                </li>
-                                <li class="mb-2 pb-1">
-                                    <a href="faqs.html" class="text-decoration-none">Lời chứng thực</a>
-                                </li>
-                                <li class="mb-0">
-                                    <a href="our-team.html" class="text-decoration-none">Our Team</a>
+                                <li>
+                                    <a href="#">Use Cases</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
-                        <div class="footer-single-item mb-4">
-                            <h3 class="mb-md-4 mb-3 fw-semibold">Privacy Policy</h3>
-                            <ul class="ps-0 mb-0 list-unstyled">
-                                <li class="mb-2 pb-1">
-                                    <a href="#" class="text-decoration-none">Terms & Conditions</a>
+                        <div class="footer-single-item-ecommerce pl-130">
+                            <h3>Resources</h3>
+                            <ul class="p-0 m-0 list-unstyled import-link">
+                                <li>
+                                    <a href="#">Help Center</a>
                                 </li>
-                                <li class="mb-2 pb-1">
-                                    <a href="#" class="text-decoration-none">Chính sách cookie</a>
+                                <li>
+                                    <a href="#">Documentation</a>
                                 </li>
-                                <li class="mb-2 pb-1">
-                                    <a href="#" class="text-decoration-none">Notice at Collection</a>
+                                <li>
+                                    <a href="#">Blog</a>
                                 </li>
-                                <li class="mb-0">
-                                    <a href="#" class="text-decoration-none">Chính sách bảo mật</a>
+                                <li>
+                                    <a href="#">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="footer-single-item-ecommerce pl-80">
+                            <h3>Get in Touch</h3>
+                            <ul class="p-0 m-0 list-unstyled info-link">
+                                <li>
+                                    <span>Email:</span>
+                                    <a href="mailto:support@trezo.com">support@trezo.com</a>
+                                </li>
+                                <li>
+                                    <span>Phone:</span>
+                                    <a href="tel:+1(555)123-4567">+1 (555) 123-4567m</a>
+                                </li>
+                                <li>
+                                    <p><span>Location:</span> 123 Learning Ave, Knowledge City, USA</p>
                                 </li>
                             </ul>
                         </div>
@@ -355,6 +691,5 @@
                 </div>
             </div>
         </div>
-
 
 </template>

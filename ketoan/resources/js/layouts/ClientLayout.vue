@@ -15,8 +15,7 @@
 
 <script>
 import Sidebar from '../components/Sidebar.vue';
-import Header from '../components/Header.vue';
-import Footer from '../components/Footer.vue';
+
 import { onMounted } from 'vue';
 
 const loadScript = (src) => {
@@ -28,6 +27,7 @@ const loadScript = (src) => {
     document.head.appendChild(script);
   });
 };
+
 export default {
   name: "AdminLayout",
   components: {
@@ -39,6 +39,8 @@ export default {
     onMounted(async () => {
       try {
         await loadScript('/assets/js/sidebar-menu.js');
+        await loadScript('/assets/js/custom/custom.js');
+        await loadScript('/assets/js/simplebar.min.js');
       } catch (error) {
         console.error('Error loading scripts:', error);
       }
