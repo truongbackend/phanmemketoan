@@ -60,72 +60,18 @@
                 </div>
 
                 <div class="banner-img">
-                    <img src="assets/images/banner.png" alt="banner">
+                    <img src="/assets/avatar/banner.png" alt="banner">
                 </div>
-
-                <img src="assets/images/shapes/shape1.png" class="shape1 shape d-none d-lg-inline-block" alt="shape1">
-                <img src="assets/images/shapes/shape2.png" class="shape2 shape d-none d-lg-inline-block" alt="shape2">
-                <img src="assets/images/shapes/shape3.png" class="shape3 shape d-none d-lg-inline-block" alt="shape3">
-                <img src="assets/images/shapes/shape4.png" class="shape4 shape d-none d-lg-inline-block" alt="shape4">
             </div>
         </div>
         <!-- End Banner Area -->
-
-        <!-- Start Partners Area -->
-        <div class="partners-area pb-180">
-            <div class="container cmw-1308">
-                <span class="partners-title fs-20 fw-medium d-block text-center">Trezo is the platform behind some of the fastest-growing online brands.</span>
-                <div class="swiper partners-slide">
-                    <div class="swiper-wrapper align-items-center text-center">
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner1.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner2.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner3.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner4.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner5.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner6.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner1.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner2.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner3.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner4.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner5.svg" alt="partner">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="assets/images/partners/partner6.svg" alt="partner">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Partners Area -->
-
         <!-- Start Why Trezo Area -->
-        <div class="why-trezo-area pb-180">
+        <div class="why-trezo-area pb-180" style="margin-top: 180px;">
             <div class="container cmw-1308">
                 <div class="row align-items-center g-4">
                     <div class="col-lg-6">
                         <div class="why-trezo-img">
-                            <img src="assets/images/why-trezo.png" alt="why-trezo">
+                            <img src="assets/avatar/about.jpg" alt="why-trezo">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -141,7 +87,7 @@
                                     <div class="col-6 col-sm-6">
                                         <div class="why-trezo-single-item">
                                             <h1>2x</h1>
-                                            <span class="d-block">Faster Sales Monitoring</span>
+                                            <span class="d-block">Kinh nghiệm về CNTT</span>
                                         </div>
                                     </div>
                                     <div class="col-6 col-sm-6">
@@ -172,22 +118,21 @@
         <!-- End Why Trezo Area -->
 
         <!-- Start Top Features Area -->
-        <div class="top-features-area bg-gray-200 ptb-180">
+        <div class="top-features-area bg-gray-200">
             <div class="container cmw-1308">
                 <div class="section-title2 mx-auto text-center">
-                    <span class="top-title2">Top Features</span>
-                    <h2>Your eCommerce Toolkit — All in One Place</h2>
-                    <p>Trezo equips you with intelligent tools to run a high-performing online store.</p>
+                    <span class="top-title2">Tính năng nổi bật</span>
+                    <h2>Bộ công cụ thương mại điện tử của bạn — Tất cả trong một nơi</h2>
+                    <p>PNL trang bị cho bạn những công cụ thông minh để vận hành một cửa hàng trực tuyến hiệu quả.</p>
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-3 col-sm-6">
                         <div class="top-features-single-item position-relative z-1 mt-35">
                             <div class="top-features-content">
-                                <img src="assets/images/icons/creativity.svg" alt="creativity">
+                                <img src="/assets/home/creativity.svg" alt="creativity">
                                 <h3>Hóa đơn tự động</h3>
                                 <p>Get a clear view of what's selling, when, and to whom — all in real time.</p>
                             </div>
-                            <img src="assets/images/shapes/shape5.png" class="shape5" alt="shape5">
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
@@ -197,7 +142,6 @@
                                 <h3>Hiệu quả về chi phí</h3>
                                 <p>Uncover buyer behavior, repeat purchases, and lifetime value effortlessly.</p>
                             </div>
-                            <img src="assets/images/shapes/shape5.png" class="shape5" alt="shape5">
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
@@ -207,7 +151,6 @@
                                 <h3>Xử lý dữ liệu dễ dàng</h3>
                                 <p>Bulk edit items, update inventory, and categorize with just a few clicks.</p>
                             </div>
-                            <img src="assets/images/shapes/shape5.png" class="shape5" alt="shape5">
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
@@ -217,7 +160,6 @@
                                 <h3>Smart Connect</h3>
                                 <p>Connect to Shopify, Stripe, Meta Ads, and more in seconds.</p>
                             </div>
-                            <img src="assets/images/shapes/shape5.png" class="shape5" alt="shape5">
                         </div>
                     </div>
                 </div>
@@ -607,84 +549,68 @@
                                 <img src="assets/images/black-logo.svg" class="black-logo" alt="black-logo">
                                 <img src="assets/images/white-logo.svg" class="d-none white-logo" alt="white-logo">
                             </a>
-                            <p class="dec">Your all-in-one marketing command center — built to help you grow, scale, and win smarter.</p>
-                            <ul class="d-flex align-items-center p-0 mb-0 list-unstyled social-link" style="gap: 5px;">
-                                <li>
-                                    <a href="https://www.facebook.com/" target="_blank">
-                                        <i class="ri-facebook-fill"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.twitter.com/" target="_blank">
-                                        <i class="ri-twitter-x-line"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.linkedin.com/" target="_blank">
-                                        <i class="ri-linkedin-fill"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.dribbble.com/" target="_blank">
-                                        <i class="ri-dribbble-line"></i>
-                                    </a>
-                                </li>
-                            </ul>
+                            <p class="dec">Chào mừng đến với PNL, đối tác đáng tin cậy của bạn về các giải pháp toàn diện. Khám phá nhiều dịch vụ của chúng tôi được thiết kế riêng để đáp ứng nhu cầu của bạn.</p>
+                            <p>info@pnl-international.com</p>
+                            <p>0908511405</p>
+                            <p>Số 230/37, Lâm Thị Hố, Tổ 2, KP 11, Phường Tân Chánh Hiệp, Quận 12, Thành phố Hồ Chí Minh, Việt Nam</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <div class="footer-single-item-ecommerce pl-130">
-                            <h3>Quick Links</h3>
+                            <h3>Liên kết nhanh</h3>
                             <ul class="p-0 m-0 list-unstyled import-link">
                                 <li>
-                                    <a href="#">Home</a>
+                                    <a href="/">Trang chủ</a>
                                 </li>
                                 <li>
-                                    <a href="#">Features</a>
+                                    <a href="#">Tính năng</a>
                                 </li>
                                 <li>
-                                    <a href="#">Pricing Plans</a>
+                                    <a href="#">Giá cả</a>
                                 </li>
                                 <li>
-                                    <a href="#">Use Cases</a>
+                                    <a href="#">Lời chứng thực</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
+
                     <div class="col-lg-3 col-sm-6">
                         <div class="footer-single-item-ecommerce pl-130">
-                            <h3>Resources</h3>
+                            <h3>Tài nguyên</h3>
                             <ul class="p-0 m-0 list-unstyled import-link">
                                 <li>
-                                    <a href="#">Help Center</a>
+                                    <a href="#">Trung tâm trợ giúp</a>
                                 </li>
                                 <li>
-                                    <a href="#">Documentation</a>
+                                    <a href="#">Bắt đầu</a>
                                 </li>
                                 <li>
-                                    <a href="#">Blog</a>
-                                </li>
-                                <li>
-                                    <a href="#">Contact</a>
+                                    <a href="#">Tài liệu tích hợp</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <div class="footer-single-item-ecommerce pl-80">
-                            <h3>Get in Touch</h3>
+                            <h3>Điều khoản dịch vụ</h3>
                             <ul class="p-0 m-0 list-unstyled info-link">
                                 <li>
-                                    <span>Email:</span>
-                                    <a href="mailto:support@trezo.com">support@trezo.com</a>
+                                    <span>Chính sách bảo mật</span>
                                 </li>
                                 <li>
-                                    <span>Phone:</span>
-                                    <a href="tel:+1(555)123-4567">+1 (555) 123-4567m</a>
+                                    <span>Chính sách cookie</span>
                                 </li>
                                 <li>
-                                    <p><span>Location:</span> 123 Learning Ave, Knowledge City, USA</p>
+                                    <span>Diễn đàn cộng đồng</span>
                                 </li>
+                                <li>
+                                    <span>Mạng xã hội</span>
+                                </li>
+                                <li>
+                                    <span>Facebook</span>
+                                </li>
+
                             </ul>
                         </div>
                     </div>

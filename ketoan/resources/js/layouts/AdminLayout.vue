@@ -18,7 +18,6 @@ import Sidebar from '../components/Sidebar.vue';
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
 import { onMounted } from 'vue';
-
 const loadScript = (src) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');

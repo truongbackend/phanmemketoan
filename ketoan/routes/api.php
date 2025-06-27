@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\packageController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ComplaintController;
 use App\Http\Controllers\Admin\notificationController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ProductImportController;
 use App\Http\Controllers\Import\ViettelPostImportController;
@@ -98,3 +99,5 @@ Route::prefix('lazada')->group(function () {
 });
 
 Route::post('products/import', [ProductImportController::class, 'import']);
+Route::get('orders', [OrderController::class, 'index']);
+Route::post('orders', [OrderController::class, 'store']);

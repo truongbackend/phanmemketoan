@@ -1,457 +1,269 @@
 <template>
-<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-    <h3 class="mb-0">Gói dịch vụ</h3>
-
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb align-items-center mb-0 lh-1">
-            <li class="breadcrumb-item">
-                <a href="#" class="d-flex align-items-center text-decoration-none">
-                    <i class="ri-home-4-line fs-18 text-primary me-1"></i>
-                    <span class="text-secondary fw-medium hover">Trang chủ</span>
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <span class="fw-medium">Gói dịch vụ</span>
-            </li>
-        </ol>
-    </nav>
-</div>
-
-<div class="card bg-white border-0 rounded-3 mb-4">
-    <div class="card-body p-25">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-            <form class="position-relative table-src-form me-0">
-                <input type="text" class="form-control border-0" placeholder="Tìm kiếm gói...." v-model="searchKeyword" />
-                <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
-            </form>
-            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal" v-if="hasPermission('package.list')">
-                <span class="d-flex align-items-center" style="gap: 5px;">
-                    <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
-                    <span>Thêm mới</span>
-                </span>
-            </button>
-        </div>
-        <div class="default-table-area all-products px-20">
-            <div class="table-responsive">
-                <table class="table align-middle">
-                    <thead>
-                        <tr>
-                            <th scope="col">
-                                STT
-                            </th>
-                            <th scope="col">
-                                Tên gói
-                            </th>
-                            <th scope="col">
-                                Giá tiền
-                            </th>
-                            <th scope="col">
-                                Giảm giá
-                            </th>
-                            <th scope="col">
-                                Thời gian
-                            </th>
-                            <th scope="col">
-                                Trạng thái
-                            </th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(Items, index) in packages" :key="index">
-                            <td>
-                                {{ index + 1 }}
-                            </td>
-                            <td>{{ Items.name }}</td>
-                            <td class="text-secondary">{{ formatPrice(Items.price) }} đ</td>
-                            <td class="text-secondary">{{ Items.discould}}%</td>
-                            <td class="text-secondary">{{ Items.expiration_time}} Ngày</td>
-                            <td v-if="Items.status === 1" class="text-secondary">
-                                <span class="badge bg-success bg-opacity-10 text-success fw-normal">Hoạt động</span>
-                            </td>
-                            <td v-else class="text-secondary">
-                                <span class="badge bg-danger bg-opacity-10 text-danger fw-normal">Ngưng hoạt động</span>
-                            </td>
-                            <td class="text-secondary">
-                                <button v-if="hasPermission('package.edit')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2" data-bs-toggle="modal" data-bs-target="#updateModal" @click="getPackageID(Items.id)">
-                                    <i class="material-symbols-outlined fs-16 text-body">edit</i>
-                                </button>
-                                <button v-if="hasPermission('package.delete')" class="ps-0 border-0 bg-transparent lh-1 position-relative top-2"
-                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                        @click="deleteId = Items.id">
-                                    <i class="material-symbols-outlined fs-16 text-danger">delete</i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header border-0 p-4 border-bottom">
-                        <h1 class="modal-title fs-18" id="createModal">Thêm mới</h1>
-                        <button type="button" class="btn-close campaigns-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <form>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Tên gói dịch vụ</label>
-                                        <input v-model="name" type="text" class="form-control h-60 border-border-color" placeholder="Gói cơ bản ...." :class="{'is-invalid': !nameValid}">
-                                        <div v-if="!nameValid" class="invalid-feedback">Tên gói không được để trống</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Giá tiền</label>
-                                        <input v-model="formattedPrice" @input="updatePrice" type="text" class="form-control h-60 border-border-color" placeholder="12.000.000 đ" :class="{'is-invalid': !priceValid}">
-                                        <div v-if="!priceValid" class="invalid-feedback">Giá tiền không hợp lệ</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Giảm giá (%)</label>
-                                        <input v-model="discount" type="text" class="form-control h-60 border-border-color" placeholder="10%" :class="{'is-invalid': !discountValid}">
-                                        <div v-if="!discountValid" class="invalid-feedback">Giảm giá phải là một số từ 0 đến 100</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Thời hạn sử dụng gói (Ngày)</label>
-                                        <input type="text" v-model="expiration_time" class="form-control h-60 border-border-color" placeholder="1 ngày" :class="{'is-invalid': !expirationValid}">
-                                        <div v-if="!expirationValid" class="invalid-feedback">Thời hạn không hợp lệ</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ghi chú</label>
-                                        <div class="form-group position-relative">
-                                            <textarea v-model="note" class="form-control text-dark" placeholder="Thông tin gói hàng 1 hàng là 1 tính năng ... " cols="30" rows="4"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="d-flex justify-content-end flex-wrap gap-3">
-                                        <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
-                                        <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="createPackage"> <i class="ri-add-line text-white fw-medium"></i> Tạo mới</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header border-0 p-4 border-bottom">
-                        <h1 class="modal-title fs-18" id="updateModal">Cập nhật</h1>
-                        <button type="button" class="btn-close campaigns-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <form>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Tên gói dịch vụ</label>
-                                        <input v-model="name" type="text" class="form-control h-60 border-border-color" placeholder="Gói cơ bản ...." :class="{'is-invalid': !nameValid}">
-                                        <div v-if="!nameValid" class="invalid-feedback">Tên gói không được để trống</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Giá tiền</label>
-                                        <input v-model="formattedPrice" @input="updatePrice" type="text" class="form-control h-60 border-border-color" placeholder="12.000.000 đ" :class="{'is-invalid': !priceValid}">
-                                        <div v-if="!priceValid" class="invalid-feedback">Giá tiền không hợp lệ</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Giảm giá (%)</label>
-                                        <input v-model="discount" type="text" class="form-control h-60 border-border-color" placeholder="10%" :class="{'is-invalid': !discountValid}">
-                                        <div v-if="!discountValid" class="invalid-feedback">Giảm giá phải là một số từ 0 đến 100</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Thời hạn sử dụng gói (Ngày)</label>
-                                        <input type="text" v-model="expiration_time" class="form-control h-60 border-border-color" placeholder="1 tháng" :class="{'is-invalid': !expirationValid}">
-                                        <div v-if="!expirationValid" class="invalid-feedback">Thời hạn không hợp lệ</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ghi chú</label>
-                                        <div class="form-group position-relative">
-                                            <textarea v-model="note" class="form-control text-dark" placeholder="Thông tin gói hàng 1 hàng là 1 tính năng ... " cols="30" rows="4"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                       <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" :value="1" v-model="default_packages">
-                                            <label class="form-check-label"> Đặt mặc định đăng ký </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-lg-12">
-                                    <div class="d-flex justify-content-end flex-wrap gap-3">
-                                        <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
-                                        <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="updatePackage"> <i class="ri-save-line text-white fw-medium"></i> Cập nhật</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteModal">Xác nhận xoá</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-                </div>
-                <div class="modal-body">
-                    Bạn có chắc chắn muốn xoá mục này? Hành động này không thể hoàn tác.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-                    <button type="button" class="btn btn-danger text-white" @click="confirmDelete">Xoá</button>
-                </div>
-                </div>
-            </div>
-        </div>
-
+  <div>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+      <h3 class="mb-0">Đơn hàng</h3>
+      <button
+        class="btn btn-outline-primary fw-medium rounded-3 hover-bg"
+        data-bs-toggle="modal"
+        data-bs-target="#createOrderModal"
+      >
+        <span class="d-flex align-items-center" style="gap: 5px;">
+          <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
+          <span>Tạo đơn hàng</span>
+        </span>
+      </button>
     </div>
-</div>
+
+    <div class="card bg-white border-0 rounded-3 mb-4">
+      <div class="card-body p-25">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+          <form class="position-relative table-src-form me-0">
+            <input
+              type="text"
+              class="form-control border-0"
+              placeholder="Tìm kiếm khách hàng..."
+              v-model="searchKeyword"
+            />
+            <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
+          </form>
+        </div>
+
+        <div class="default-table-area all-products px-20">
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên khách hàng</th>
+                  <th>Email</th>
+                  <th>Số điện thoại</th>
+                  <th>Gói dịch vụ</th>
+                  <th>Số tiền</th>
+                  <th>Thời gian</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in orders" :key="item.id">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ item.customer_name }}</td>
+                  <td>{{ item.email }}</td>
+                  <td class="text-secondary">{{ item.phone }}</td>
+                  <td class="text-secondary">{{ item.package ? item.package.name : 'Không có gói' }}</td>
+                  <td class="text-secondary">{{ formatPrice(item.total_amount) }} đ</td>
+                  <td class="text-secondary">{{ formatDate(item.created_at) }}</td>
+                  <td class="text-secondary">
+                    <span
+                      v-if="Number(item.status) === 1"
+                      class="badge bg-success bg-opacity-10 text-success fw-normal"
+                      >Hoạt động</span
+                    >
+                    <span
+                      v-else
+                      class="badge bg-danger bg-opacity-10 text-danger fw-normal"
+                      >Ngưng hoạt động</span
+                    >
+                  </td>
+                </tr>
+                <tr v-if="orders.length === 0">
+                  <td colspan="8" class="text-center text-muted">Không có đơn hàng nào.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal tạo đơn hàng -->
+    <div class="modal fade" id="createOrderModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
+        <div class="modal-content rounded-0">
+          <div class="modal-header border-0 p-4 border-bottom">
+            <h1 class="modal-title fs-18">Tạo đơn hàng</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body p-4">
+            <form @submit.prevent="createOrder">
+              <div v-if="users.length > 0" class="mb-3">
+                <label class="form-label">Chọn người dùng</label>
+                <select v-model="orderForm.user_id" class="form-select" required>
+                  <option disabled value="">Chọn người dùng</option>
+                  <option v-for="u in users" :key="u.id" :value="u.id">{{ u.name }} ({{ u.email }})</option>
+                </select>
+              </div>
+
+              <div v-else>
+                <div class="mb-3">
+                  <label class="form-label">Tên người dùng</label>
+                  <input type="text" class="form-control bg-light" :value="currentUser.name" readonly />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Email người dùng</label>
+                  <input type="text" class="form-control bg-light" :value="currentUser.email" readonly />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Số điện thoại</label>
+                <input v-model="orderForm.phone" type="text" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Địa chỉ</label>
+                <input v-model="orderForm.address" type="text" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Gói dịch vụ</label>
+                <select v-model="orderForm.package_id" class="form-select" required>
+                  <option disabled value="">Chọn gói dịch vụ</option>
+                  <option v-for="pkg in packages" :key="pkg.id" :value="pkg.id">{{ pkg.name }}</option>
+                </select>
+                <div v-if="selectedPackage" class="mt-2 text-primary fw-medium">
+                  Giá gói: {{ formatPrice(selectedPackage.price) }} đ
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Số tiền</label>
+                <input v-model="orderForm.total_amount" type="number" min="0" class="form-control" required />
+              </div>
+              <div class="d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                <button type="submit" class="btn btn-primary">Tạo mới</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import {
-    defineComponent,
-    ref,
-    watch
-} from 'vue';
+import { defineComponent, ref, watch, onMounted, computed } from 'vue';
 import axios from 'axios';
-import {
-    useToast
-} from 'vue-toast-notification';
-import {
-    inject
-} from 'vue';
+import { useToast } from 'vue-toast-notification';
+import { inject } from 'vue';
+
 export default defineComponent({
-    setup() {
-        const packages = ref([]);
-        const name = ref('');
-        const price = ref('');
-        const discount = ref('');
-        const expiration_time = ref('');
-        const note = ref('');
-        const toast = useToast();
-        const formattedPrice = ref('');
-        const nameValid = ref(true);
-        const priceValid = ref(true);
-        const discountValid = ref(true);
-        const expirationValid = ref(true);
-        const searchKeyword = ref('');
-        const packagesId = ref('');
-        const globalState = inject('globalState');
-        const baseUrl = globalState.baseUrl;
-        const deleteId = ref(null);
-        const default_packages = ref(false);
-        const formatPrice = (value) => {
-            if (!value) return '';
-            const cleaned = value.toString().replace(/[^\d]/g, '');
-            return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        };
+  setup() {
+    const orders = ref([]);
+    const packages = ref([]);
+    const users = ref([]);
+    const currentUser = ref({});
+    const searchKeyword = ref('');
+    const orderForm = ref({
+      user_id: '',
+      phone: '',
+      address: '',
+      package_id: '',
+      total_amount: '',
+    });
 
-        const cleanInput = (value) => {
-            return value.toString().replace(/[^\d]/g, '');
-        };
+    const toast = useToast();
+    const globalState = inject('globalState');
+    const baseUrl = globalState.baseUrl;
 
-        const updatePrice = () => {
-            price.value = cleanInput(formattedPrice.value);
-            formattedPrice.value = formatPrice(price.value);
-        };
+    const selectedPackage = computed(() => {
+      return packages.value.find(pkg => pkg.id === orderForm.value.package_id) || null;
+    });
 
-        watch(price, (newVal) => {
-            formattedPrice.value = formatPrice(newVal);
+    const formatPrice = (value) => {
+      if (!value) return '0';
+      const cleaned = value.toString().replace(/[^\d]/g, '');
+      return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
+
+    const formatDate = (value) => {
+      if (!value) return '';
+      const date = new Date(value);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${day}/${month}/${year} ${hours}:${minutes}`;
+    };
+
+    const getOrders = () => {
+      const params = {};
+      if (searchKeyword.value.trim() !== '') {
+        params.search = searchKeyword.value.trim();
+      }
+      axios
+        .get(`${baseUrl}/api/orders`, { params })
+        .then((response) => {
+          orders.value = response.data;
+        })
+        .catch((error) => {
+          console.error('Lỗi khi lấy danh sách đơn hàng:', error);
         });
+    };
 
-        const getPackage = () => {
-            const params = {};
+    const getPackages = () => {
+      axios
+        .get(`${baseUrl}/api/packages`)
+        .then((res) => (packages.value = res.data))
+        .catch((err) => console.error('Lỗi lấy packages:', err));
+    };
 
-            if (searchKeyword.value.trim() !== '') {
-                params.search = searchKeyword.value.trim();
-            }
-            axios
-                .get(`${baseUrl}/api/packages`, {
-                    params
-                })
-                .then((response) => {
-                    packages.value = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        };
-        const confirmDelete = () => {
-            if (!deleteId.value) return;
+    const getAllUsers = () => {
+      axios.get(`${baseUrl}/api/users`) // cần API trả user đang hoạt động
+        .then(res => users.value = res.data)
+        .catch(err => console.error('Lỗi lấy users:', err));
+    };
 
-            axios.delete(`${baseUrl}/api/packages/${deleteId.value}`)
-                .then(() => {
-                    toast.success('Xoá gói thành công');
-                    getPackage();
-                    deleteId.value = null;
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
-                    modal.hide();
-                })
-                .catch((error) => {
-                    toast.error('Xoá gói thất bại');
-                    console.log(error);
-                });
-        };
+    const getCurrentUser = () => {
+       const userData = JSON.parse(localStorage.getItem("user"));
+      console.log(userData);
+      currentUser.value = userData || {};
+    };
 
-        const getPackageID = (id) => {
-            axios
-                .get(`${baseUrl}/api/packages/${id}/edit`)
-                .then((response) => {
-                    const data = response.data;
-                    packagesId.value = data.id;
-                    name.value = data.name;
-                    price.value = data.price;
-                    discount.value = data.discould;
-                    expiration_time.value = data.expiration_time;
-                    note.value = data.note;
-                    default_packages.value = data.default_packages === 1;
-                    formattedPrice.value = formatPrice(price.value);
-                })
-                .catch((error) => {
-                    toast.error('Xóa gói thất bại');
-                    console.log(error);
-                });
-        };
-
-        const createPackage = () => {
-            nameValid.value = name.value.trim() !== '';
-            priceValid.value = !isNaN(price.value) && parseFloat(price.value) > 0;
-            discountValid.value = !isNaN(discount.value) && discount.value >= 0 && discount.value <= 100;
-            expirationValid.value = !isNaN(expiration_time.value) && expiration_time.value > 0;
-
-            if (nameValid.value && priceValid.value && discountValid.value && expirationValid.value) {
-                axios
-                    .post(`${baseUrl}/api/packages`, {
-                        name: name.value,
-                        price: price.value,
-                        discould: discount.value,
-                        expiration_time: expiration_time.value,
-                        note: note.value,
-                    })
-                    .then((response) => {
-                        getPackage();
-                        toast.success("Tạo gói mới thành công");
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
-                        modal.hide();
-                        name.value = '';
-                        price.value = '';
-                        discount.value = '';
-                        expiration_time.value = '';
-                        note.value = '';
-
-                    })
-                    .catch((error) => {
-                        if (error.response && error.response.status === 422) {
-                            const errors = error.response.data.errors;
-
-                            if (errors.name) {
-                                toast.error(errors.name[0]);
-                            } else {
-                                toast.error("Có lỗi xảy ra khi tạo gói.");
-                            }
-                        }
-                    });
-            } else {
-                toast.error("Vui lòng kiểm tra lại các trường dữ liệu");
-            }
-        };
-        const updatePackage = () => {
-            nameValid.value = name.value.trim() !== '';
-            priceValid.value = !isNaN(price.value) && parseFloat(price.value) > 0;
-            discountValid.value = !isNaN(discount.value) && discount.value >= 0 && discount.value <= 100;
-            expirationValid.value = !isNaN(expiration_time.value) && expiration_time.value > 0;
-
-            if (nameValid.value && priceValid.value && discountValid.value && expirationValid.value) {
-                axios
-                    .put(`${baseUrl}/api/packages/${packagesId.value}`, {
-                        name: name.value,
-                        price: price.value,
-                        discould: discount.value,
-                        expiration_time: expiration_time.value,
-                        note: note.value,
-                        default_packages:default_packages.value,
-                    })
-                    .then(() => {
-                        getPackage();
-                        toast.success("Cập nhật gói thành công");
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('updateModal'));
-                        modal.hide();
-                    })
-                    .catch((error) => {
-                        if (error.response && error.response.status === 422) {
-                            const errors = error.response.data.errors;
-                            if (errors.name) {
-                                toast.error(errors.name[0]);
-                            } else {
-                                toast.error("Có lỗi xảy ra khi tạo gói.");
-                            }
-                        }
-                    });
-            } else {
-                toast.error("Vui lòng kiểm tra lại các trường dữ liệu");
-            }
-        };
-
-
-        formattedPrice.value = formatPrice(price.value);
-
-        getPackage();
-        watch(searchKeyword, (newVal) => {
-            getPackage();
+    const createOrder = () => {
+      axios
+        .post(`${baseUrl}/api/orders`, orderForm.value)
+        .then(() => {
+          toast.success('Đơn hàng được tạo thành công');
+          getOrders();
+          const modal = bootstrap.Modal.getInstance(document.getElementById('createOrderModal'));
+          modal.hide();
+          orderForm.value = { user_id: '', phone: '', address: '', package_id: '', total_amount: '' };
+        })
+        .catch((error) => {
+          console.error('Lỗi tạo đơn hàng:', error);
+          toast.error('Tạo đơn hàng thất bại');
         });
+    };
 
-        return {
-            packages,
-            name,
-            price,
-            discount,
-            expiration_time,
-            note,
-            formattedPrice,
-            nameValid,
-            priceValid,
-            discountValid,
-            expirationValid,
-            createPackage,
-            updatePrice,
-            searchKeyword,
-            getPackageID,
-            packagesId,
-            updatePackage,
-            deleteId,
-            confirmDelete,
-            default_packages,
-            formatPrice
-        };
-    },
+    watch(() => orderForm.value.package_id, (newId) => {
+      const pkg = packages.value.find(p => p.id === newId);
+      if (pkg) {
+        orderForm.value.total_amount = pkg.price;
+      } else {
+        orderForm.value.total_amount = '';
+      }
+    });
+
+    watch(searchKeyword, () => getOrders());
+
+    onMounted(() => {
+      getOrders();
+      getPackages();
+
+     
+    });
+
+    return {
+      searchKeyword,
+      orders,
+      formatPrice,
+      formatDate,
+      packages,
+      orderForm,
+      createOrder,
+      users,
+      currentUser,
+      selectedPackage,
+    };
+  },
 });
 </script>

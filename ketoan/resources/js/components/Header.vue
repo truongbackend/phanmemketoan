@@ -177,7 +177,6 @@ export default {
         .get("/api/notifications", { params: { per_page: 10 } })
         .then((res) => {
           this.notifications = res.data.data;
-          console.log(this.notifications);
           this.unreadCount = this.notifications.filter(n => !n.pivot.read_at).length;
         })
         .catch((err) => {
