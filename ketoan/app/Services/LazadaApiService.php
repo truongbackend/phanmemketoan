@@ -8,11 +8,13 @@ class LazadaApiService
     protected $shopDataService;
     protected $appKey;
     protected $appSecret;
+    protected $client;
     public function __construct(ShopDataService $shopDataService)
     {
         $this->shopDataService = $shopDataService;
         $this->appKey = env('LAZOP_APP_KEY');
         $this->appSecret = env('LAZOP_APP_SECRET');
+        $this->client = new \Lazada\LazopClient('https://api.lazada.com/rest', $this->appKey, $this->appSecret);
     }
 
     public function getAccessToken($code)
@@ -20,10 +22,9 @@ class LazadaApiService
         if (!$this->appKey || !$this->appSecret || !$code) {
             throw new \Exception('Missing app_key, app_secret or code');
         }
-        $client = new \Lazada\LazopClient('https://api.lazada.com/rest', $this->appKey, $this->appSecret);
         $lazopRequest = new \Lazada\LazopRequest('/auth/token/create');
         $lazopRequest->addApiParam('code', $code);
-        $response = $client->execute($lazopRequest);
+        $response = $this->client->execute($lazopRequest);
         $data = json_decode($response, true);
         if (isset($data['access_token'])) {
             $dataUserInfo = $data['country_user_info'] ?? [];
@@ -52,10 +53,9 @@ class LazadaApiService
         if (!$this->appKey || !$this->appSecret || !$refreshToken) {
             throw new \Exception('Missing app_key, app_secret or refresh_token');
         }
-        $client = new \Lazada\LazopClient('https://api.lazada.com/rest', $this->appKey, $this->appSecret);
         $lazopRequest = new \Lazada\LazopRequest('/auth/token/refresh');
         $lazopRequest->addApiParam('refresh_token', $refreshToken);
-        $response = $client->execute($lazopRequest);
+        $response = $this->client->execute($lazopRequest);
         return json_decode($response, true);
     }
 
@@ -64,13 +64,11 @@ class LazadaApiService
         if (!$this->appKey || !$this->appSecret || !$accessToken) {
             throw new \Exception('Missing app_key, app_secret or access_token');
         }
-        $client = new \Lazada\LazopClient('https://api.lazada.com/rest', $this->appKey, $this->appSecret);
         $lazopRequest = new \Lazada\LazopRequest('/orders/get', 'GET');
         foreach ($params as $key => $value) {
             $lazopRequest->addApiParam($key, $value);
         }
-        $response = $client->execute($lazopRequest, $accessToken);
-
+        $response = $this->client->execute($lazopRequest, $accessToken);
         return json_decode($response, true);
     }
 }
