@@ -70,6 +70,7 @@ class LazadaApiService
             $lazopRequest->addApiParam($key, $value);
         }
         $response = $client->execute($lazopRequest, $accessToken);
+
         return json_decode($response, true);
     }
 }

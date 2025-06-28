@@ -46,6 +46,22 @@ Route::middleware(['auth:api'])->prefix('accounting')->group(function () {
     });
 });
 
+Route::middleware(['auth:api'])->prefix('e-commerce')->group(function () {
+    Route::prefix('shopee')->group(function () {
+        Route::post('/auth-shop', [AuthShopeeController::class, 'getAuthShopUrl'])->name('shopee.authshop');
+        Route::post('/token-shop-level', [AuthShopeeController::class, 'getTokenShopLevel'])->name('shopee.tokenShopLevel');
+        Route::post('/token-account-level', [AuthShopeeController::class, 'getTokenAccountLevel'])->name('shopee.tokenAccountLevel');
+        Route::post('/access-token-shop-level', [AuthShopeeController::class, 'getAccessTokenShopLevel'])->name('shopee.accessTokenShopLevel');
+        Route::post('/access-token-merchant-level', [AuthShopeeController::class, 'getAccessTokenMerchantLevel'])->name('shopee.accessTokenMerchantLevel');
+    });
+    Route::prefix('lazada')->group(function () {
+        Route::post('/auth-shop', [LazopController::class, 'getAuthShopUrl'])->name('lazada.auth-shop');
+        Route::post('/shop-access-token', [LazopController::class, 'getShopAccessToken'])->name('lazada.shop-access-token');
+        Route::post('/shop-refresh-token', [LazopController::class, 'getShopRefreshtoken'])->name('lazada.shop-refresh-token');
+        Route::post('/push-receipt', [LazopController::class, 'pushReceipt'])->name('lazada.shop-refresh-token');
+    });
+});
+
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
@@ -84,18 +100,6 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('complaints/{complaint}', [ComplaintController::class, 'show']);
     Route::patch('complaints/{complaint}', [ComplaintController::class, 'update']);
     Route::delete('complaints/{complaint}', [ComplaintController::class, 'destroy']);
-});
-
-Route::post('/auth-shopee', [AuthShopeeController::class, 'getAuthShopUrl'])->name('shopee.authshop');
-Route::post('/shopee/token-shop-level', [AuthShopeeController::class, 'getTokenShopLevel'])->name('shopee.tokenShopLevel');
-Route::post('/shopee/token-account-level', [AuthShopeeController::class, 'getTokenAccountLevel'])->name('shopee.tokenAccountLevel');
-Route::post('/shopee/access-token-shop-level', [AuthShopeeController::class, 'getAccessTokenShopLevel'])->name('shopee.accessTokenShopLevel');
-Route::post('/shopee/access-token-merchant-level', [AuthShopeeController::class, 'getAccessTokenMerchantLevel'])->name('shopee.accessTokenMerchantLevel');
-
-Route::prefix('lazada')->group(function () {
-    Route::post('/auth-shop', [LazopController::class, 'getAuthShopUrl'])->name('lazada.auth-shop');
-    Route::post('/shop-access-token', [LazopController::class, 'getShopAccessToken'])->name('lazada.shop-access-token');
-    Route::post('/shop-refresh-token', [LazopController::class, 'getShopRefreshtoken'])->name('lazada.shop-refresh-token');
 });
 
 Route::post('products/import', [ProductImportController::class, 'import']);

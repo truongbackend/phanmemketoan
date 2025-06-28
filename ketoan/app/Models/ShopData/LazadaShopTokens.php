@@ -12,6 +12,7 @@ class LazadaShopTokens extends Model
     protected $table = 'lazada_shop_tokens';
 
     protected $fillable = [
+        'auth_user_id',
         'access_token',
         'refresh_token',
         'account_platform',

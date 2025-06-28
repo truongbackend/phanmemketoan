@@ -25,4 +25,13 @@ class ShopDataService
     {
         return $this->repo->findByUserId($userId);
     }
+
+    public function getTokenByAuthUserId($userId)
+    {
+        $find = $this->repo->findByAuthUserId($userId);
+        if (!$find) {
+            throw new \Exception('No Lazada token found for user ID: ' . $userId);
+        }
+        return $find->access_token;
+    }
 }
