@@ -105,3 +105,5 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
 Route::post('products/import', [ProductImportController::class, 'import']);
 Route::get('orders', [OrderController::class, 'index']);
 Route::post('orders', [OrderController::class, 'store']);
+Route::delete('orders/{id}', [OrderController::class, 'destroy']);
+Route::put('orders/{id}', [OrderController::class, 'update']);

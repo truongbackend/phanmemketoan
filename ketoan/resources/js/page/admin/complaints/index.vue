@@ -10,7 +10,10 @@
                 data-bs-target="#createModal"
                 v-if="hasPermission('complaints.create')"
             >
-                <i class="ri-add-line me-1"></i> Tạo khiếu nại
+            <span class="py-sm-1 d-block">
+                    <i class="ri-add-line d-none d-sm-inline-block"></i>
+                        <span>Thêm mới khiếu nại</span>
+            </span>
             </button>
         </div>
         <div class="card bg-white border-0 rounded-3 mb-4">

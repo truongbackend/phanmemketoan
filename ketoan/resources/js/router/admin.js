@@ -93,6 +93,12 @@ const adminRoutes = [
             name: "home",
             component: () => import("../page/client/home.vue"),
         },
+
+        {
+            path: "/cart",
+            name: "cart",
+            component: () => import("../page/client/cart.vue"),
+        },
         {
             path: "login",
             name: "login",

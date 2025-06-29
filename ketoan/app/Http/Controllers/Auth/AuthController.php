@@ -13,6 +13,9 @@ use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegisterMail;
+use App\Mail\ResetPasswordMail;
 
 class AuthController extends Controller
 {
@@ -104,6 +107,7 @@ class AuthController extends Controller
             'expiration_package' => $expiration_package,
 
         ]);
+        Mail::to($user->email)->send(new RegisterMail($user));
         if ($role) {
             $user->roles()->attach($role->id);
         }
@@ -135,7 +139,12 @@ class AuthController extends Controller
 
             $user->password = Hash::make($newPassword);
             $user->save();
-
+            try {
+            Mail::to($user->email)->send(new ResetPasswordMail($user, $newPassword));
+            } catch (\Exception $e) {
+                \Log::error('Lỗi gửi email đặt lại mật khẩu: ' . $e->getMessage());
+                return response()->json(['error' => 'Đặt lại mật khẩu thành công nhưng gửi email thất bại. Vui lòng thử lại sau.'], 500);
+            }
             return response()->json(['message' => 'Mật khẩu đã được đặt lại thành công']);
         }
         return response()->json(['message' => 'Không tìm thấy người dùng.'], 404);

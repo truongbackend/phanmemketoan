@@ -27,9 +27,11 @@
             <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal" v-if="hasPermission('package.list')">
                 <span class="d-flex align-items-center" style="gap: 5px">
                 <span class="py-sm-1 d-block">
+                    <span class="py-sm-1 d-block">
                     <i class="ri-add-line d-none d-sm-inline-block"></i>
                         <span>Thêm mới gói dịch vụ</span>
                     </span>
+                </span>
                 </span>
             </button>
         </div>

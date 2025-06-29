@@ -6,8 +6,10 @@
                 <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal"
                     data-bs-target="#createModal" v-if="hasPermission('complaints.create')">
                     <span class="d-flex align-items-center" style="gap:5px">
-                        <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
-                        <span>Thêm mới</span>
+                        <span class="py-sm-1 d-block">
+                        <i class="ri-add-line d-none d-sm-inline-block"></i>
+                            <span>Thêm mới thông báo</span>
+                        </span>
                     </span>
                 </button>
             </nav>

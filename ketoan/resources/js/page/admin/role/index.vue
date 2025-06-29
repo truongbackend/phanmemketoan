@@ -313,6 +313,7 @@ const moduleLabel = (moduleKey) => {
         notification: 'Thông báo',
         package: 'Gói dịch vụ',
         complaints: 'Khiếu nại',
+        orders: 'Đơn hàng',
     };
     return map[moduleKey] || moduleKey;
 };

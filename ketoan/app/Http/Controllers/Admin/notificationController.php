@@ -8,7 +8,8 @@ use App\Models\CustomNotification;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Events\NotificationCreated;
-
+use App\Mail\CustomNotificationMail;
+use Illuminate\Support\Facades\Mail;
 class NotificationController extends Controller
 {
     public function index(Request $req)
@@ -39,6 +40,14 @@ class NotificationController extends Controller
             $notif->recipients()->sync(array_combine($ids, $attach));
 
             event(new NotificationCreated($notif));
+            $emails = User::pluck('email')->all();
+            foreach ($emails as $email) {
+                try {
+                    Mail::to($email)->queue(new CustomNotificationMail($notif));
+                } catch (\Exception $e) {
+                    \Log::error("Lỗi gửi email thông báo đến $email: " . $e->getMessage());
+                }
+            }
         });
         return response()->json([
             'data'    => $notif,

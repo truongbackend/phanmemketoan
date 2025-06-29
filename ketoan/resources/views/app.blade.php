@@ -45,4 +45,3 @@
 <script src="{{ asset('assets/js/moment.min.js') }}"></script>
 <script src="{{ asset('assets/js/lightpick.js') }}"></script>
 <script src="{{ asset('assets/js/custom/custom.js') }}"></script>
-

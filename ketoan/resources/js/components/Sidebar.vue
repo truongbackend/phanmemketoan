@@ -11,7 +11,7 @@
 
     <aside id="layout-menu" class="layout-menu menu-vertical menu" data-simplebar>
         <ul class="menu-inner">
-        <li class="menu-item" v-if="hasPermission('notification.list')">
+        <li class="menu-item">
                 <router-link :to="{ name: 'admin-dashboard' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">dashboard</span>
                     <span class="title">Nổi bật</span>
@@ -20,7 +20,7 @@
             <li class="menu-title small">
                 <span class="menu-title-text">Thương mại điện tử</span>
             </li>
-            <li class="menu-item" v-if="hasPermission('notification.list')">
+            <li class="menu-item" v-if="hasPermission('orders.list')">
                 <router-link :to="{ name: 'admin-order' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">shopping_bag</span>
                     <span class="title">Đơn hàng</span>

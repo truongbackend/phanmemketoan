@@ -11,8 +11,6 @@
     </div>
 </div>
 </template>
-
-
 <script>
 import Sidebar from '../components/Sidebar.vue';
 import Header from '../components/Header.vue';
@@ -38,6 +36,7 @@ export default {
     onMounted(async () => {
       try {
         await loadScript('/assets/js/sidebar-menu.js');
+        await loadScript('/assets/js/custom/custom.js');
       } catch (error) {
         console.error('Error loading scripts:', error);
       }
