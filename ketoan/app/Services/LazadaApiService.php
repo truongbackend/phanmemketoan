@@ -2,6 +2,8 @@
 namespace App\Services;
 
 use App\Services\ShopDataService;
+use LazopSdk\lazop\LazopClient;
+use LazopSdk\lazop\LazopRequest;
 
 class LazadaApiService
 {
@@ -14,7 +16,7 @@ class LazadaApiService
         $this->shopDataService = $shopDataService;
         $this->appKey = env('LAZOP_APP_KEY');
         $this->appSecret = env('LAZOP_APP_SECRET');
-        $this->client = new \Lazada\LazopClient('https://api.lazada.com/rest', $this->appKey, $this->appSecret);
+        $this->client = new LazopClient('https://api.lazada.com/rest', $this->appKey, $this->appSecret);
     }
 
     public function getAccessToken($code)
@@ -22,7 +24,7 @@ class LazadaApiService
         if (!$this->appKey || !$this->appSecret || !$code) {
             throw new \Exception('Missing app_key, app_secret or code');
         }
-        $lazopRequest = new \Lazada\LazopRequest('/auth/token/create');
+        $lazopRequest = new LazopRequest('/auth/token/create');
         $lazopRequest->addApiParam('code', $code);
         $response = $this->client->execute($lazopRequest);
         $data = json_decode($response, true);
@@ -53,7 +55,7 @@ class LazadaApiService
         if (!$this->appKey || !$this->appSecret || !$refreshToken) {
             throw new \Exception('Missing app_key, app_secret or refresh_token');
         }
-        $lazopRequest = new \Lazada\LazopRequest('/auth/token/refresh');
+        $lazopRequest = new LazopRequest('/auth/token/refresh');
         $lazopRequest->addApiParam('refresh_token', $refreshToken);
         $response = $this->client->execute($lazopRequest);
         return json_decode($response, true);
@@ -64,7 +66,7 @@ class LazadaApiService
         if (!$this->appKey || !$this->appSecret || !$accessToken) {
             throw new \Exception('Missing app_key, app_secret or access_token');
         }
-        $lazopRequest = new \Lazada\LazopRequest('/orders/get', 'GET');
+        $lazopRequest = new LazopRequest('/orders/get', 'GET');
         foreach ($params as $key => $value) {
             $lazopRequest->addApiParam($key, $value);
         }
