@@ -16,7 +16,7 @@ class LazadaApiService
         $this->shopDataService = $shopDataService;
         $this->appKey = env('LAZOP_APP_KEY');
         $this->appSecret = env('LAZOP_APP_SECRET');
-        $this->client = new LazopClient('https://api.lazada.com/rest', $this->appKey, $this->appSecret);
+        $this->client = new LazopClient('https://api.lazada.vn/rest', $this->appKey, $this->appSecret);
     }
 
     public function getAccessToken($code)

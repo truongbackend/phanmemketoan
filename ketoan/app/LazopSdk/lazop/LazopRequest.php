@@ -19,7 +19,7 @@ class LazopRequest
 
 		if($this->startWith($apiName,"//"))
 		{
-			throw new Exception("api name is invalid. It should be start with /");			
+			throw new \Exception("api name is invalid. It should be start with /");			
 		}
 	}
 
@@ -29,7 +29,7 @@ class LazopRequest
 
 		if(!is_string($key))
 		{
-			throw new Exception("api param key should be string");
+			throw new \Exception("api param key should be string");
 		}
 
 		if(is_object($value))
@@ -46,7 +46,7 @@ class LazopRequest
 	{
 		if(!is_string($key))
 		{
-			throw new Exception("api file param key should be string");
+			throw new \Exception("api file param key should be string");
 		}
 
 		$file = array(
@@ -61,12 +61,12 @@ class LazopRequest
 	{
 		if(!is_string($key))
 		{
-			throw new Exception("http header param key should be string");
+			throw new \Exception("http header param key should be string");
 		}
 
 		if(!is_string($value))
 		{
-			throw new Exception("http header param value should be string");
+			throw new \Exception("http header param value should be string");
 		}
 
 		$this->headerParams[$key] = $value;
