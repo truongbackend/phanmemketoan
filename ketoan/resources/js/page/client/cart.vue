@@ -445,20 +445,26 @@ onMounted(() => {
       cart.value = JSON.parse(storedCart);
       subtotal.value = cart.value.reduce((sum, item) => sum + (item.price ?? 0) * item.quantity, 0);
     } catch (e) {
-      console.error("Lỗi parse cart:", e);
       cart.value = [];
       subtotal.value = 0;
     }
   }
+
   const storedUser = localStorage.getItem("user");
-    if (storedUser) {
+  if (storedUser) {
     try {
-        user.value = JSON.parse(storedUser);
-        console.log("User đã login:", user.value);
+      user.value = JSON.parse(storedUser);
+      customerName.value = user.value.name || "";
+      phone.value = user.value.phone || "";
+      email.value = user.value.email || "";
+      address.value = user.value.address || "";
     } catch (e) {
-        console.error("Lỗi parse user:", e);
-        user.value = null;
+      console.error("Lỗi parse user:", e);
+      user.value = null;
     }
+  }
+    if (!storedUser) {
+        router.push({ name: "login" });
     }
 });
 
