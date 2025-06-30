@@ -1,20 +1,22 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\packageController;
-use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ComplaintController;
 use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\packageController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\RevenueReportController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ProductImportController;
 use App\Http\Controllers\Import\ViettelPostImportController;
 use App\Http\Controllers\Lazada\LazopController;
 use App\Http\Controllers\Shopee\AuthShopeeController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -70,7 +72,6 @@ Route::post('resetPassword', [AuthController::class, 'resetPassword'])->name('re
 
 Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('profile', [AuthController::class, 'userProfile']);
-    Route::resource('packages', packageController::class);
     Route::resource('products', ProductController::class);
     Route::get('user', [UserController::class, 'index']);
     Route::post('user', [UserController::class, 'store']);
@@ -100,10 +101,14 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('complaints/{complaint}', [ComplaintController::class, 'show']);
     Route::patch('complaints/{complaint}', [ComplaintController::class, 'update']);
     Route::delete('complaints/{complaint}', [ComplaintController::class, 'destroy']);
+    Route::post('products/import', [ProductImportController::class, 'import']);
+    Route::get('orders', [OrderController::class, 'index']);
+    Route::post('orders', [OrderController::class, 'store']);
+    Route::delete('orders/{id}', [OrderController::class, 'destroy']);
+    Route::put('orders/{id}', [OrderController::class, 'update']);
+    Route::get('revenue/year', [RevenueReportController::class, 'byYear']);
+    Route::get('revenue/month', [RevenueReportController::class, 'byMonth']);
+    Route::get('revenue/day', [RevenueReportController::class, 'byDay']);
 });
+Route::resource('packages', packageController::class);
 
-Route::post('products/import', [ProductImportController::class, 'import']);
-Route::get('orders', [OrderController::class, 'index']);
-Route::post('orders', [OrderController::class, 'store']);
-Route::delete('orders/{id}', [OrderController::class, 'destroy']);
-Route::put('orders/{id}', [OrderController::class, 'update']);

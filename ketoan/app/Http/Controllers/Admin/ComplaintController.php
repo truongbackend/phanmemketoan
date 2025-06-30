@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use \Log;
+use App\Http\Controllers\Controller;
+use App\Mail\ComplaintNotificationMail;
 use App\Models\Complaint;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class ComplaintController extends Controller
@@ -39,6 +42,13 @@ class ComplaintController extends Controller
         $data['user_id'] = Auth::id();
 
         $complaint = Complaint::create($data);
+        try {
+            $admins = ['info@pnl-international.com', 'trongfrontend@gmail.com'];
+            Mail::to($admins)->send(new ComplaintNotificationMail($complaint));
+        } catch (\Exception $e) {
+            Log::error('Lỗi gửi email khiếu nại: '.$e->getMessage());
+        }
+
         return response()->json($complaint);
     }
     public function update(Request $request, Complaint $complaint)

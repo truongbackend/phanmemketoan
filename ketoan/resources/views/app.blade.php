@@ -15,7 +15,8 @@
         <link rel="stylesheet" href="{{ asset('assets/css/lightpick.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/frontend/style.css') }}">
-		<link rel="icon" type="image/png" href="assets/images/favicon.png">
+        <link rel="stylesheet" href="{{ asset('assets/css/frontend/home.css') }}">
+		<link rel="icon" type="image/png" href="assets/home/logo.png">
 		<title>PNL INTERNATIONAL </title>
         @vite('../resources/js/app.js')
     </head>

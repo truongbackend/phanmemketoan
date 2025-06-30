@@ -55,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (isAuthenticated && isAuthPage) {
-    return next({ path: '/admin' });
+    return next({ path: '/admin/dashboard' });
   }
 
   next();

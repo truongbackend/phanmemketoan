@@ -25,6 +25,7 @@
                                     <th>STT</th>
                                     <th>Ngày</th>
                                     <th>Loại</th>
+                                    <th>Tiêu đề</th>
                                     <th>Nội dung</th>
                                     <th>Trạng thái</th>
                                     <th></th>
@@ -37,7 +38,8 @@
                                     <td @click="toggleRead(item)" class="text-secondary fw-medium">
                                         {{ item.type === '1' ? 'Cảnh báo' : 'Hệ thống' }}
                                     </td>
-                                    <td @click="toggleRead(item)" class="text-secondary fs-14 fw-medium text-primary">{{ item.content }}</td>
+                                    <td @click="toggleRead(item)" class="text-secondary fs-14 fw-medium text-primary" style="width:300px;">{{ item.title }}</td>
+                                    <td @click="toggleRead(item)" class="text-secondary fs-14 fw-medium text-primary" style="width:300px;">{{ item.content }}</td>
                                     <td>
                                         <span class="badge" :class="item.pivot.read_at
                                             ? 'bg-success bg-opacity-10 text-success'

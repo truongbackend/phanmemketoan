@@ -1,7 +1,7 @@
 <template>
 <div class="sidebar-area" id="sidebar-area">
     <div class="logo position-relative">
-        <a href="#" class="d-block text-decoration-none position-relative">
+        <a href="/" class="d-block text-decoration-none position-relative">
             <span class="fs-5 fw-bold text-dark">PNL INTERNATIONAL</span>
         </a>
         <button class="sidebar-burger-menu bg-transparent p-0 border-0 opacity-0 z-n1 position-absolute top-50 end-0 translate-middle-y" id="sidebar-burger-menu">
@@ -47,7 +47,7 @@
             </li>
 
             <li class="menu-item" v-if="hasPermission('report.list')">
-                <router-link :to="{ name: 'admin-accounting' }" class="menu-link">
+                <router-link :to="{ name: 'admin-revenue' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">pie_chart</span>
                     <span class="title">Báo cáo</span>
                 </router-link>

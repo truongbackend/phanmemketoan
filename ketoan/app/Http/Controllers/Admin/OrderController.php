@@ -50,6 +50,9 @@ class OrderController extends Controller
             'address' => $request->input('address'),
             'total_amount' => $totalAmount,
             'package_id' => $request->input('package_id'),
+            'note' => $request->input('note'),
+            'companyTax' => $request->input('companyTax'),
+            'companyName' => $request->input('companyName'),
             'order_user_id' => $user->id,
             'status' => 1,
         ]);

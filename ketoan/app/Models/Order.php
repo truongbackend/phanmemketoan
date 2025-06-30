@@ -10,7 +10,7 @@ class Order extends Model
 
     use HasFactory;
 protected $fillable = [
-    'customer_name', 'email', 'phone', 'discould', 'address', 'total_amount','package_id','order_user_id','stauts',
+    'customer_name', 'email', 'phone', 'discould', 'address', 'total_amount','package_id','order_user_id','stauts','companyTax','companyName','note'
 ];
 
 public function package()
