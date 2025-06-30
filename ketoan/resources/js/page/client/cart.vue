@@ -46,8 +46,16 @@
           </li>
         </ul>
         <div class="othres">
-          <router-link :to="{ name: 'register' }" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn" style="margin-right:10px;">Dùng thử miễn phí</router-link>
-          <router-link :to="{ name: 'login' }" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn">Đăng nhập</router-link>
+            <template v-if="user">
+                <span class="text-white fw-medium me-3 fs-14">Xin chào, {{ user.name }}</span>
+                <router-link to="admin/dashboard" class="btn bg-white fw-medium fs-14 text-primary rounded-pill hover-bg landing-page-btn">
+                Phần mềm
+                </router-link>
+            </template>
+            <template v-else>
+                <router-link :to="{ name: 'register' }" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn" style="margin-right:10px;">Dùng thử miễn phí</router-link>
+                <router-link :to="{ name: 'login' }" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn">Đăng nhập</router-link>
+            </template>
         </div>
       </div>
     </div>
@@ -96,18 +104,28 @@
                                         <div class="form-group mb-4">
                                             <label class="label text-secondary">Mã thuế Công ty / Cá nhân</label>
                                             <input type="text" class="form-control h-55" v-model="companyName" placeholder="Mã thuế Công ty / Cá nhân">
+                                        <div v-if="errors.companyName" class="invalid-feedback d-block">
+                                            {{ errors.companyName }}
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-sm-6">
                                         <div class="form-group mb-4">
                                             <label class="label text-secondary">Tên công ty</label>
                                             <input type="text" class="form-control h-55" v-model="companyTax" placeholder="Tên công ty">
+                                            <div v-if="errors.companyTax" class="invalid-feedback d-block">
+                                            {{ errors.companyTax }}
                                         </div>
+                                        </div>
+
                                     </div>
                                      <div class="col-lg-6 col-sm-6">
                                         <div class="form-group mb-4">
                                             <label class="label text-secondary">Địa chỉ</label>
                                             <input type="text" class="form-control h-55" v-model="address" placeholder="Địa chỉ">
+                                            <div v-if="errors.address" class="invalid-feedback d-block">
+                                                {{ errors.address }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
@@ -177,6 +195,10 @@
                                     <td class="fw-medium text-secondary">Chủ tài khoản:</td>
                                     <td class="text-end text-dark">CÔNG TY TNHH PNL INTERNATIONAL</td>
                                 </tr>
+                                <tr>
+                                    <td class="fw-medium text-secondary">MST:</td>
+                                    <td class="text-end text-dark">0316996806</td>
+                                </tr>
 
 
                                 </tbody>
@@ -224,6 +246,10 @@
                                     <td class="fw-medium text-secondary">Chủ tài khoản:</td>
                                     <td class="text-end text-dark">CÔNG TY TNHH PNL INTERNATIONAL</td>
                                 </tr>
+                                 <tr>
+                                    <td class="fw-medium text-secondary">MST:</td>
+                                    <td class="text-end text-dark">0316996806</td>
+                                </tr>
 
 
                                 </tbody>
@@ -247,56 +273,61 @@
             </div>
         </div>
 
-<div class="footer-area-ecommerce ptb-180" style="background: linear-gradient(180deg, rgb(14, 14, 14) 0%, rgb(10, 10, 10) 100%)">
+<div
+    class="footer-area-ecommerce ptb-180"
+    style="background: linear-gradient(180deg, rgb(14, 14, 14) 0%, rgb(10, 10, 10) 100%)"
+  >
     <div class="container cmw-1308">
-        <div class="row g-4 justify-content-center">
-            <div class="col-lg-3 col-sm-6">
-                <div class="footer-single-item-ecommerce">
-                    <a href="#" class="logo">
-                        <img src="assets/home/logo.png" width="90px" class="black-logo" alt="logo pnl" />
-                    </a>
-                    <p>Email: info@pnl-international.com</p>
-                    <p>SDT:0908511405</p>
-                    <p>
-                        Địa chỉ: Số 230/37, Lâm Thị Hố, Tổ 2, KP 11, Phường Tân Chánh Hiệp, Quận 12, Thành
-                        phố Hồ Chí Minh, Việt Nam
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="footer-single-item-ecommerce pl-130 text-white">
-                    <h3>Liên kết nhanh</h3>
-                    <ul class="p-0 m-0 list-unstyled import-link">
-                        <li>Trang chủ</li>
-                        <li>Về chúng tôi</li>
-                        <li>Tính năng</li>
-                        <li>Bảng giá</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-sm-6">
-                <div class="footer-single-item-ecommerce pl-130">
-                    <h3 style="color:white">Tài nguyên</h3>
-                    <ul class="p-0 m-0 list-unstyled import-link">
-                        <li>Trung tâm trợ giúp</li>
-                        <li>Tài liệu hướng dẫn</li>
-                        <li>Câu hỏi thường gặp</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="footer-single-item-ecommerce pl-80">
-                    <h3 style="color:white">Pháp lý</h3>
-                    <ul class="p-0 m-0 list-unstyled info-link">
-                        <li>Chính sách bảo mật</li>
-                        <li>Điều khoản dịch vụ</li>
-                    </ul>
-                </div>
-            </div>
+      <div class="row g-4 justify-content-center">
+        <div class="col-lg-3 col-sm-6">
+          <div class="footer-single-item-ecommerce">
+            <a href="#" class="logo">
+              <img src="assets/home/logo.png" width="160px" class="black-logo" alt="logo pnl" />
+            </a>
+            <ul class="p-0 m-0 list-unstyled import-link">
+              <li>CÔNG TY TNHH PNL INTERNATIONAL</li>
+              <li>Email: info@pnl-international.com</li>
+              <li>Số điện thoại : 0908 511 405</li>
+              <li>MST: 0316996806</li>
+              <li> Địa chỉ: Số 230/37, Lâm Thị Hố, Tổ 2, KP 11, Phường Tân Chánh Hiệp, Quận 12, Thành
+              phố Hồ Chí Minh, Việt Nam</li>
+            </ul>
+          </div>
         </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="footer-single-item-ecommerce pl-130 text-white">
+            <h3>Liên kết nhanh</h3>
+            <ul class="p-0 m-0 list-unstyled import-link">
+              <li>Trang chủ</li>
+              <li>Về chúng tôi</li>
+              <li>Tính năng</li>
+              <li>Bảng giá</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-6">
+          <div class="footer-single-item-ecommerce pl-130">
+            <h3 style="color:white">Tài nguyên</h3>
+            <ul class="p-0 m-0 list-unstyled import-link">
+              <li>Trung tâm trợ giúp</li>
+              <li>Tài liệu hướng dẫn</li>
+              <li>Câu hỏi thường gặp</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="footer-single-item-ecommerce pl-80">
+            <h3 style="color:white">Pháp lý</h3>
+            <ul class="p-0 m-0 list-unstyled info-link">
+              <li>Chính sách bảo mật</li>
+              <li>Điều khoản dịch vụ</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
@@ -313,6 +344,7 @@ const companyTax = ref("");
 const address = ref("");
 const note = ref("");
 const toast = useToast();
+const user = ref(null);
 
 const errors = ref({
   customerName: "",
@@ -342,6 +374,18 @@ const validateForm = () => {
   }
   if (!email.value.trim()) {
     errors.value.email = "Email không được để trống.";
+    isValid = false;
+  }
+  if (!companyName.value.trim()) {
+    errors.value.companyName = "Công ty không được để trống.";
+    isValid = false;
+  }
+  if (!companyTax.value.trim()) {
+    errors.value.companyTax = "Mã số thuế không được để trống.";
+    isValid = false;
+  }
+  if (!address.value.trim()) {
+    errors.value.address = "Địa chỉ không được để trống.";
     isValid = false;
   }
 
@@ -406,5 +450,16 @@ onMounted(() => {
       subtotal.value = 0;
     }
   }
+  const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+    try {
+        user.value = JSON.parse(storedUser);
+        console.log("User đã login:", user.value);
+    } catch (e) {
+        console.error("Lỗi parse user:", e);
+        user.value = null;
+    }
+    }
 });
+
 </script>

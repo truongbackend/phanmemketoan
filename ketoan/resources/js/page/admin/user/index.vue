@@ -24,7 +24,7 @@
                 <input type="text" class="form-control border-0" placeholder="Tìm kiếm người dùng...." v-model="searchKeyword" />
                 <i class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y text-secondary">search</i>
             </form>
-            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal" v-if="hasPermission('user create')">
+            <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal" data-bs-target="#createModal" v-if="hasPermission('user.create')">
                 <span class="d-flex align-items-center" style="gap: 5px;">
                     <i class="ri-add-line d-none d-sm-inline-block fs-20 lh-1"></i>
                     <span>Thêm mới</span>

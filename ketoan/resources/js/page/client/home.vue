@@ -46,8 +46,16 @@
           </li>
         </ul>
         <div class="othres">
-          <router-link :to="{ name: 'register' }" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn" style="margin-right:10px;">Dùng thử miễn phí</router-link>
-          <router-link :to="{ name: 'login' }" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn">Đăng nhập</router-link>
+            <template v-if="user">
+                <span class="text-white fw-medium me-3 fs-14">Xin chào, {{ user.name }}</span>
+                <router-link to="admin/dashboard" class="btn bg-white fw-medium fs-14 text-primary rounded-pill hover-bg landing-page-btn">
+                Phần mềm
+                </router-link>
+            </template>
+            <template v-else>
+                <router-link :to="{ name: 'register' }" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn" style="margin-right:10px;">Dùng thử miễn phí</router-link>
+                <router-link :to="{ name: 'login' }" class="btn btn-outline-body-bg text-white fw-medium fs-14 rounded-pill hover-bg landing-page-btn">Đăng nhập</router-link>
+            </template>
         </div>
       </div>
     </div>
@@ -204,22 +212,25 @@
         <div class="col-lg-4 col-md-6" v-for="pkg in packages" :key="pkg.id">
           <div class="pricing-plans-single-item position-relative z-1">
             <div class="pricing-header">
-              <span class="trial">{{ pkg.name }}</span>
-              <h1 v-if="pkg.price !== null">
-                {{ formatCurrency(pkg.price) }}<sub class="text-body">VND/tháng</sub>
-              </h1>
-              <h1 v-else>Liên hệ<sub class="text-body"></sub></h1>
-              <p>
+                <span class="trial">{{ pkg.name }}</span>
 
-                <span v-if="pkg.name === 'Gói Cơ Bản'"
-                  >Dành cho công ty siêu nhỏ & freelancers.</span
-                >
-                <span v-else-if="pkg.name === 'Gói Phổ Biến'"
-                  >Dành cho doanh nghiệp vừa và nhỏ.</span
-                >
-                <span v-else>Dành cho tập đoàn & yêu cầu riêng.</span>
-              </p>
-            </div>
+                <h1 v-if="pkg.price === 0">
+                    Miễn phí<sub class="text-body"></sub>
+                </h1>
+                <h1 v-else-if="pkg.price !== null">
+                    {{ formatCurrency(pkg.price) }}<sub class="text-body">VND/tháng</sub>
+                </h1>
+                <h1 v-else>
+                    Liên hệ<sub class="text-body"></sub>
+                </h1>
+
+                <p>
+                    <span v-if="pkg.name === 'Gói Cơ Bản'">Dành cho công ty siêu nhỏ & freelancers.</span>
+                    <span v-else-if="pkg.name === 'Gói Phổ Biến'">Dành cho doanh nghiệp vừa và nhỏ.</span>
+                    <span v-else>Dành cho tập đoàn & yêu cầu riêng.</span>
+                </p>
+                </div>
+
 
             <div class="pricing-content">
               <h3>Tính năng:</h3>
@@ -331,7 +342,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, onMounted } from "vue";
 import axios from "axios";
 import { inject } from "vue";
 import { useRouter } from "vue-router";
@@ -341,6 +352,7 @@ export default defineComponent({
     const globalState = inject("globalState");
     const baseUrl = globalState.baseUrl;
     const router = useRouter();
+    const user = ref(null);
     const cart = ref([]);
     const getPackage = () => {
       axios
@@ -371,16 +383,28 @@ export default defineComponent({
     };
     const formatCurrency = (amount) => {
     if (!amount) return "0 ₫";
-    return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+        return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
     };
+    onMounted(() => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          user.value = JSON.parse(storedUser);
+          console.log("Đã đăng nhập:", user.value);
+        } catch (e) {
+          console.error("Lỗi parse user:", e);
+          user.value = null;
+        }
+      }
+    });
     getPackage();
     return {
       packages,
       addToCart,
        cart,
-       formatCurrency
+       formatCurrency,
+       user,
     };
   },
 });
 </script>
-

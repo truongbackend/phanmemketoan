@@ -159,7 +159,6 @@ export default {
     }
   },
   methods: {
-    // Logout
     async logout() {
       try {
         const response = await axios.post("/api/logout");

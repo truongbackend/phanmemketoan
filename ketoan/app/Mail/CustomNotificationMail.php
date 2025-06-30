@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\CustomNotification;
-class CustomNotificationMail extends Mailable implements ShouldQueue
+class CustomNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $notification;
@@ -23,11 +23,15 @@ class CustomNotificationMail extends Mailable implements ShouldQueue
         $this->notification = $notification;
     }
 
-    public function build()
-    {
-        return $this->subject('Thông báo mới: ' . $this->notification->title)
-                    ->markdown('emails.custom-notification')
-                    ->with(['notification' => $this->notification]);
-    }
+public function build()
+{
+    return $this->subject('Thông báo mới: ' . $this->notification->title)
+        ->view('emails.custom-notification')
+        ->with([
+            'title'   => $this->notification->title,
+            'content' => $this->notification->content,
+            'type'    => $this->notification->type,
+        ]);
+}
 
 }

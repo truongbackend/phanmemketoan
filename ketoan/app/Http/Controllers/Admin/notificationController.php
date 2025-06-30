@@ -41,21 +41,22 @@ class NotificationController extends Controller
             $attach = array_fill(0, count($ids), ['read_at'=>null]);
             $notif->recipients()->sync(array_combine($ids, $attach));
 
-            event(new NotificationCreated($notif));
             $emails = User::pluck('email')->all();
             foreach ($emails as $email) {
                 try {
-                    Mail::to($email)->queue(new CustomNotificationMail($notif));
+                    Mail::to($email)->send(new CustomNotificationMail($notif));
                 } catch (\Exception $e) {
                     \Log::error("Lỗi gửi email thông báo đến $email: " . $e->getMessage());
                 }
             }
         });
+
         return response()->json([
             'data'    => $notif,
             'message' => 'Created & broadcasted'
         ], 201);
     }
+
 
     public function update(Request $req, $id)
     {

@@ -46,12 +46,7 @@
                 </router-link>
             </li>
 
-            <li class="menu-item" v-if="hasPermission('report.list')">
-                <router-link :to="{ name: 'admin-revenue' }" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">pie_chart</span>
-                    <span class="title">Báo cáo</span>
-                </router-link>
-            </li>
+
             <li class="menu-title small">
                 <span class="menu-title-text">Hệ thống</span>
             </li>
@@ -61,7 +56,12 @@
                     <span class="title">Gói dịch vụ</span>
                 </router-link>
             </li>
-
+            <li class="menu-item" v-if="hasPermission('report.list')">
+                <router-link :to="{ name: 'admin-revenue' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">pie_chart</span>
+                    <span class="title">Báo cáo</span>
+                </router-link>
+            </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle active">
                     <span class="material-symbols-outlined menu-icon">account_box</span>
