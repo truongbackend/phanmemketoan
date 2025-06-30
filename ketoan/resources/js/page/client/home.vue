@@ -65,7 +65,6 @@
             <span class="text-primary-50">Nền tảng kế toán thông minh</span>
           </div>
         </div>
-        <!-- SECTION 1: HERO -->
         <h2>Giải pháp bán hàng thông minh</h2>
          <h2>Gói gọn trong một nền tảng. </h2>
         <div
@@ -87,9 +86,6 @@
       </div>
     </div>
   </div>
-  <!-- End Banner Area -->
-
-  <!-- SECTION 2: ABOUT US -->
   <div class="why-trezo-area" id="about" style="margin-top: 100px; margin-bottom: 100px">
     <div class="container cmw-1308">
       <div class="row align-items-center g-4">
@@ -135,9 +131,6 @@
       </div>
     </div>
   </div>
-  <!-- End Why Trezo Area -->
-
-  <!-- SECTION 3: FEATURES -->
   <div class="top-features-area bg-gray-200" id="features" style="padding-top: 40px">
     <div class="container cmw-1308">
       <div class="mx-auto text-center">
@@ -262,7 +255,6 @@
     </div>
   </div>
 
-  <!-- SECTION 5: FINAL CTA -->
   <div class="supercharge-area">
     <div class="container cmw-1308">
       <div
@@ -291,11 +283,13 @@
         <div class="col-lg-3 col-sm-6">
           <div class="footer-single-item-ecommerce">
             <a href="#" class="logo">
-              <img src="assets/home/logo.png" width="90px" class="black-logo" alt="logo pnl" />
+              <img src="assets/home/logo.png" width="160px" class="black-logo" alt="logo pnl" />
             </a>
             <ul class="p-0 m-0 list-unstyled import-link">
+              <li>CÔNG TY TNHH PNL INTERNATIONAL</li>
               <li>Email: info@pnl-international.com</li>
               <li>Số điện thoại : 0908 511 405</li>
+              <li>MST: 0316996806</li>
               <li> Địa chỉ: Số 230/37, Lâm Thị Hố, Tổ 2, KP 11, Phường Tân Chánh Hiệp, Quận 12, Thành
               phố Hồ Chí Minh, Việt Nam</li>
             </ul>
