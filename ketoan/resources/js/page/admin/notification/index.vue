@@ -4,7 +4,7 @@
             <h3 class="mb-0">Thông báo</h3>
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" data-bs-toggle="modal"
-                    data-bs-target="#createModal" v-if="hasPermission('complaints.create')">
+                    data-bs-target="#createModal" v-if="hasPermission('notification.create')">
                     <span class="d-flex align-items-center" style="gap:5px">
                         <span class="py-sm-1 d-block">
                         <i class="ri-add-line d-none d-sm-inline-block"></i>
@@ -49,12 +49,12 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <button v-if="hasPermission('complaints.edit')" class="btn btn-sm btn-link p-0" @click="toggleRead(item)"
+                                            <button class="btn btn-sm btn-link p-0" @click="toggleRead(item)"
                                                 :title="item.pivot.read_at ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc'">
                                                 <i class="material-symbols-outlined fs-16"
                                                     :class="item.pivot.read_at ? 'text-secondary' : 'text-primary'">visibility</i>
                                             </button>
-                                            <button v-if="hasPermission('complaints.delete')" class="btn btn-sm btn-link p-0" @click="openDeleteModal(item.id)"
+                                            <button v-if="hasPermission('notification.delete')" class="btn btn-sm btn-link p-0" @click="openDeleteModal(item.id)"
                                                 title="Xóa">
                                                 <i class="material-symbols-outlined fs-16 text-danger">delete</i>
                                             </button>

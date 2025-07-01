@@ -63,9 +63,9 @@
                 </router-link>
             </li>
             <li class="menu-item">
-                <a href="javascript:void(0);" class="menu-link menu-toggle active">
+                <a href="javascript:void(0);" class="menu-link menu-toggle active" v-if="hasPermission('role.list')">
                     <span class="material-symbols-outlined menu-icon">account_box</span>
-                    <span class="title">Người dùng</span>
+                    <span class="title">Hệ thống phân quyền</span>
                 </a>
                 <ul class="menu-sub">
                     <li class="menu-item" v-if="hasPermission('role.list')">

@@ -9,7 +9,7 @@
         <h2 style="color: #0d6efd; text-align: center;">🔔 {{ $title ?? 'Thông báo mới!' }}</h2>
 
         <div style="margin: 20px 0;">
-            {(($content))}
+            {!! nl2br(e($content)) !!}
         </div>
         <hr style="margin-top: 40px;">
         <p style="font-size: 12px; color: #6c757d; text-align: center;">

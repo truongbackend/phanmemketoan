@@ -33,6 +33,7 @@ class NotificationController extends Controller
             'type'    => 'required|string',
         ]);
 
+
         $notif = null;
         DB::transaction(function() use($data, &$notif) {
             $notif = CustomNotification::create($data);
