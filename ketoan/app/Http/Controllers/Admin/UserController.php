@@ -116,7 +116,7 @@ class UserController extends Controller
         // Danh sách các field cần kiểm tra
         $fields = [
             'name', 'email', 'phone', 'packages_id',
-            'address', 'expiration_package', 'note', 'status'
+            'address', 'expiration_package', 'note', 'status','companyName','companyTax'
         ];
 
         foreach ($fields as $field) {
