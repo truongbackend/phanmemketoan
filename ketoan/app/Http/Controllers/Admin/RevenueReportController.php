@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TotalRevenueExport;
 
 class RevenueReportController extends Controller
 {
@@ -142,6 +144,7 @@ class RevenueReportController extends Controller
 
     $orders = Order::with(['user:id,name,email', 'package:id,name'])
         ->select('order_user_id', 'package_id', 'companyTax', 'companyName', 'created_at')
+        ->where('status', 2)
         ->whereBetween('created_at', [$from, $to])
         ->orderBy('created_at', 'desc')
         ->get();
@@ -161,6 +164,65 @@ class RevenueReportController extends Controller
     });
     return response()->json($customers);
 }
+public function totalRevenueByUser()
+{
+    $from = request()->get('from');
+    $to = request()->get('to');
+    $perPage = request()->get('per_page', 10);
+
+    // Nếu thiếu from/to, fallback về 30 ngày gần nhất
+    if (!$from) {
+        $from = now()->subDays(29)->format('Y-m-d');
+    }
+    if (!$to) {
+        $to = now()->format('Y-m-d');
+    }
+
+    try {
+        $fromDate = Carbon::createFromFormat('Y-m-d', $from)->startOfDay();
+        $toDate   = Carbon::createFromFormat('Y-m-d', $to)->endOfDay();
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Invalid date format, expected YYYY-MM-DD'], 400);
+    }
+
+    $query = Order::with(['user:id,name,email'])
+        ->select('order_user_id', 'companyName', 'companyTax')
+        ->selectRaw('SUM(total_amount) as total_spent')
+        ->where('status', 2)
+        ->whereBetween('created_at', [$fromDate, $toDate])
+        ->groupBy('order_user_id', 'companyName', 'companyTax');
+
+    $paginator = $query->orderByDesc('total_spent')->paginate($perPage);
+
+    $data = $paginator->getCollection()->map(function ($item) {
+        $user = optional($item->user);
+        return [
+            'user_id'     => $item->order_user_id,
+            'user_name'   => $user->name ?? 'Không xác định',
+            'email'       => $user->email ?? 'N/A',
+            'companyName' => $item->companyName ?? 'N/A',
+            'companyTax'  => $item->companyTax ?? 'N/A',
+            'total_spent' => $item->total_spent,
+        ];
+    });
+
+    return response()->json([
+        'current_page' => $paginator->currentPage(),
+        'last_page'    => $paginator->lastPage(),
+        'per_page'     => $paginator->perPage(),
+        'total'        => $paginator->total(),
+        'data'         => $data,
+    ]);
+}
+
+public function exportTotalRevenueByUser()
+{
+    $from = request()->get('from');
+    $to = request()->get('to');
+
+    return Excel::download(new TotalRevenueExport($from, $to), "tong_chi_tieu_{$from}_{$to}.xlsx");
+}
+
 
 
 }

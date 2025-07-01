@@ -111,6 +111,8 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('revenue/day', [RevenueReportController::class, 'byDay']);
     Route::get('revenue/totalOrder', [RevenueReportController::class, 'totalOrder']);
     Route::get('revenue/customers-list', [RevenueReportController::class, 'listCustomersWithOrders']);
+    Route::get('revenue/total-by-user', [RevenueReportController::class, 'totalRevenueByUser']);
+    Route::get('revenue/export-total-by-user', [RevenueReportController::class, 'exportTotalRevenueByUser']);
 });
 Route::resource('packages', packageController::class);
 

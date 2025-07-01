@@ -25,6 +25,9 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Thời gian</th>
                                 <th scope="col">Người gửi</th>
+                                 <th scope="col">Số điện thoại</th>
+                                  <th scope="col">Công ty</th>
+                                  <th scope="col">Mã số thuế</th>
                                 <th scope="col">Mã đơn</th>
                                 <th scope="col">Nội dung</th>
                                 <th scope="col">Trạng thái</th>
@@ -43,6 +46,9 @@
                                 </td>
                                 <td class="text-secondary">{{ formatDate(c.created_at) }}</td>
                                 <td class="text-secondary">{{ c.user.name }}</td>
+                                <td class="text-secondary">{{ c.user.phone}}</td>
+                                <td class="text-secondary">{{ c.user.companyName}}</td>
+                                <td class="text-secondary">{{ c.user.companyTax}}</td>
                                 <td class="text-secondary"> <p style="max-width: 300px;">{{ c.order_code || "-" }}</p></td>
                                 <td class="text-secondary"><p style="max-width: 300px;">{{ c.content }}</p></td>
                                 <td>

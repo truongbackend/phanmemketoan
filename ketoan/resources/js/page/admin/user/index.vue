@@ -48,6 +48,12 @@
                             <th scope="col">
                                 Số điện thoại
                             </th>
+                             <th scope="col">
+                                Công ty
+                            </th>
+                             <th scope="col">
+                                Mã số thuế
+                            </th>
 
                             <th scope="col">
                                 Ngày đăng ký
@@ -73,6 +79,8 @@
                             <td>{{ Items.name }}</td>
                             <td class="text-secondary">{{ Items.email }}</td>
                             <td class="text-secondary">{{ Items.phone}}</td>
+                            <td class="text-secondary">{{ Items.companyName}}</td>
+                            <td class="text-secondary">{{ Items.companyTax}}</td>
                             <td class="text-secondary">{{ Items.create_package}}</td>
                             <td class="text-secondary">{{ Items.expiration_package}}</td>
                             <td class="text-secondary">{{ Items.duration }}</td>
@@ -121,99 +129,114 @@
             </div>
         </div>
         <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header border-0 p-4 border-bottom">
-                        <h1 class="modal-title fs-18" id="createModal">Thêm mới</h1>
-                        <button type="button" class="btn-close campaigns-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <form>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Họ và tên</label>
-                                        <input v-model="name" type="text" class="form-control h-60 border-border-color" placeholder="Họ và tên ...." :class="{'is-invalid': !nameValid}">
-                                        <div v-if="!nameValid" class="invalid-feedback">Họ và tên không được để trống</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Email</label>
-                                        <input v-model="email" type="email" class="form-control h-60 border-border-color" placeholder="abc@gmail.com" :class="{'is-invalid': !emailValid}">
-                                        <div v-if="!email" class="invalid-feedback">Email không được để trống</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Số điện thoại</label>
-                                        <input v-model="phone" type="text" class="form-control h-60 border-border-color" placeholder="012345678" :class="{'is-invalid': !phoneValid}">
-                                        <div v-if="!phoneValid" class="invalid-feedback">Số điện thoại không hợp lệ</div>
-                                    </div>
-                                </div>
-                                 <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Địa chỉ</label>
-                                        <input v-model="address" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ngày hết hạn</label>
-                                        <input v-model="expiration_package" type="date" class="form-control h-60 border-border-color" placeholder="10%" :class="{'is-invalid': !expirationValid}">
-                                        <div v-if="!expirationValid" class="invalid-feedback">Ngày hết hạn không hợp lệ</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Gói dịch vụ</label>
-                                        <select v-model="selectedPackageId" class="form-select form-control h-60">
-                                            <option v-for="pkg in packageList" :key="pkg.id" :value="pkg.id">
-                                                {{ pkg.name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Trạng thái</label>
-                                        <select v-model="selectedStatus" class="form-select form-control h-60" aria-label="Default select example">
-                                            <option value="1" class="text-dark">Hoạt động</option>
-                                            <option value="0" class="text-dark">Ngưng hoạt động</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Nhóm quyền</label>
-                                        <select v-model="selectedRole" class="form-select form-control h-60">
-                                            <option v-for="roles in role" :key="roles.id" :value="roles.id">
-                                                {{ roles.name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ghi chú</label>
-                                        <div class="form-group position-relative">
-                                            <textarea v-model="note" class="form-control text-dark" placeholder="Ghi chú ... " cols="30" rows="4"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
+    <div class="modal-content rounded-0">
+      <div class="modal-header border-0 p-4 border-bottom">
+        <h1 class="modal-title fs-18" id="createModal">Thêm mới người dùng</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+          <div class="row">
 
-                                <div class="col-lg-12">
-                                    <div class="d-flex justify-content-end flex-wrap gap-3">
-                                        <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
-                                        <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="createUser"> <i class="ri-add-line text-white fw-medium"></i> Tạo mới</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <!-- Họ và tên -->
+            <div class="form-group mb-4 col-lg-12">
+              <label class="label text-secondary">Họ và tên</label>
+              <input v-model="name" type="text" class="form-control h-60" placeholder="Họ và tên..." :class="{'is-invalid': errors.name}">
+              <div v-if="errors.name" class="invalid-feedback">{{ errors.name[0] }}</div>
             </div>
-        </div>
+
+            <!-- Email -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Email</label>
+              <input v-model="email" type="email" class="form-control h-60" placeholder="abc@gmail.com" :class="{'is-invalid': errors.email}">
+              <div v-if="errors.email" class="invalid-feedback">{{ errors.email[0] }}</div>
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Số điện thoại</label>
+              <input v-model="phone" type="text" class="form-control h-60" placeholder="012345678" :class="{'is-invalid': errors.phone}">
+              <div v-if="errors.phone" class="invalid-feedback">{{ errors.phone[0] }}</div>
+            </div>
+
+            <!-- Địa chỉ -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Địa chỉ</label>
+              <input v-model="address" type="text" class="form-control h-60" placeholder="Địa chỉ..." :class="{'is-invalid': errors.address}">
+              <div v-if="errors.address" class="invalid-feedback">{{ errors.address[0] }}</div>
+            </div>
+
+            <!-- Ngày hết hạn -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Ngày hết hạn</label>
+              <input v-model="expiration_package" type="date" class="form-control h-60" :class="{'is-invalid': errors.expiration_package}">
+              <div v-if="errors.expiration_package" class="invalid-feedback">{{ errors.expiration_package[0] }}</div>
+            </div>
+
+            <!-- Gói dịch vụ -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Gói dịch vụ</label>
+              <select v-model="selectedPackageId" class="form-select form-control h-60">
+                <option v-for="pkg in packageList" :key="pkg.id" :value="pkg.id">{{ pkg.name }}</option>
+              </select>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Trạng thái</label>
+              <select v-model="selectedStatus" class="fform-select form-control h-60">
+                <option value="1">Hoạt động</option>
+                <option value="0">Ngưng hoạt động</option>
+              </select>
+            </div>
+
+            <!-- Tên công ty -->
+            <div class="form-group mb-4 col-lg-12">
+              <label class="label text-secondary">Tên công ty</label>
+              <input v-model="companyName" type="text" class="form-control h-60" placeholder="Tên công ty..." :class="{'is-invalid': errors.companyName}">
+              <div v-if="errors.companyName" class="invalid-feedback">{{ errors.companyName[0] }}</div>
+            </div>
+
+            <!-- Mã số thuế -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Mã số thuế</label>
+              <input v-model="companyTax" type="text" class="form-control h-60" placeholder="Mã số thuế..." :class="{'is-invalid': errors.companyTax}">
+              <div v-if="errors.companyTax" class="invalid-feedback">{{ errors.companyTax[0] }}</div>
+            </div>
+
+            <!-- Nhóm quyền -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Nhóm quyền</label>
+              <select v-model="selectedRole" class="form-select form-control h-60" :class="{'is-invalid': errors.role_id}">
+                <option v-for="r in role" :key="r.id" :value="r.id">{{ r.name }}</option>
+              </select>
+              <div v-if="errors.role_id" class="invalid-feedback">{{ errors.role_id[0] }}</div>
+            </div>
+
+            <!-- Ghi chú -->
+            <div class="form-group mb-4 col-lg-12">
+              <label class="label text-secondary">Ghi chú</label>
+              <textarea v-model="note" class="form-control text-dark" placeholder="Ghi chú..." rows="3"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-lg-12">
+              <div class="d-flex justify-content-end flex-wrap gap-3">
+                <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
+                <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="createUser">
+                  <i class="ri-add-line text-white fw-medium"></i> Tạo mới
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -232,114 +255,123 @@
             </div>
         </div>
         <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header border-0 p-4 border-bottom">
-                        <h1 class="modal-title fs-18" id="updateModal">Cập nhật</h1>
-                        <button type="button" class="btn-close campaigns-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <form>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Họ và tên</label>
-                                        <input v-model="name" type="text" class="form-control h-60 border-border-color" placeholder="Họ và tên ...." :class="{'is-invalid': !nameValid}">
-                                        <div v-if="!nameValid" class="invalid-feedback">Họ và tên không được để trống</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Email</label>
-                                        <input disabled v-model="email" type="email" class="form-control h-60 border-border-color" placeholder="abc@gmail.com" :class="{'is-invalid': !emailValid}">
-                                        <div v-if="!email" class="invalid-feedback">Email không được để trống</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Số điện thoại</label>
-                                        <input v-model="phone" type="text" class="form-control h-60 border-border-color" placeholder="012345678" :class="{'is-invalid': !phoneValid}">
-                                        <div v-if="!phoneValid" class="invalid-feedback">Số điện thoại không hợp lệ</div>
-                                    </div>
-                                </div>
-                                 <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Địa chỉ</label>
-                                        <input v-model="address" type="text" class="form-control h-60 border-border-color" placeholder="Địa chỉ ...">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ngày hết hạn</label>
-                                        <input v-model="expiration_package" type="date" class="form-control h-60 border-border-color" placeholder="10%" :class="{'is-invalid': !expirationValid}">
-                                        <div v-if="!expirationValid" class="invalid-feedback">Ngày hết hạn không hợp lệ</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Gói dịch vụ</label>
-                                        <select v-model="selectedPackageId" class="form-select form-control h-60">
-                                            <option v-for="pkg in packageList" :key="pkg.id" :value="pkg.id">
-                                                {{ pkg.name }}
-                                            </option>
-                                        </select>
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
+    <div class="modal-content rounded-0">
+      <div class="modal-header border-0 p-4 border-bottom">
+        <h1 class="modal-title fs-18" id="updateModal">Cập nhật người dùng</h1>
+        <button type="button" class="btn-close campaigns-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form>
+          <div class="row">
 
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Trạng thái</label>
-                                        <select v-model="selectedStatus" class="form-select form-control h-60" aria-label="Default select example">
-                                            <option value="1" class="text-dark">Hoạt động</option>
-                                            <option value="0" class="text-dark">Ngưng hoạt động</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Nhóm quyền</label>
-                                        <select v-model="selectedRole" class="form-select form-control h-60">
-                                            <option v-for="roles in role" :key="roles.id" :value="roles.id">
-                                                {{ roles.name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group mb-4">
-                                        <label class="label text-secondary">Ghi chú</label>
-                                        <div class="form-group position-relative">
-                                            <textarea v-model="note" class="form-control text-dark" placeholder="Ghi chú ... " cols="30" rows="4"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="d-flex justify-content-end flex-wrap gap-3">
-                                        <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
-                                        <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="updateUser"> <i class="ri-add-line text-white fw-medium"></i> Cập nhât mới</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <!-- Họ và tên -->
+            <div class="form-group mb-4 col-lg-12">
+              <label class="label text-secondary">Họ và tên</label>
+              <input v-model="name" type="text" class="form-control h-60" placeholder="Họ và tên..." :class="{'is-invalid': errors.name}">
+              <div v-if="errors.name" class="invalid-feedback">{{ errors.name[0] }}</div>
             </div>
-        </div>
+
+            <!-- Email (disabled) -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Email</label>
+              <input disabled v-model="email" type="email" class="form-control h-60" placeholder="abc@gmail.com">
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Số điện thoại</label>
+              <input v-model="phone" type="text" class="form-control h-60" placeholder="012345678" :class="{'is-invalid': errors.phone}">
+              <div v-if="errors.phone" class="invalid-feedback">{{ errors.phone[0] }}</div>
+            </div>
+
+            <!-- Địa chỉ -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Địa chỉ</label>
+              <input v-model="address" type="text" class="form-control h-60" placeholder="Địa chỉ..." :class="{'is-invalid': errors.address}">
+              <div v-if="errors.address" class="invalid-feedback">{{ errors.address[0] }}</div>
+            </div>
+
+            <!-- Ngày hết hạn -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Ngày hết hạn</label>
+              <input v-model="expiration_package" type="date" class="form-control h-60" :class="{'is-invalid': errors.expiration_package}">
+              <div v-if="errors.expiration_package" class="invalid-feedback">{{ errors.expiration_package[0] }}</div>
+            </div>
+
+            <!-- Gói dịch vụ -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Gói dịch vụ</label>
+              <select v-model="selectedPackageId" class="form-select form-control h-60">
+                <option v-for="pkg in packageList" :key="pkg.id" :value="pkg.id">{{ pkg.name }}</option>
+              </select>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Trạng thái</label>
+              <select v-model="selectedStatus" class="form-select form-control h-60">
+                <option value="1">Hoạt động</option>
+                <option value="0">Ngưng hoạt động</option>
+              </select>
+            </div>
+
+            <!-- Tên công ty -->
+            <div class="form-group mb-4 col-lg-12">
+              <label class="label text-secondary">Tên công ty</label>
+              <input v-model="companyName" type="text" class="form-control h-60" placeholder="Tên công ty..." :class="{'is-invalid': errors.companyName}">
+              <div v-if="errors.companyName" class="invalid-feedback">{{ errors.companyName[0] }}</div>
+            </div>
+
+            <!-- Mã số thuế -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Mã số thuế</label>
+              <input v-model="companyTax" type="text" class="form-control h-60" placeholder="Mã số thuế..." :class="{'is-invalid': errors.companyTax}">
+              <div v-if="errors.companyTax" class="invalid-feedback">{{ errors.companyTax[0] }}</div>
+            </div>
+
+            <!-- Nhóm quyền -->
+            <div class="form-group mb-4 col-lg-6">
+              <label class="label text-secondary">Nhóm quyền</label>
+              <select v-model="selectedRole" class="form-select form-control h-60" :class="{'is-invalid': errors.role_id}">
+                <option v-for="r in role" :key="r.id" :value="r.id">{{ r.name }}</option>
+              </select>
+              <div v-if="errors.role_id" class="invalid-feedback">{{ errors.role_id[0] }}</div>
+            </div>
+
+            <!-- Ghi chú -->
+            <div class="form-group mb-4 col-lg-12">
+              <label class="label text-secondary">Ghi chú</label>
+              <textarea v-model="note" class="form-control text-dark" placeholder="Ghi chú..." rows="3"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-lg-12">
+              <div class="d-flex justify-content-end flex-wrap gap-3">
+                <button type="button" class="btn btn-danger py-2 px-4 fw-medium fs-16 text-white" data-bs-dismiss="modal">Huỷ</button>
+                <button type="button" class="btn btn-primary py-2 px-4 fw-medium fs-16" @click="updateUser">
+                  <i class="ri-add-line text-white fw-medium"></i> Cập nhật
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
     </div>
 </div>
 </template>
 
 <script>
-import {
-    defineComponent,
-    ref,
-    watch
-} from 'vue';
+import { defineComponent, ref, watch, inject } from 'vue';
 import axios from 'axios';
 import { useToast } from 'vue-toast-notification';
-import { inject } from 'vue';
 import { hasPermission } from '@/utils/permission';
+
 export default defineComponent({
     setup() {
         const packageList = ref([]);
@@ -349,14 +381,12 @@ export default defineComponent({
         const phone = ref('');
         const address = ref('');
         const email = ref('');
+        const companyName = ref('');
+        const companyTax = ref('');
         const expiration_package = ref('');
         const note = ref('');
+        const errors = ref({}); // Lưu lỗi server
         const toast = useToast();
-        const nameValid = ref(true);
-        const emailValid = ref(true);
-        const phoneValid = ref(true);
-        const addressValid = ref(true);
-        const expirationValid = ref(true);
         const searchKeyword = ref('');
         const userId = ref('');
         const globalState = inject('globalState');
@@ -368,6 +398,7 @@ export default defineComponent({
         const selectedPackageId = ref(null);
         const selectedStatus = ref(1);
         const selectedRole = ref('');
+
         const getUser = () => {
             const params = {
                 page: currentPage.value,
@@ -384,11 +415,9 @@ export default defineComponent({
                         const now = new Date();
                         const end = u.expiration_package ? new Date(u.expiration_package) : null;
                         let duration = '';
-
                         if (end) {
                             const diffTime = end.getTime() - now.getTime();
                             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
                             if (diffDays < 0) {
                                 duration = `Hết hạn ${Math.abs(diffDays)} ngày`;
                             } else {
@@ -396,104 +425,119 @@ export default defineComponent({
                                 duration = diffMonths > 0 ? `${diffMonths} tháng` : `${diffDays} ngày`;
                             }
                         }
-
                         return { ...u, duration };
                     });
-
                     packageList.value = response.data.packages;
                     const defaultPkg = packageList.value.find(p => p.default_packages === 1);
                     if (defaultPkg) {
-                        selectedPackageId.value = defaultPkg.id;
+                    selectedPackageId.value = defaultPkg.id;
+                    if (defaultPkg.expiration_time) {
+                        const now = new Date();
+                        now.setDate(now.getDate() + parseInt(defaultPkg.expiration_time));
+                        const yyyy = now.getFullYear();
+                        const mm = String(now.getMonth() + 1).padStart(2, '0');
+                        const dd = String(now.getDate()).padStart(2, '0');
+                        expiration_package.value = `${yyyy}-${mm}-${dd}`;
                     }
+                }
                     role.value = response.data.role;
                     const defaultRole = role.value.find(r => r.default_role === 1);
-                    if (defaultRole) {
-                        selectedRole.value = defaultRole.id;
-                    }
+                    if (defaultRole) selectedRole.value = defaultRole.id;
                     totalPages.value = pagination.last_page;
                 })
-                .catch((error) => {
-                    console.log(error);
-                });
+                .catch(console.log);
         };
 
         const createUser = () => {
-            nameValid.value = name.value.trim() !== '';
-            emailValid.value = email.value.trim() !== '' && /\S+@\S+\.\S+/.test(email.value);
-            phoneValid.value = typeof phone.value === 'string' ? phone.value.trim() === '' || /^\d{9,11}$/.test(phone.value) : true;
-            expirationValid.value = expiration_package.value !== '';
-            if (nameValid.value && emailValid.value && phoneValid.value && addressValid.value && expirationValid.value) {
-                axios.post(`${baseUrl}/api/user`, {
-                    name: name.value,
-                    phone: phone.value,
-                    address: address.value,
-                    email: email.value,
-                    expiration_package: expiration_package.value,
-                    packages_id: selectedPackageId.value,
-                    status: selectedStatus.value,
-                    note: note.value,
-                })
-                .then(() => {
-                    getUser();
-                    toast.success("Tạo người dùng thành công");
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
-                    modal.hide();
-                    name.value = '';
-                    phone.value = '';
-                    address.value = '';
-                    email.value = '';
-                    expiration_package.value = '';
-                    note.value = '';
-                    selectedPackageId.value = null;
-                    selectedStatus.value = 1;
-                })
-                .catch((error) => {
-                    toast.error("Có lỗi xảy ra khi tạo người dùng");
-                    console.log(error);
-                });
-            } else {
-                toast.error("Vui lòng kiểm tra lại các trường dữ liệu");
-            }
+            axios.post(`${baseUrl}/api/user`, {
+                name: name.value,
+                phone: phone.value,
+                address: address.value,
+                email: email.value,
+                expiration_package: expiration_package.value,
+                packages_id: selectedPackageId.value,
+                status: selectedStatus.value,
+                note: note.value,
+                role_id: selectedRole.value,
+                companyName: companyName.value,
+                companyTax: companyTax.value,
+            })
+            .then(() => {
+                getUser();
+                toast.success("Tạo người dùng thành công");
+                const modal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
+                modal.hide();
+                name.value = '';
+                phone.value = '';
+                address.value = '';
+                email.value = '';
+                expiration_package.value = '';
+                note.value = '';
+                selectedPackageId.value = null;
+                selectedStatus.value = 1;
+                companyTax.value = '';
+                companyName.value = '';
+                selectedRole.value = null;
+                errors.value = {}; // clear lỗi
+            })
+            .catch((error) => {
+                const response = error.response;
+                if (response?.data?.errors) {
+                    errors.value = response.data.errors;
+                } else {
+                    errors.value = {};
+                    const message = response?.data?.message || "Có lỗi xảy ra khi tạo người dùng";
+                    toast.error(message);
+                }
+                console.log(error);
+            });
         };
+
         const updateUser = () => {
-            nameValid.value = name.value.trim() !== '';
-            emailValid.value = email.value.trim() !== '' && /\S+@\S+\.\S+/.test(email.value);
-            phoneValid.value = typeof phone.value === 'string' ? phone.value.trim() === '' || /^\d{9,11}$/.test(phone.value) : true;
-            expirationValid.value = expiration_package.value !== '';
-            if (nameValid.value && emailValid.value && phoneValid.value && expirationValid.value) {
-                axios.put(`${baseUrl}/api/user/${userId.value}`, {
-                    name: name.value,
-                    phone: phone.value,
-                    address: address.value,
-                    email: email.value,
-                    expiration_package: expiration_package.value,
-                    packages_id: selectedPackageId.value,
-                    status: selectedStatus.value,
-                    note: note.value,
-                    role_id: selectedRole.value,
-                })
-                .then(() => {
-                    getUser();
-                    toast.success("Cập nhật người dùng thành công");
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('updateModal'));
-                    modal.hide();
-                    name.value = '';
-                    phone.value = '';
-                    address.value = '';
-                    email.value = '';
-                    expiration_package.value = '';
-                    note.value = '';
-                    selectedPackageId.value = null;
-                    selectedStatus.value = '';
-                })
-                .catch((error) => {
-                    toast.error("Có lỗi xảy ra khi tạo người dùng");
-                    console.log(error);
-                });
-            } else {
-                toast.error("Vui lòng kiểm tra lại các trường dữ liệu");
-            }
-        };
+    axios.put(`${baseUrl}/api/user/${userId.value}`, {
+        name: name.value,
+        phone: phone.value,
+        address: address.value,
+        email: email.value,
+        expiration_package: expiration_package.value,
+        packages_id: selectedPackageId.value,
+        status: selectedStatus.value,
+        note: note.value,
+        role_id: selectedRole.value,
+        companyName: companyName.value,
+        companyTax: companyTax.value,
+    })
+    .then(() => {
+        getUser();
+        toast.success("Cập nhật người dùng thành công");
+        const modal = bootstrap.Modal.getInstance(document.getElementById('updateModal'));
+        modal.hide();
+        name.value = '';
+        phone.value = '';
+        address.value = '';
+        email.value = '';
+        expiration_package.value = '';
+        note.value = '';
+        selectedPackageId.value = null;
+        selectedStatus.value = '';
+        companyTax.value = '';
+        companyName.value = '';
+        selectedRole.value = null;
+        errors.value = {};
+    })
+    .catch((error) => {
+        const response = error.response;
+        if (response?.data?.errors) {
+            errors.value = response.data.errors;
+        } else {
+            errors.value = {};
+            const message = response?.data?.message || "Có lỗi xảy ra khi cập nhật người dùng";
+            toast.error(message);
+        }
+        console.log(error);
+    });
+};
+
 
         const confirmDelete = () => {
             if (!deleteId.value) return;
@@ -515,9 +559,9 @@ export default defineComponent({
             currentPage.value = page;
             getUser();
         };
+
         const getUserID = (id) => {
-            axios
-                .get(`${baseUrl}/api/user/${id}`)
+            axios.get(`${baseUrl}/api/user/${id}`)
                 .then((response) => {
                     const data = response.data;
                     name.value = data.name;
@@ -530,49 +574,30 @@ export default defineComponent({
                     selectedStatus.value = data.status;
                     userId.value = data.id;
                     selectedRole.value = data.role_id ?? null;
+                    companyTax.value = data.companyTax;
+                    companyName.value = data.companyName;
                 })
                 .catch((error) => {
                     toast.error('Lấy thông tin người dùng thất bại');
                     console.log(error);
                 });
         };
+
         watch(searchKeyword, () => {
             currentPage.value = 1;
             getUser();
         });
+
         getUser();
+
         return {
-            user,
-            name,
-            phone,
-            address,
-            email,
-            expiration_package,
-            note,
-            nameValid,
-            emailValid,
-            phoneValid,
-            addressValid,
-            expirationValid,
-            createUser,
-            deleteId,
-            confirmDelete,
-            searchKeyword,
-            currentPage,
-            totalPages,
-            changePage,
-            packageList,
-            selectedPackageId,
-            selectedStatus,
-            getUserID,
-            userId,
-            updateUser,
-            role,
-            selectedRole
+            user, name, phone, address, email, expiration_package, note,
+            createUser, deleteId, confirmDelete, searchKeyword, currentPage, totalPages,
+            changePage, packageList, selectedPackageId, selectedStatus, getUserID, userId,
+            updateUser, role, selectedRole, companyTax, companyName, errors,
         };
     },
-    methods: {
-        hasPermission
-    }
+    methods: { hasPermission }
 });
+
 </script>

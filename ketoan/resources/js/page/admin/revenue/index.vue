@@ -106,7 +106,7 @@
 
             <div class="default-table-area style-two transaction-history" v-else>
               <div v-if="customersError" class="text-danger text-center mb-3">{{ customersError }}</div>
-              <div class="table-responsive" v-if="customers.length">
+              <div class="table-responsive" v-if="customersOrders.length">
                 <table class="table align-middle">
                   <thead>
                     <tr>
@@ -119,7 +119,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="c in customers" :key="c.user_id">
+                   <tr v-for="c in customersOrders" :key="c.user_id">
                       <td class="fw-medium">{{ c.user_name }}</td>
                       <td>{{ c.email || '' }}</td>
                       <td>{{ c.companyName || '' }}</td>
@@ -134,14 +134,100 @@
                   </tbody>
                 </table>
               </div>
-              <div v-if="!customers.length && !customersError" class="text-center text-muted py-4">
-                Không có dữ liệu khách hàng.
-              </div>
+             <div v-if="!customersOrders.length && !customersError" class="text-center text-muted py-4">
+            Không có dữ liệu khách hàng.
+            </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- CUSTOMERS TOTAL SPENDING TABLE -->
+<div class="card bg-white border-0 rounded-3 mt-5">
+  <div class="card-body p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="mb-0">Tổng chi tiêu khách hàng</h3>
+      <div class="d-flex align-items-center flex-wrap gap-2">
+  <label class="mb-0">Từ:</label>
+  <input type="date" v-model="fromDateTotal" @change="onDateChangeTotal" class="form-control w-auto" />
+  <label class="mb-0 ms-3">Đến:</label>
+  <input type="date" v-model="toDateTotal" @change="onDateChangeTotal" class="form-control w-auto" />
+  <button class="btn btn-success ms-3 text-white" @click="exportCustomersTotal">
+    Xuất Excel
+  </button>
+</div>
+
+    </div>
+
+
+    <div v-if="customersLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Đang tải tổng chi tiêu…</span>
+      </div>
+    </div>
+
+    <div class="default-table-area style-two transaction-history" v-else>
+      <div v-if="customersError" class="text-danger text-center mb-3">{{ customersError }}</div>
+      <div class="table-responsive" v-if="customersTotals.length">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>Tên</th>
+              <th>Email</th>
+              <th>Công ty</th>
+              <th>Mã số thuế</th>
+              <th>Tổng chi tiêu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="c in customersTotals" :key="c.user_id">
+              <td class="fw-medium">{{ c.user_name }}</td>
+              <td>{{ c.email || '' }}</td>
+              <td>{{ c.companyName || '' }}</td>
+              <td>{{ c.companyTax || '' }}</td>
+              <td>{{ formatCurrency(c.total_spent) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+     <div v-if="!customersTotals.length && !customersError" class="text-center text-muted py-4">
+        Không có dữ liệu tổng chi tiêu.
+        </div>
+
+      <div v-if="customers.length" class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+        <span class="fs-12">
+          Hiển thị {{ customersPagination.per_page }} khách hàng mỗi trang, tổng cộng {{ customersPagination.total }} kết quả
+        </span>
+
+        <nav aria-label="Pagination">
+          <ul class="pagination mb-0">
+            <li class="page-item" :class="{disabled: customersPagination.current_page === 1}">
+              <button class="page-link" @click="fetchCustomersTotal(customersPagination.current_page-1)" :disabled="customersPagination.current_page === 1">
+                &laquo;
+              </button>
+            </li>
+
+            <li class="page-item"
+                v-for="page in customersPagination.last_page"
+                :key="page"
+                :class="{active: page === customersPagination.current_page}">
+              <button class="page-link" @click="fetchCustomersTotal(page)">
+                {{ page }}
+              </button>
+            </li>
+
+            <li class="page-item" :class="{disabled: customersPagination.current_page === customersPagination.last_page}">
+              <button class="page-link" @click="fetchCustomersTotal(customersPagination.current_page+1)" :disabled="customersPagination.current_page === customersPagination.last_page">
+                &raquo;
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
 </template>
 
 <script setup>
@@ -163,6 +249,14 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 const summaryLoading   = ref(true);
 const revenueLoading   = ref(true);
 const customersLoading = ref(true);
+const fromDateTotal = ref(new Date(Date.now() - 29*24*60*60*1000).toISOString().slice(0,10));
+const toDateTotal   = ref(new Date().toISOString().slice(0,10));
+const customersPagination = reactive({
+  current_page: 1,
+  last_page: 1,
+  per_page: 10,
+  total: 0,
+});
 
 const summary = reactive({
   total_revenue:         0,
@@ -194,6 +288,8 @@ const chartOptions  = reactive({
 const revenueError   = ref('');
 const customers      = ref([]);
 const customersError = ref('');
+const customersOrders = ref([]); // cho bảng 1
+const customersTotals = ref([]); // cho bảng 2
 
 // date filters (default last 30 days)
 const toDate   = ref(new Date().toISOString().slice(0,10));
@@ -321,12 +417,49 @@ async function fetchCustomers() {
     let url = `/api/revenue/customers-list?from=${fromDate.value}&to=${toDate.value}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('customers API lỗi');
-    customers.value = await res.json();
+    customersOrders.value = await res.json();
   } catch (e) {
     console.error(e);
     customersError.value = 'Không thể tải danh sách khách hàng.';
   } finally {
     customersLoading.value = false;
+  }
+}
+async function fetchCustomersTotal(page=1) {
+  customersLoading.value = true;
+  customersError.value   = '';
+  try {
+    const url = `/api/revenue/total-by-user?from=${fromDateTotal.value}&to=${toDateTotal.value}&per_page=${customersPagination.per_page}&page=${page}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('customersTotal API lỗi');
+    const data = await res.json();
+
+    customersTotals.value = data.data;
+    console.log(customersTotals.value);
+    customersPagination.current_page = data.current_page;
+    customersPagination.last_page    = data.last_page;
+    customersPagination.total        = data.total;
+  } catch (e) {
+    console.error(e);
+    customersError.value = 'Không thể tải danh sách tổng chi tiêu khách hàng.';
+  } finally {
+    customersLoading.value = false;
+  }
+}
+
+async function exportCustomersTotal() {
+  try {
+    const url = `/api/revenue/export-total-by-user?from=${fromDateTotal.value}&to=${toDateTotal.value}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Lỗi khi xuất Excel');
+    const blob = await res.blob();
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `tong_chi_tieu_${fromDateTotal.value}_${toDateTotal.value}.xlsx`;
+    link.click();
+  } catch (e) {
+    console.error(e);
+    alert('Không thể xuất file Excel.');
   }
 }
 
@@ -341,12 +474,19 @@ function onDateChange() {
   }
   fetchCustomers();
 }
+function onDateChangeTotal() {
+  if (fromDateTotal.value > toDateTotal.value) {
+    [fromDateTotal.value, toDateTotal.value] = [toDateTotal.value, fromDateTotal.value];
+  }
+  fetchCustomersTotal(1);
+}
 
 // --- LIFECYCLE ---
 onMounted(async () => {
   await fetchSummary();
   fetchRevenue();
   fetchCustomers();
+  fetchCustomersTotal();
 });
 </script>
 

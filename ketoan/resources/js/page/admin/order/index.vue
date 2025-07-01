@@ -1,11 +1,11 @@
 <template>
 <div>
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-        <h3 class="mb-0">Đơn hàng</h3>
+        <h3 class="mb-0">Gói đăng ký</h3>
         <button class="btn btn-outline-primary fw-medium rounded-3 hover-bg" v-if="hasPermission('orders.create')" data-bs-toggle="modal" data-bs-target="#createOrderModal">
            <span class="py-sm-1 d-block">
                     <i class="ri-add-line d-none d-sm-inline-block"></i>
-                    <span>Thêm mới đơn hàng</span>
+                    <span>Thêm mới gói đăng ký</span>
             </span>
         </button>
     </div>
@@ -68,7 +68,7 @@
                             </tr>
 
                             <tr v-if="orders.length === 0">
-                                <td colspan="8" class="text-center text-muted">Không có đơn hàng nào.</td>
+                                <td colspan="8" class="text-center text-muted">Không có gói đăng ký nào.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -81,7 +81,7 @@
         <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
             <div class="modal-content rounded-0">
                 <div class="modal-header border-0 p-4 border-bottom">
-                    <h1 class="modal-title fs-18">Tạo đơn hàng</h1>
+                    <h1 class="modal-title fs-18">Tạo gói đăng ký</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -146,11 +146,11 @@
       <div class="modal-dialog" style="max-width: 550px">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="deleteModalLabel">Xóa đơn hàng</h5>
+            <h5 class="modal-title" id="deleteModalLabel">Xóa gói đăng ký</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-            Bạn có chắc chắn muốn xóa đơn hàng?
+            Bạn có chắc chắn muốn xóa gói đăng ký?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -173,7 +173,7 @@
       <div class="modal-dialog" style="max-width: 550px">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="updateModalLabel">Cập nhật đơn hàng</h5>
+            <h5 class="modal-title" id="updateModalLabel">Cập nhật gói đăng ký</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
@@ -270,7 +270,7 @@ export default defineComponent({
                     orders.value = response.data;
                 })
                 .catch((error) => {
-                    console.error('Lỗi khi lấy danh sách đơn hàng:', error);
+                    console.error('Lỗi khi lấy danh sách gói đăng ký:', error);
                 });
         };
 
@@ -291,7 +291,7 @@ export default defineComponent({
             axios
                 .post(`${baseUrl}/api/orders`, orderForm.value)
                 .then(() => {
-                    toast.success('Đơn hàng được tạo thành công');
+                    toast.success('gói đăng ký được tạo thành công');
                     getOrders();
                     const modal = bootstrap.Modal.getInstance(document.getElementById('createOrderModal'));
                     modal.hide();
@@ -304,8 +304,8 @@ export default defineComponent({
                     };
                 })
                 .catch((error) => {
-                    console.error('Lỗi tạo đơn hàng:', error);
-                    toast.error('Tạo đơn hàng thất bại');
+                    console.error('Lỗi tạo gói đăng ký:', error);
+                    toast.error('Tạo gói đăng ký thất bại');
                 });
         };
         const confirmDelete = () => {
@@ -314,7 +314,7 @@ export default defineComponent({
             axios
                 .delete(`${baseUrl}/api/orders/${deleteOrderId.value}`)
                 .then(() => {
-                    toast.success('Đơn hàng đã được xóa thành công');
+                    toast.success('gói đăng ký đã được xóa thành công');
                     getOrders();
                     const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
                     modal.hide();
@@ -322,8 +322,8 @@ export default defineComponent({
                     deleteOrderId.value = null;
                 })
                 .catch((error) => {
-                    console.error('Lỗi khi xóa đơn hàng:', error);
-                    toast.error('Xóa đơn hàng thất bại');
+                    console.error('Lỗi khi xóa gói đăng ký:', error);
+                    toast.error('Xóa gói đăng ký thất bại');
                 });
         };
         const UpdateOrder = () => {
@@ -332,7 +332,7 @@ export default defineComponent({
             axios
                 .put(`${baseUrl}/api/orders/${editOrderId.value}`)
                 .then(() => {
-                    toast.success('Đơn hàng đã được cập nhật thành công');
+                    toast.success('gói đăng ký đã được cập nhật thành công');
                     getOrders();
                     const modal = bootstrap.Modal.getInstance(document.getElementById('updateModal'));
                     modal.hide();
@@ -340,8 +340,8 @@ export default defineComponent({
                     editOrderId.value = null;
                 })
                 .catch((error) => {
-                    console.error('Lỗi khi xóa đơn hàng:', error);
-                    toast.error('Xóa đơn hàng thất bại');
+                    console.error('Lỗi khi xóa gói đăng ký:', error);
+                    toast.error('Xóa gói đăng ký thất bại');
                 });
         };
 

@@ -34,36 +34,60 @@ class UserController extends Controller
         ]);
     }
     public function store(Request $request)
-    {
-        $messages = [
-            'email.unique' => 'Email đã tồn tại, chọn email khác nhé.',
-        ];
+{
+    $messages = [
+        'name.required' => 'Vui lòng nhập họ và tên.',
+        'name.max' => 'Họ và tên không được vượt quá 255 ký tự.',
+        'email.required' => 'Vui lòng nhập email.',
+        'email.email' => 'Định dạng email không hợp lệ.',
+        'email.unique' => 'Email đã tồn tại, vui lòng chọn email khác.',
+        'phone.regex' => 'Số điện thoại không hợp lệ, chỉ bao gồm 9-11 chữ số.',
+        'phone.required' => 'Vui lòng nhập số điện thoại',
+        'address.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
+        'address.required' => 'Vui lòng nhập địa chỉ',
+        'expiration_package.required' => 'Vui lòng chọn ngày hết hạn.',
+        'expiration_package.date' => 'Ngày hết hạn không hợp lệ.',
+        'role_id.required' => 'Vui lòng chọn nhóm quyền.',
+        'role_id.exists' => 'Nhóm quyền không tồn tại.',
+        'companyName.max' => 'Tên công ty không được vượt quá 255 ký tự.',
+        'companyName.required' => 'Vui lòng nhập tên công ty.',
+        'companyTax.required' => 'Vui lòng nhập mã số thuê.',
+    ];
 
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|unique:users,email',
-            'role_id' => 'required|exists:roles,id',
-        ], $messages);
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'phone' => 'required|nullable|regex:/^\d{9,11}$/',
+        'address' => 'required|nullable|string|max:255',
+        'expiration_package' => 'required|date',
+        'role_id' => 'required|exists:roles,id',
+        'companyName' => 'required|nullable|string|max:255',
+        'companyTax' => 'required|nullable',
+    ], $messages);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-            'expiration_package' => $request->input('expiration_package'),
-            'create_package' => now(),
-            'note' => $request->input('note'),
-            'status' => $request->input('status'),
-            'password' => Hash::make('pnl@12345'),
-        ]);
-
-        $user->syncRoles([$request->input('role_id')]);
-
-        return response()->json($user, 201);
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
+    $user = User::create([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+        'phone' => $request->input('phone'),
+        'address' => $request->input('address'),
+        'expiration_package' => $request->input('expiration_package'),
+        'packages_id' => $request->input('packages_id'),
+        'companyName' => $request->input('companyName'),
+        'companyTax' => $request->input('companyTax'),
+        'create_package' => now(),
+        'note' => $request->input('note'),
+        'status' => $request->input('status'),
+        'password' => Hash::make('pnl@12345'),
+    ]);
+
+    $user->syncRoles([$request->input('role_id')]);
+
+    return response()->json($user, 201);
+}
+
    public function update(Request $request, $id)
     {
         $messages = [
@@ -125,6 +149,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $role = $user->roles()->first();
         $user->role_id = $role ? $role->id : null;
+        $user->packages_id = $user->packages_id;
         return response()->json($user, 200);
     }
     public function destroy($id)

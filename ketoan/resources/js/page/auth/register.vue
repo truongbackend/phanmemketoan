@@ -106,10 +106,7 @@ export default defineComponent({
                         toast.error(data.error);
                     } else {
                         const token = data.access_token;
-                        const user = data.user;
-                        Cookies.set('token', token, { expires: 7, path: '/' });
-                        localStorage.setItem('user', JSON.stringify(user));
-                        router.push('admin');
+                        router.push('login');
                         toast.success("Đăng ký thành công");
                     }
                 })

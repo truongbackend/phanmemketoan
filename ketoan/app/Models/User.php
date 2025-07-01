@@ -31,7 +31,9 @@ class User extends Authenticatable implements JWTSubject
         'status',
         'packages_id',
         'note',
-        'api_token'
+        'api_token',
+        'companyName',
+        'companyTax',
     ];
     public function getJWTIdentifier()
     {

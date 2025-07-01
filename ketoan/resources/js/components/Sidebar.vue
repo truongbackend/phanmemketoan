@@ -20,12 +20,7 @@
             <li class="menu-title small">
                 <span class="menu-title-text">Thương mại điện tử</span>
             </li>
-            <li class="menu-item" v-if="hasPermission('orders.list')">
-                <router-link :to="{ name: 'admin-order' }" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">shopping_bag</span>
-                    <span class="title">Đơn hàng</span>
-                </router-link>
-            </li>
+
             <li class="menu-item" >
                 <router-link :to="{ name: 'admin-delivery' }" class="menu-link" >
                     <span class="material-symbols-outlined menu-icon">calculate</span>
@@ -49,6 +44,12 @@
 
             <li class="menu-title small">
                 <span class="menu-title-text">Hệ thống</span>
+            </li>
+             <li class="menu-item" v-if="hasPermission('orders.list')">
+                <router-link :to="{ name: 'admin-order' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">shopping_bag</span>
+                    <span class="title">Gói đăng ký</span>
+                </router-link>
             </li>
              <li class="menu-item" v-if="hasPermission('package.list')">
                 <router-link :to="{ name: 'admin-package' }" class="menu-link">

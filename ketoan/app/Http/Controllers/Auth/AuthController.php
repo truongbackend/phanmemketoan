@@ -29,7 +29,10 @@ class AuthController extends Controller
             'email.email' => 'Hãy nhập đúng định dạng email',
             'password.required' => 'Hãy nhập mật khẩu',
         ]);
-
+        $user =User::where('email', $credentials['email'])->first();
+            if (!$user) {
+                return response()->json(['error' => 'Email chưa được đăng ký'], 404);
+            }
         if (!$token = Auth::attempt($credentials)) {
             return response()->json(['error' => 'Email hoặc mật khẩu không đúng'], 401);
         }
