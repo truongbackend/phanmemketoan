@@ -125,6 +125,8 @@ class LazopController extends Controller
                 'created_after' => $createdAfterIso,
                 'sort_by' => 'updated_at',
                 'sort_direction' => 'DESC',
+                'offset' => $request->input('offset', 0),
+                'limit' => $request->input('limit', 100),
                 //'status' => $request->input('status'),
             ];
 
