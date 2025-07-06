@@ -73,4 +73,19 @@ class LazadaApiService
         $response = $this->client->execute($lazopRequest, $accessToken);
         return json_decode($response, true);
     }
+
+    public function getOrderItemsByListID($accessToken, $orderIds = [])
+    {
+        if (!$this->appKey || !$this->appSecret || !$accessToken) {
+            throw new \Exception('Missing app_key, app_secret or access_token');
+        }
+        if (empty($orderIds)) {
+            throw new \Exception('Order IDs cannot be empty');
+        }
+        $lazopRequest = new LazopRequest('/orders/items/get', 'GET');
+        $orderIdsString = '[' . implode(', ', $orderIds) . ']';
+        $lazopRequest->addApiParam('order_ids', $orderIdsString);
+        $response = $this->client->execute($lazopRequest, $accessToken);
+        return json_decode($response, true);
+    }
 }

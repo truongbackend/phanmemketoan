@@ -17,6 +17,23 @@ class LazopController extends Controller
         $this->shopDataService = $shopDataService;
     }
 
+    private function responseApiLzd($data)
+    {
+        if (isset($data['code']) && $data['code'] != '0') {
+            return response()->json([
+                'status' => false,
+                'code' => $data['code'],
+                'message' => $data['message'] ?? 'Unknown error'
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
+    }
+    
+
     public function getAuthShopUrl(Request $request)
     {
         $appKey = env('LAZOP_APP_KEY');
@@ -92,26 +109,33 @@ class LazopController extends Controller
                 ], 422);
             }
 
-            // Convert format dd/mm/yyyy HH:ii:ss => Y-m-d\TH:i:sP
-            $from = \DateTime::createFromFormat('d/m/Y H:i:s', $createdAfter);
-            $to = \DateTime::createFromFormat('d/m/Y H:i:s', $createdBefore);
+            // Convert format dd/mm/yyyy => Y-m-d\TH:i:sP
+            $from = \DateTime::createFromFormat('d/m/Y', $createdAfter);
+            $to = \DateTime::createFromFormat('d/m/Y', $createdBefore);
+
             if (!$from || !$to) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Định dạng ngày tháng không hợp lệ. Định dạng đúng: dd/mm/yyyy HH:ii:ss'
+                    'message' => 'Định dạng ngày tháng không hợp lệ. Định dạng đúng: dd/mm/yyyy'
                 ], 422);
             }
+
+            $from->modify('-3 days');
+            $from->setTime(0, 0, 0);
+            $to->setTime(23, 59, 59);
+
             $tz = '+07:00';
             $createdAfterIso = $from->format('Y-m-d\TH:i:s') . $tz;
             $createdBeforeIso = $to->format('Y-m-d\TH:i:s') . $tz;
-
+            
             // Validate logic
             if ($to <= $from) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'created_before phải lớn hơn created_after.'
+                    'message' => 'Ngày bắt đầu phải lớn hơn ngày kết thúc.'
                 ], 422);
             }
+
             $interval = $from->diff($to)->days;
             if ($interval > 30) {
                 return response()->json([
@@ -120,6 +144,7 @@ class LazopController extends Controller
                 ], 422);
             }
 
+            // Prepare params
             $params = [
                 'created_before' => $createdBeforeIso,
                 'created_after' => $createdAfterIso,
@@ -127,21 +152,42 @@ class LazopController extends Controller
                 'sort_direction' => 'DESC',
                 'offset' => $request->input('offset', 0),
                 'limit' => $request->input('limit', 100),
-                //'status' => $request->input('status'),
+                'status' => 'delivered',
             ];
 
             $accessToken = $this->shopDataService->getTokenByAuthUserId(auth()->user()->id);
             
             $data = $this->lazadaApiService->getOrderList($accessToken, $params);
+            
+            if ($data['code'] != '0') {
+                return $this->responseApiLzd($data);
+            }
 
+            $data = $data['data'] ?? [];
+            $totalRecord = $data['countTotal'] ?? 0;
+            $totalInPage = $data['count'] ?? 0;
+            $listOrder = $data['orders'] ?? [];
+            $listOrderOrderNumbers = ($totalInPage > 0) ? array_column($listOrder, 'order_number') : [];
+            $dataOrderItems = [];
+
+            if (!empty($listOrderOrderNumbers)) {
+                $dataOrderItems = $this->lazadaApiService->getOrderItemsByListID($accessToken, $listOrderOrderNumbers);
+                
+                if ($dataOrderItems['code'] != '0') {
+                    return $this->responseApiLzd($dataOrderItems);
+                }
+            }
+            
             return response()->json([
                 'status' => true,
-                'data' => $data
+                'data' => $data,
+                'data_items' => $dataOrderItems,
             ]);
         } catch (\Exception $e) {
             dd($e);
             return response()->json([
                 'status' => false,
+                'code' => '0',
                 'message' => 'Error: ' . $e->getMessage()
             ], 500);
         }
