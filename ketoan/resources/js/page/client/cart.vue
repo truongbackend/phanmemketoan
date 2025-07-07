@@ -267,7 +267,7 @@
                     </div>
                     <div class="modal-footer button-back">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><router-link :to="{ name: 'home' }">Quay lại trang chủ</router-link> </button>
-                        <button type="button" class="btn btn-danger text-white"><router-link :to="{ name: 'login' }">Hoàn thành</router-link> </button>
+                        <button type="button" class="btn btn-danger text-white" @click="submitSuccess">Hoàn thành </button>
                     </div>
                 </div>
             </div>
@@ -330,10 +330,10 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,onUnmounted } from "vue";
 import { inject } from "vue";
 import { useToast } from 'vue-toast-notification';
-import { useRouter } from "vue-router";
+import { useRouter, onBeforeRouteLeave } from 'vue-router'
 const cart = ref([]);
 const subtotal = ref(0);
 const customerName = ref("");
@@ -437,6 +437,9 @@ const checkout = () => {
       toast.error("Có lỗi xảy ra khi gửi đơn hàng.");
     });
 };
+const submitSuccess = () => {
+  router.push({ name: 'admin-dashboard' })
+}
 
 onMounted(() => {
   const storedCart = localStorage.getItem("cart");
@@ -467,5 +470,18 @@ onMounted(() => {
         router.push({ name: "login" });
     }
 });
+onBeforeRouteLeave((to, from, next) => {
+  const el = document.getElementById('cartModal')
+  const bs = el && bootstrap.Modal.getInstance(el)
+  if (bs) {
+    bs.hide()
+    bs.dispose()
+  }
+  next()
+})
 
+onUnmounted(() => {
+  document.querySelectorAll('.modal-backdrop').forEach(e => e.remove())
+  document.body.classList.remove('modal-open')
+})
 </script>

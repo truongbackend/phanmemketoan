@@ -32,14 +32,13 @@ class LazopController extends Controller
             'data' => $data
         ]);
     }
-    
+
 
     public function getAuthShopUrl(Request $request)
     {
         $appKey = env('LAZOP_APP_KEY');
         $appSecret = env('LAZOP_APP_SECRET');
         $callbackUrl = env('LAZOP_CALLBACK_URL');
-        
         if (!$appKey || !$appSecret) {
             return response()->json([
                 'status' => false,
@@ -127,7 +126,7 @@ class LazopController extends Controller
             $tz = '+07:00';
             $createdAfterIso = $from->format('Y-m-d\TH:i:s') . $tz;
             $createdBeforeIso = $to->format('Y-m-d\TH:i:s') . $tz;
-            
+
             // Validate logic
             if ($to <= $from) {
                 return response()->json([
@@ -156,9 +155,9 @@ class LazopController extends Controller
             ];
 
             $accessToken = $this->shopDataService->getTokenByAuthUserId(auth()->user()->id);
-            
+
             $data = $this->lazadaApiService->getOrderList($accessToken, $params);
-            
+
             if ($data['code'] != '0') {
                 return $this->responseApiLzd($data);
             }
@@ -172,12 +171,12 @@ class LazopController extends Controller
 
             if (!empty($listOrderOrderNumbers)) {
                 $dataOrderItems = $this->lazadaApiService->getOrderItemsByListID($accessToken, $listOrderOrderNumbers);
-                
+
                 if ($dataOrderItems['code'] != '0') {
                     return $this->responseApiLzd($dataOrderItems);
                 }
             }
-            
+
             return response()->json([
                 'status' => true,
                 'data' => $data,
