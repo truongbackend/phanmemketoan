@@ -14,7 +14,7 @@
         <li class="menu-item">
                 <router-link :to="{ name: 'admin-dashboard' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">dashboard</span>
-                    <span class="title">Nổi bật</span>
+                    <span class="title">Tổng quan</span>
                 </router-link>
             </li>
             <li class="menu-title small">
@@ -43,7 +43,7 @@
 
 
             <li class="menu-title small">
-                <span class="menu-title-text">Hệ thống</span>
+                <span class="menu-title-text">ỨNG DỤNG</span>
             </li>
              <li class="menu-item" v-if="hasPermission('orders.list')">
                 <router-link :to="{ name: 'admin-order' }" class="menu-link">
@@ -66,7 +66,7 @@
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle active" v-if="hasPermission('role.list')">
                     <span class="material-symbols-outlined menu-icon">account_box</span>
-                    <span class="title">Hệ thống phân quyền</span>
+                    <span class="title">Phân quyền</span>
                 </a>
                 <ul class="menu-sub">
                     <li class="menu-item" v-if="hasPermission('role.list')">
@@ -103,25 +103,96 @@
                 </router-link>
             </li>
             <li class="menu-title small">
-                <span class="menu-title-text">Sàn thương mại điện tử</span>
+                <span class="menu-title-text">KÊNH BÁN HÀNG</span>
             </li>
-            <li class="menu-item" v-if="hasPermission('complaints.list')">
-                <router-link :to="{ name: 'admin-setting' }" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">settings</span>
-                    <span class="title">Thiết lập</span>
-                </router-link>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle active">
+                    <img src="/assets/avatar/lazada.jpg" width="25px" class="me-2">
+                    <span class="title">Lazada</span>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
+                            Tất cả
+                        </router-link>
+                    </li>
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-channel-connection-lazada' }" class="menu-link" >
+                            Kết nối sàn
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                            Đơn hàng
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                           Công nợ
+                        </router-link>
+                    </li>
+                </ul>
             </li>
-            <li class="menu-item" v-if="hasPermission('complaints.list')">
-                <router-link :to="{ name: 'admin-saleonlineOrder' }" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">shopping_bag</span>
-                    <span class="title">Đơn hàng</span>
-                </router-link>
+
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle active">
+                    <img src="/assets/avatar/shopee.png" width="25px" class="me-2">
+                    <span class="title">Shopee</span>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
+                            Tất cả
+                        </router-link>
+                    </li>
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-channel-connection-shopee' }" class="menu-link" >
+                            Kết nối sàn
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                            Đơn hàng
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                           Công nợ
+                        </router-link>
+                    </li>
+                </ul>
             </li>
-             <li class="menu-item" v-if="hasPermission('complaints.list')">
-                <router-link :to="{ name: 'admin-setting' }" class="menu-link">
-                    <span class="material-symbols-outlined menu-icon">view_timeline</span>
-                    <span class="title">Công nợ</span>
-                </router-link>
+
+
+
+
+             <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle active">
+                    <img src="/assets/avatar/tiktok.png" width="25px" class="me-2">
+                    <span class="title">Tiktok Shop</span>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
+                            Tất cả
+                        </router-link>
+                    </li>
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-channel-connection-shopee' }" class="menu-link" >
+                            Kết nối sàn
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                            Đơn hàng
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                           Công nợ
+                        </router-link>
+                    </li>
+                </ul>
             </li>
         </ul>
     </aside>

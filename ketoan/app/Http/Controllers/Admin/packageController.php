@@ -111,7 +111,6 @@ class packageController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
         $package = Package::findOrFail($id);
         $package->name = $request->name;
         $package->price = $request->price;

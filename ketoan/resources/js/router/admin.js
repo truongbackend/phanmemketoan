@@ -1,6 +1,6 @@
 const adminRoutes = [
     {
-        path: "/admin",
+        path: "/app",
         component: () =>import ("../layouts/AdminLayout.vue"),
         children: [
             {
@@ -78,14 +78,20 @@ const adminRoutes = [
                 component: () =>import ("../page/admin/order/index.vue"),
             },
             {
-                path: "saleonlineOrder",
-                name: "admin-saleonlineOrder",
-                component: () =>import ("../page/admin/saleonlineOrder/index.vue"),
-            },
-            {
                 path: "revenue",
                 name: "admin-revenue",
                 component: () =>import ("../page/admin/revenue/index.vue"),
+            },
+
+            {
+                path: "sales-channel/channel-connection/lazada",
+                name: "admin-channel-connection-lazada",
+                component: () =>import ("../page/ecommerce/lazada/index.vue"),
+            },
+            {
+                path: "sales-channel/channel-connection/shopee",
+                name: "admin-channel-connection-shopee",
+                component: () =>import ("../page/ecommerce/lazada/index.vue"),
             },
         ]
     },
@@ -119,6 +125,7 @@ const adminRoutes = [
             name: "register",
             component: () => import("../page/auth/register.vue"),
         },
+
         {
             path: "/:pathMatch(.*)*",
             name: "not-found",
