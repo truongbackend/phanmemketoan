@@ -60,7 +60,9 @@ Route::middleware(['auth:api'])->prefix('e-commerce')->group(function () {
         Route::post('/auth-shop', [LazopController::class, 'getAuthShopUrl'])->name('lazada.auth-shop');
         Route::post('/shop-access-token', [LazopController::class, 'getShopAccessToken'])->name('lazada.shop-access-token');
         Route::post('/shop-refresh-token', [LazopController::class, 'getShopRefreshtoken'])->name('lazada.shop-refresh-token');
-        Route::post('/push-receipt', [LazopController::class, 'pushReceipt'])->name('lazada.shop-refresh-token');
+        Route::post('/refresh-token-by-id', [LazopController::class, 'refreshTokenById'])->name('lazada.refresh-token-by-id');
+        Route::post('/push-receipt', [LazopController::class, 'pushReceipt'])->name('lazada.push-receipt');
+        Route::get('/auth-shop-status', [LazopController::class, 'checkAuthShopStatus'])->name('lazada.auth-shop-status');
     });
 });
 

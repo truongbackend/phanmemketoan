@@ -34,4 +34,29 @@ class ShopDataService
         }
         return $find->access_token;
     }
+
+    public function getRefreshTokenByAuthUserIdAndId($authUserId, $id)
+    {
+        $find = $this->repo->findByAuthUserIdAndId($authUserId, $id);
+        if (!$find) {
+            throw new \Exception('No Lazada token found for user ID: ' . $authUserId . ' and token ID: ' . $id);
+        }
+        return $find->refresh_token;
+    }
+
+    public function updateLazadaShopToken($authUserId, $id, $data)
+    {
+        $token = $this->repo->findByAuthUserIdAndId($authUserId, $id);
+        if (!$token) {
+            throw new \Exception('No Lazada token found for user ID: ' . $authUserId . ' and token ID: ' . $id);
+        }
+        
+        $token->update($data);
+        return $token;
+    }
+
+    public function checkAuthShopStatus($authUserId)
+    {
+        return $this->repo->checkAuthShopStatus($authUserId);
+    }
 }
