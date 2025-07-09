@@ -14,11 +14,11 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-info fw-medium text-white py-2 px-4">
-            <i class="ri-link me-2"></i>Kết nối </button>
+        <button type="button" @click="connectLazada" class="btn btn-info fw-medium text-white py-2 px-4">
+            <i class="ri-link me-2" ></i>Kết nối </button>
         </div>
         <div class="card-footer bg-white">
-            <button @click="authShop" class="btn btn-outline-info fw-medium rounded-3 hover-white mt-3 py-2 px-4"><i class="ri-add-circle-fill me-2"></i>Thêm kết nối</button>
+            <button @click="connectLazada" class="btn btn-outline-info fw-medium rounded-3 hover-white mt-3 py-2 px-4"><i class="ri-add-circle-fill me-2"></i>Thêm kết nối</button>
         </div>
     </div>
 </template>
@@ -26,67 +26,82 @@
 <script>
 import axios from 'axios';
 import { inject, defineComponent } from 'vue';
-
+import {
+    useToast
+} from 'vue-toast-notification';
 export default defineComponent({
   setup() {
     const globalState = inject('globalState');
     const baseUrl = globalState.baseUrl;
+    const toast = useToast();
 
-    const authShop = async () => {
-      try {
-        const { data } = await axios.post(`${baseUrl}/api/e-commerce/lazada/auth-shop`);
-        if (!data.auth_url) return;
+    const connectLazada = async () => {
+        try {
+            const { data } = await axios.post(`${baseUrl}/api/e-commerce/lazada/auth-shop`);
+            if (!data.auth_url) return;
+            const w = 1200;
+            const h = 680;
+            const dualScreenLeft = window.screenLeft ?? window.screenX;
+            const dualScreenTop  = window.screenTop  ?? window.screenY;
+            const width  = window.innerWidth
+                        || document.documentElement.clientWidth
+                        || screen.width;
+            const height = window.innerHeight
+                        || document.documentElement.clientHeight
+                        || screen.height;
+            const left = Math.round(dualScreenLeft + (width  - w) / 2);
+            const top  = Math.round(dualScreenTop  + (height - h) / 2);
 
-        const w = 1200, h = 680;
-        const left = (screen.width - w) / 2;
-        const top = (screen.height - h) / 2;
-        const popup = window.open(
-          data.auth_url,
-          'LazadaAuth',
-          `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=yes`
-        );
-        if (!popup) {
-          console.error('Không thể mở popup. Vui lòng tắt chặn popup.');
-          return;
+            const popup = window.open(
+            data.auth_url,
+            'LazadaAuth',
+            `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=yes`
+            );
+            if (!popup) {
+                console.error('Không thể mở popup. Vui lòng tắt chặn popup.');
+                return;
+            }
+            const timer = setInterval(() => {
+            let href;
+            try {
+                href = popup.location.href;
+            } catch {
+                return;
+            }
+            const code = new URL(href).searchParams.get('code');
+            if (code) {
+                clearInterval(timer);
+                popup.close();
+                fetchAccessToken(code);
+            }
+            if (popup.closed) clearInterval(timer);
+            }, 500);
+        } catch (err) {
+            console.error('Lỗi khi lấy URL xác thực:', err);
         }
-        const timer = setInterval(() => {
-          let href;
-          try {
-            href = popup.location.href;
-          } catch {
-            return;
-          }
-          const code = new URL(href).searchParams.get('code');
-          if (code) {
-            clearInterval(timer);
-            popup.close();
-            fetchAccessToken(code);
-          }
-          if (popup.closed) clearInterval(timer);
-        }, 500);
-      } catch (err) {
-        console.error('Lỗi khi lấy URL xác thực:', err);
-      }
-    };
+        };
+
 
     const fetchAccessToken = (code) => {
       axios
         .get(`${baseUrl}/api/e-commerce/lazada/shop-access-token`, { params: { code } })
         .then(res => {
           console.log('Access token response:', res.data);
+          res.data.success
+            ? toast.success('Kết nối thành công với Lazada!')
+            : toast.error('Lỗi khi kết nối với Lazada. Vui lòng thử lại.');
         })
         .catch(err => {
           console.error('Lỗi khi lấy access token:', err);
         });
     };
 
-    // Ví dụ hàm “Thêm kết nối” nếu bạn có logic riêng
     const addConnection = () => {
       console.log('Bạn vừa click Thêm kết nối');
     };
 
     return {
-      authShop,
+      connectLazada,
       addConnection,
     };
   },

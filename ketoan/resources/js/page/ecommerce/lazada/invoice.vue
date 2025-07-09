@@ -1,6 +1,6 @@
 <template>
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-    <h3 class="mb-0">Thiết lập chung</h3>
+    <h3 class="mb-0">Xuất hóa đơn</h3>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb align-items-center mb-0 lh-1">
@@ -14,37 +14,29 @@
                 <span class="fw-medium">Lazada</span>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                <span class="fw-medium">Cài đặt</span>
+                <span class="fw-medium">Xuất hóa đơn</span>
             </li>
         </ol>
     </nav>
 </div>
 <div class="row justify-content-center">
-
-
     <div class="col-lg-12">
         <div class="card bg-white border-0 rounded-3 mb-4">
-
             <div class="card-body p-4">
-                <h3 class="mb-lg-4 mb-3">Thiết lập chung Lazada</h3>
+                <h3 class="mb-lg-4 mb-3">Lấy dữ liệu</h3>
+
                 <form>
                     <div class="row">
                         <div class="col-lg-6 col-sm-6">
                             <div class="form-group mb-4">
-                                <label class="label text-secondary">Mã khách hàng</label>
-                                <select class="form-select form-control h-55" aria-label="Default select example">
-                                    <option selected>Không có MST</option>
-                                    <option value="1">Có MST</option>
-                                </select>
+                                <label class="label text-secondary">Chọn ngày xuất hóa đơn từ ngày</label>
+                                <input type="date" class="form-control h-55">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-6">
                             <div class="form-group mb-4">
-                                <label class="label text-secondary">Tên khách hàng</label>
-                                <select class="form-select form-control h-55" aria-label="Default select example">
-                                    <option selected>Không có MST + hóa đơn</option>
-                                    <option value="1">Có MST</option>
-                                </select>
+                                <label class="label text-secondary">Đến ngày</label>
+                                <input type="date" class="form-control h-55">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-6">
