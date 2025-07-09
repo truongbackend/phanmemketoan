@@ -82,11 +82,22 @@ const adminRoutes = [
                 name: "admin-revenue",
                 component: () =>import ("../page/admin/revenue/index.vue"),
             },
+            // E-commerce routes lazada
 
             {
                 path: "sales-channel/channel-connection/lazada",
-                name: "admin-channel-connection-lazada",
+                name: "channel-connection-lazada",
                 component: () =>import ("../page/ecommerce/lazada/index.vue"),
+            },
+            {
+                path: "sales-channel/channel-connection/lazada/settings",
+                name: "channel-connection-lazada-settings",
+                component: () =>import ("../page/ecommerce/lazada/setting.vue"),
+            },
+            {
+                path: "sales-channel/channel-connection/lazada/invoice",
+                name: "channel-connection-lazada-invoice",
+                component: () =>import ("../page/ecommerce/lazada/invoice.vue"),
             },
             {
                 path: "sales-channel/channel-connection/shopee",

@@ -20,13 +20,11 @@
     </nav>
 </div>
 <div class="row justify-content-center">
-
-
     <div class="col-lg-12">
         <div class="card bg-white border-0 rounded-3 mb-4">
-
             <div class="card-body p-4">
-                <h3 class="mb-lg-4 mb-3">Thiết lập chung Lazada</h3>
+                <h3 class="mb-lg-4 mb-3">Thiết lập chung</h3>
+
                 <form>
                     <div class="row">
                         <div class="col-lg-6 col-sm-6">

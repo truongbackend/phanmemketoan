@@ -18,7 +18,7 @@
                 </router-link>
             </li>
             <li class="menu-title small">
-                <span class="menu-title-text">Thương mại điện tử</span>
+                <span class="menu-title-text">THƯƠNG MẠI ĐIỆN TỬ</span>
             </li>
 
             <li class="menu-item" >
@@ -102,6 +102,12 @@
                     <span class="title">Thông tin tài khoản</span>
                 </router-link>
             </li>
+            <li class="menu-item">
+                <router-link :to="{ name: 'admin-setting' }" class="menu-link">
+                    <span class="material-symbols-outlined menu-icon">settings</span>
+                    <span class="title">Thiết lập</span>
+                </router-link>
+            </li>
             <li class="menu-title small">
                 <span class="menu-title-text">KÊNH BÁN HÀNG</span>
             </li>
@@ -112,18 +118,18 @@
                 </a>
                 <ul class="menu-sub">
                     <li class="menu-item">
-                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
-                            Tất cả
-                        </router-link>
-                    </li>
-                    <li class="menu-item">
-                        <router-link :to="{ name: 'admin-channel-connection-lazada' }" class="menu-link" >
+                        <router-link :to="{ name: 'channel-connection-lazada' }" class="menu-link" >
                             Kết nối sàn
                         </router-link>
                     </li>
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'channel-connection-lazada-settings' }" class="menu-link" >
+                            Cài đặt chung
+                        </router-link>
+                    </li>
                     <li class="menu-item" >
-                        <router-link :to="{ name: '' }" class="menu-link">
-                            Đơn hàng
+                        <router-link :to="{ name: 'channel-connection-lazada-invoice' }" class="menu-link">
+                            Xuất hóa đơn
                         </router-link>
                     </li>
                     <li class="menu-item" >
@@ -162,11 +168,7 @@
                     </li>
                 </ul>
             </li>
-
-
-
-
-             <li class="menu-item">
+            <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle active">
                     <img src="/assets/avatar/tiktok.png" width="25px" class="me-2">
                     <span class="title">Tiktok Shop</span>
@@ -194,6 +196,101 @@
                     </li>
                 </ul>
             </li>
+            <li class="menu-title small">
+                <span class="menu-title-text">KÊNH VẬN CHUYỂN</span>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle active">
+                    <img src="/assets/avatar/viettelpost.webp" width="25px" class="me-2">
+                    <span class="title">Viettel Post</span>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
+                            Tất cả
+                        </router-link>
+                    </li>
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-channel-connection-shopee' }" class="menu-link" >
+                            Kết nối sàn
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                            Đơn hàng
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                           Công nợ
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle active">
+                    <img src="/assets/avatar/giaohangnhanh.png" width="25px" class="me-2">
+                    <span class="title">Giao hàng nhanh</span>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
+                            Tất cả
+                        </router-link>
+                    </li>
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-channel-connection-shopee' }" class="menu-link" >
+                            Kết nối sàn
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                            Đơn hàng
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                           Công nợ
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-title small">
+                <span class="menu-title-text">PHẦN MỀM</span>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle active">
+                    <img src="/assets/avatar/amis.jpg" width="25px" class="me-2">
+                    <span class="title">AMIS kế toán</span>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
+                            Cài đặt chung
+                        </router-link>
+                    </li>
+                    <li class="menu-item">
+                        <router-link :to="{ name: 'admin-channel-connection-shopee' }" class="menu-link" >
+                            Kết nối sàn
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                            Đơn hàng
+                        </router-link>
+                    </li>
+                    <li class="menu-item" >
+                        <router-link :to="{ name: '' }" class="menu-link">
+                           Công nợ
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+             <li class="menu-title small">
+                <span class="menu-title-text">CÀI ĐẶT</span>
+            </li>
+
+
         </ul>
     </aside>
 </div>
