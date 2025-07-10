@@ -19,7 +19,7 @@ class LazadaApiService
         $this->client = new LazopClient('https://api.lazada.vn/rest', $this->appKey, $this->appSecret);
     }
 
-    public function getAccessToken($code)
+    public function getAccessToken($code, $userId)
     {
         if (!$this->appKey || !$this->appSecret || !$code) {
             throw new \Exception('Missing app_key, app_secret or code');
@@ -28,9 +28,11 @@ class LazadaApiService
         $lazopRequest->addApiParam('code', $code);
         $response = $this->client->execute($lazopRequest);
         $data = json_decode($response, true);
+
         if (isset($data['access_token'])) {
-            $dataUserInfo = $data['country_user_info'] ?? [];
+            $dataUserInfo = $data['country_user_info'][0] ?? [];
             $saveData = [
+                'auth_user_id' => $userId,
                 'access_token' => $data['access_token'],
                 'refresh_token' => $data['refresh_token'] ?? null,
                 'account_platform' => 'lazada',
@@ -59,6 +61,35 @@ class LazadaApiService
         $lazopRequest->addApiParam('refresh_token', $refreshToken);
         $response = $this->client->execute($lazopRequest);
         return json_decode($response, true);
+    }
+
+    public function refreshTokenAndUpdate($authUserId, $tokenId)
+    {
+        // Lấy refresh token từ database
+        $refreshToken = $this->shopDataService->getRefreshTokenByAuthUserIdAndId($authUserId, $tokenId);
+        
+        if (!$refreshToken) {
+            throw new \Exception('Refresh token not found');
+        }
+
+        // Gọi API refresh token
+        $response = $this->refreshToken($refreshToken);
+        
+        if (isset($response['access_token'])) {
+            // Cập nhật thông tin token mới vào database
+            $updateData = [
+                'access_token' => $response['access_token'],
+                'refresh_token' => $response['refresh_token'] ?? $refreshToken,
+                'expires_in' => $response['expires_in'] ?? null,
+                'refresh_expires_in' => $response['refresh_expires_in'] ?? null,
+                'request_id' => $response['request_id'] ?? null,
+                'trace_id' => $response['_trace_id_'] ?? null,
+            ];
+            
+            $this->shopDataService->updateLazadaShopToken($authUserId, $tokenId, $updateData);
+        }
+        
+        return $response;
     }
 
     public function getOrderList($accessToken, $params = [])

@@ -94,6 +94,47 @@ class LazopController extends Controller
         }
     }
 
+    public function refreshTokenById(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $userId = $user->id;
+            $tokenId = $request->input('token_id');
+            
+            if (!$tokenId) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Token ID là bắt buộc'
+                ], 422);
+            }
+            
+            $data = $this->lazadaApiService->refreshTokenAndUpdate($userId, $tokenId);
+            
+            if (isset($data['access_token'])) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Token đã được refresh thành công',
+                    'data' => [
+                        'access_token' => $data['access_token'],
+                        'expires_in' => $data['expires_in'] ?? null,
+                        'refresh_expires_in' => $data['refresh_expires_in'] ?? null
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Không thể refresh token',
+                    'data' => $data
+                ], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function pushReceipt(Request $request)
     {
         try {
@@ -187,6 +228,26 @@ class LazopController extends Controller
             return response()->json([
                 'status' => false,
                 'code' => '0',
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function checkAuthShopStatus(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $userId = $user->id;
+            
+            $status = $this->shopDataService->checkAuthShopStatus($userId);
+            
+            return response()->json([
+                'status' => true,
+                'data' => $status
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
                 'message' => 'Error: ' . $e->getMessage()
             ], 500);
         }
