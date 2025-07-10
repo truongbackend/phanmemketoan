@@ -1,8 +1,9 @@
 <template>
 <div class="sidebar-area" id="sidebar-area">
     <div class="logo position-relative">
-        <a href="/" class="d-block text-decoration-none position-relative">
-            <span class="fs-5 fw-bold text-dark">PNL INTERNATIONAL</span>
+        <a href="/" class="text-decoration-none position-relative">
+            <img src="/assets/avatar/logo.png" alt="logo-icon" width="40" class="logo-icon">
+            <span class="fw-bold fs-13 text-white pnl" style="margin-left:5px;">PNL<wbr> INTERNATIONAL</span>
         </a>
         <button class="sidebar-burger-menu bg-transparent p-0 border-0 opacity-0 z-n1 position-absolute top-50 end-0 translate-middle-y" id="sidebar-burger-menu">
             <i data-feather="x"></i>
@@ -305,7 +306,7 @@ export default {
 </script>
 <style scope>
 a.router-link-active.router-link-exact-active.menu-link {
-  background-color: #ECF0FF;
+  background-color: #15203c;
   color:rgb(12, 120, 243);
 }
 </style>

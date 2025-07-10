@@ -130,7 +130,7 @@
         </div>
         <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
-    <div class="modal-content rounded-0">
+    <div class="modal-content border-0 rounded-3">
       <div class="modal-header border-0 p-4 border-bottom">
         <h1 class="modal-title fs-18" id="createModal">Thêm mới người dùng</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
@@ -256,7 +256,7 @@
         </div>
         <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
-    <div class="modal-content rounded-0">
+    <div class="modal-content border-0 rounded-3">
       <div class="modal-header border-0 p-4 border-bottom">
         <h1 class="modal-title fs-18" id="updateModal">Cập nhật người dùng</h1>
         <button type="button" class="btn-close campaigns-close" data-bs-dismiss="modal" aria-label="Close"></button>

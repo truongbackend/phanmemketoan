@@ -26,8 +26,9 @@
                     </p>
                 </div>
             </div>
-            <div class="d-flex align-items-center flex-grow-1 justify-content-center gap-3 px-3">
-                <!-- Gói đang sử dụng -->
+            <div class="card bg-white border-0 rounded-3 mb-4">
+                <div class="card-body p-4">
+                <div class="d-flex align-items-center flex-grow-1 justify-content-center">
                 <div class="text-center" style="min-width:140px; padding:.75rem; border:1px dashed #ced4da; border-radius:.5rem;">
                     <div class="d-flex align-items-center justify-content-center mb-1">
                         <i class="bi bi-gear-fill me-1"></i>
@@ -59,6 +60,9 @@
                     </div>
                 </div>
             </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

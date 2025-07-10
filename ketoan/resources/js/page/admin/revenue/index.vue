@@ -82,66 +82,6 @@
         </div>
       </div>
     </div>
-
-    <!-- CUSTOMERS TABLE WITH DATE FILTER -->
-    <div class="row">
-      <div class="col-12">
-        <div class="card bg-white border-0 rounded-3">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3 class="mb-0">Danh sách khách hàng đã mua</h3>
-              <div class="d-flex align-items-center gap-2">
-              <label class="mb-0">Từ:</label>
-              <input type="date" v-model="fromDate" @change="onDateChange" class="form-control w-auto" />
-              <label class="mb-0 ms-3">Đến:</label>
-              <input type="date" v-model="toDate"   @change="onDateChange" class="form-control w-auto" />
-            </div>
-            </div>
-
-            <div v-if="customersLoading" class="text-center py-5">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Đang tải khách hàng…</span>
-              </div>
-            </div>
-
-            <div class="default-table-area style-two transaction-history" v-else>
-              <div v-if="customersError" class="text-danger text-center mb-3">{{ customersError }}</div>
-              <div class="table-responsive" v-if="customersOrders.length">
-                <table class="table align-middle">
-                  <thead>
-                    <tr>
-                      <th>Tên</th>
-                      <th>Email</th>
-                      <th>Công ty</th>
-                      <th>Mã số thuế</th>
-                      <th>Gói</th>
-                      <th>Ngày mua</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                   <tr v-for="c in customersOrders" :key="c.user_id">
-                      <td class="fw-medium">{{ c.user_name }}</td>
-                      <td>{{ c.email || '' }}</td>
-                      <td>{{ c.companyName || '' }}</td>
-                      <td>{{ c.companyTax || '' }}</td>
-                      <td>{{ c.package }}</td>
-                      <td>
-                        <span>
-                          {{ c.order_date }}
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-             <div v-if="!customersOrders.length && !customersError" class="text-center text-muted py-4">
-            Không có dữ liệu khách hàng.
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- CUSTOMERS TOTAL SPENDING TABLE -->
 <div class="card bg-white border-0 rounded-3 mt-5">
   <div class="card-body p-4">

@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\NotificationCreated;
 use App\Http\Controllers\Controller;
-use App\Mail\CustomNotificationMail;
 use App\Models\CustomNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class NotificationController extends Controller
 {
@@ -41,15 +39,6 @@ class NotificationController extends Controller
             $ids    = User::pluck('id')->all();
             $attach = array_fill(0, count($ids), ['read_at'=>null]);
             $notif->recipients()->sync(array_combine($ids, $attach));
-
-            $emails = User::pluck('email')->all();
-            foreach ($emails as $email) {
-                try {
-                    Mail::to($email)->send(new CustomNotificationMail($notif));
-                } catch (\Exception $e) {
-                    \Log::error("Lỗi gửi email thông báo đến $email: " . $e->getMessage());
-                }
-            }
         });
 
         return response()->json([
@@ -79,7 +68,6 @@ class NotificationController extends Controller
     }
     public function broadcast($id) {
         $notif = CustomNotification::findOrFail($id);
-        // gán lại cho tất cả user với read_at = null
         $ids    = User::pluck('id')->all();
         $attach = array_fill(0, count($ids), ['read_at'=>null]);
         $notif->recipients()->syncWithoutDetaching(array_combine($ids,$attach));

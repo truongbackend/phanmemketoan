@@ -13,7 +13,12 @@ margin-top: 13px;
 .footer-single-item-ecommerce.pl-130.text-white h3 , .footer-single-item-ecommerce.pl-130.text-white a {
     color:white;
 }
-
+.unseenNotificitons {
+  background-color: #ebf2fa !important;
+}
+body[sidebar-data-theme="sidebar-hide"] span.pnl {
+    display: none;
+}
 /* --- Navigation Bar --- */
 .navbar-for-landing-page {
   transition: all 0.4s ease-in-out;

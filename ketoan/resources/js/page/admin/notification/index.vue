@@ -91,7 +91,7 @@
         </div>
         <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" style="max-width:550px">
-                <div class="modal-content rounded-0">
+                <div class="modal-content border-0 rounded-3">
                     <div class="modal-header border-0 p-4">
                         <h5 class="modal-title fs-18" id="createModalLabel">Thêm mới thông báo</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

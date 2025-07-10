@@ -20,7 +20,7 @@
 		<title>PNL INTERNATIONAL </title>
         @vite('../resources/js/app.js')
     </head>
-    <body class="boxed-size">
+    <body class="boxed-size" data-theme="sidebar-dark" sidebar-dark-light-data-theme="sidebar-dark" header-dark-light-data-theme="sidebar-dark" footer-dark-light-data-theme="sidebar-dark" card-radius-square-data-theme="sidebar-dark" card-bg-data-theme="sidebar-dark">
         <div class="preloader" id="preloader">
             <div class="preloader">
                 <div class="waviy position-relative">

@@ -13,59 +13,11 @@
         kiểm soát chính xác hiệu quả bán hàng từ mọi kênh bán.
       </p>
     </div>
-    <div class="d-flex flex-wrap gap-2">
-      <a
-        v-for="platform in platforms"
-        :key="platform.name"
-        :href="platform.link"
-        class="platform-btn d-inline-flex align-items-center rounded-2 border text-decoration-none"
-      >
-        <img :src="platform.icon" :alt="platform.name" class="me-2" />
-        <span class="fs-14 fw-semibold">{{ platform.name }}</span>
-      </a>
+    <div class="d-flex justify-content-center">
+        <img src="/assets/avatar/welcome.png" width="500px;"/>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      platforms: [
-        {
-          name: 'Shopee',
-          link: '#',
-          icon: '/assets/avatar/shoppe.png'
-        },
-        {
-          name: 'Tiktok Shop',
-          link: '#',
-          icon: '/assets/avatar/tiktok.png'
-        },
-        {
-          name: 'Lazada',
-          link: '#',
-          icon: '/assets/avatar/lazada.jpg'
-        },
-      ]
-    }
-  }
-}
 </script>
-
-<style scoped>
-.platform-btn {
-  padding: 13px;
-  border-color: #e0e0e0;
-  color: #333;
-  transition: background-color .2s, border-color .2s;
-}
-.platform-btn img {
-  width: 20px;
-  height: auto;
-}
-.platform-btn:hover {
-  background-color: #f8f9fa;
-  border-color: #ccc;
-}
-</style>

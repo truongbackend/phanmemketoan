@@ -78,7 +78,7 @@
     </div>
 
     <div class="modal fade" id="createOrderModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 550px;">
+        <div class="modal-dialog modal-dialog-centered " style="max-width: 550px;">
             <div class="modal-content rounded-0">
                 <div class="modal-header border-0 p-4 border-bottom">
                     <h1 class="modal-title fs-18">Tạo gói đăng ký</h1>

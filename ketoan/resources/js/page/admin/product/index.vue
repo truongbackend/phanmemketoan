@@ -135,45 +135,52 @@
 
     <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-xl">
-        <div class="modal-content">
+        <div class="modal-content border-0">
           <form @submit.prevent="saveProduct">
             <div class="modal-header">
-              <h5 class="modal-title">{{ modalTitle }}</h5>
+              <h4 class="modal-title">{{ modalTitle }}</h4>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body">
-              <div class="row g-3 mb-4">
-                <div class="col-md-4">
-                  <label class="form-label text-secondary">Mã sàn</label>
-                  <input v-model="form.sku" type="text" class="form-control" required />
+                <div class="card bg-white border-0 rounded-3 mb-4">
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                        <h3 class="fs-16 fw-semibold">Thông tin chung</h3>
+                        <div class="col-md-4">
+                        <label class="form-label text-secondary">Mã sàn <i class="text-danger mr-1">*</i></label>
+                        <input v-model="form.sku" type="text" class="form-control" required />
+                        </div>
+                        <div class="col-md-4">
+                        <label class="form-label text-secondary">Mã kế toán</label>
+                        <input v-model="form.accountingCode" type="text" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                        <label class="form-label text-secondary">Tên sản phẩm</label>
+                        <input v-model="form.productName" type="text" class="form-control" required />
+                        </div>
+                        <div class="col-md-4">
+                        <label class="form-label text-secondary">Đơn vị tính</label>
+                        <input v-model="form.unit" type="text" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                        <label class="form-label text-secondary">Thuế suất (%)</label>
+                        <input
+                            v-model.number="form.taxRate"
+                            type="number"
+                            class="form-control"
+                            min="0"
+                            max="100"
+                            required
+                        />
+                        </div>
+                    </div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                  <label class="form-label text-secondary">Mã kế toán</label>
-                  <input v-model="form.accountingCode" type="text" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label text-secondary">Tên sản phẩm</label>
-                  <input v-model="form.productName" type="text" class="form-control" required />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label text-secondary">Đơn vị tính</label>
-                  <input v-model="form.unit" type="text" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label text-secondary">Thuế suất (%)</label>
-                  <input
-                    v-model.number="form.taxRate"
-                    type="number"
-                    class="form-control"
-                    min="0"
-                    max="100"
-                    required
-                  />
-                </div>
-              </div>
-              <hr />
-              <h6>Chi tiết combo</h6>
-              <div class="row g-3 align-items-end">
+                <div class="card bg-white border-0 rounded-3 ">
+                    <div class="card-body p-4">
+                     <h3 class="fs-16 fw-semibold">Mã sản phẩm combo</h3>
+              <div class="row g-3 align-items-end mb-2">
                 <template v-for="(detail, idx) in form.comboDetails" :key="idx">
                   <div class="col-md-3">
                     <label class="form-label text-secondary">Mã chi tiết</label>
@@ -216,6 +223,9 @@
                   </button>
                 </div>
               </div>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-danger fw-medium py-2 px-4 hover-white" data-bs-dismiss="modal">

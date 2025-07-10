@@ -3783,13 +3783,16 @@ textarea.form-control-lg {
   border-color: var(--bs-btn-disabled-border-color);
   opacity: var(--bs-btn-disabled-opacity);
 }
+button.btn.btn-primary.bg-primary.bg-opacity-10.text-primary.py-3.px-5.fw-semibold.border-0 {
+    color: white !important;
+}
 
 .btn-primary {
   --bs-btn-color: #fff;
   --bs-btn-bg: #1677ff;
   --bs-btn-border-color: #1677ff;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: rgb(81.6, 79.05, 216.75);
+  --bs-btn-hover-bg: rgb(22 119 255);
   --bs-btn-hover-border-color: rgb(76.8, 74.4, 204);
   --bs-btn-focus-shadow-rgb: 120, 117, 255;
   --bs-btn-active-color: #fff;

@@ -39,46 +39,61 @@
                         </button>
                     </li>
                     <li class="header-right-item" id="notification-dropdown">
-                        <div class="dropdown notifications noti" v-cloak>
+                        <div class="dropdown notifications noti" v-cloak data-bs-auto-close="outside">
                             <button class="btn btn-secondary border-0 p-0 position-relative badge" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="material-symbols-outlined">notifications</span>
-                                <span v-if="unreadCount > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">
-                                    {{ unreadCount }}
-                                </span>
+                                <span class="material-symbols-outlined">notifications_active</span>
                             </button>
-                            <div class="dropdown-menu dropdown-lg p-0 border-0 dropdown-menu-end" style="min-width: 320px;">
+                            <div class="dropdown-menu dropdown-lg p-0 border-0 dropdown-menu-end rounded-3" style="min-width: 450px;">
                                 <div class="d-flex justify-content-between align-items-center title p-3">
-                                    <span class="fw-semibold fs-15 text-secondary">
+                                    <span class="fw-semibold fs-20 text-secondary">
                                         Thông báo
-                                        <span class="fw-normal text-body fs-14">({{ notifications.length }})</span>
                                     </span>
                                     <button class="p-0 m-0 bg-transparent border-0 fs-14 text-primary" @click="markAllRead">
-                                        Đánh dấu đã xem
+                                        Đánh dấu tất cả đã đọc
                                     </button>
                                 </div>
-
-                                <div class="overflow-auto" style="max-height: 380px;" data-simplebar>
-                                    <div v-for="note in notifications" :key="note.id" class="notification-menu" :class="{ unseen: !note.read_at }">
-                                        <router-link :to="{ name: 'admin-notification' }" class="dropdown-item">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <i class="material-symbols-outlined" :class="iconClass(note.type)">{{ iconName(note.type) }}</i>
+                                <ul class="nav nav-tabs px-3 pt-3 pb-2" role="tablist">
+                                    <li class="nav-item me-4">
+                                        <button class="nav-link p-0 fs-13" :class="{ active: activeTab==='all' }" @click.stop="activeTab='all'">
+                                            Tất cả <span class="text-muted fs-12">({{ counts.all }})</span>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item me-4">
+                                        <button class="nav-link p-0 fs-13" :class="{ active: activeTab==='system' }" @click.stop="activeTab='system'">
+                                            Hệ thống <span class="text-muted fs-12">({{ counts.system }})</span>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link p-0 fs-13" :class="{ active: activeTab==='warning' }" @click.stop="activeTab='warning'">
+                                            Cảnh báo <span class="text-muted fs-12">({{ counts.warning }})</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active overflow-auto" data-simplebar style="max-height: 580px;min-height:580px;" id="all-tab-pane" role="tabpanel" aria-labelledby="all-tab" tabindex="0">
+                                        <div v-for="note in filteredNotifications" :key="note.id" class="notification-menu d-flex align-items-start" :class="{ unseenNotificitons: !note.read_at }">
+                                            <router-link :to="{ name: 'admin-notification' }" class="dropdown-item">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0">
+                                                        <i class="material-symbols-outlined" :class="iconClass(note.type)">{{ iconName(note.type) }}</i>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <p class="fs-13 text-dark">{{ note.title }}</p>
+                                                        <p>
+                                                            <span class="fw-semibold fs-13 text-primary" @click="selectNote(note)" data-bs-toggle="modal" data-bs-target="#detailModal">
+                                                                Xem chi tiết
+                                                            </span>
+                                                        </p>
+                                                        <small class="fs-13 text-muted">{{ formatAgo(note.created_at) }}</small>
+                                                    </div>
                                                 </div>
-                                                <div class="flex-grow-1 ms-3">
-                                                    <p class="mb-1">{{ note.content }}</p>
-                                                    <small class="fs-13 text-muted">{{ formatAgo(note.created_at) }}</small>
-                                                </div>
-                                            </div>
-                                        </router-link>
-                                    </div>
-                                    <div v-if="notifications.length === 0" class="p-3 text-center text-muted">
-                                        Không có thông báo
+                                            </router-link>
+                                        </div>
+                                        <div v-if="notifications.length === 0" class="p-3 text-center text-muted">
+                                            Không có thông báo
+                                        </div>
                                     </div>
                                 </div>
-
-                                <router-link :to="{ name: 'admin-notification' }" class="dropdown-item text-center text-primary d-block view-all fw-medium rounded-bottom-3">
-                                    Xem tất cả thông báo
-                                </router-link>
                             </div>
                         </div>
                     </li>
@@ -118,7 +133,7 @@
                                     <li>
                                         <a @click="logout" class="dropdown-item admin-item-link d-flex align-items-center text-body" style="cursor: pointer">
                                             <i class="material-symbols-outlined">logout</i>
-                                            <span class="ms-2">Logout</span>
+                                            <span class="ms-2">Đăng xuất</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -130,6 +145,22 @@
         </div>
     </div>
 </header>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog" style="max-width:650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">{{ selectedNote?.title }}</h5>
+            </div>
+            <div class="modal-body" v-if="selectedNote?.content">
+                <p>{{ selectedNote.content }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
 </template>
 
 <script>
@@ -137,89 +168,129 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 export default {
-  name: "Header",
-  data() {
-    return {
-      userName: null,
-      notifications: [],
-      unreadCount: 0,
-    };
-  },
-  mounted() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.name) {
-      this.userName = user.name;
-    }
-    this.fetchNotifications();
-    if (window.Echo && user && user.id) {
-      Echo.private(`App.Models.User.${user.id}`)
-        .notification(() => {
-          this.fetchNotifications();
-        });
-    }
-  },
-  methods: {
-    async logout() {
-      try {
-        const response = await axios.post("/api/logout");
-        if (response.status === 200) {
-          localStorage.removeItem("user");
-          Cookies.remove("token");
-          this.$router.push("/login");
+    name: "Header",
+    data() {
+        return {
+            userName: null,
+            notifications: [],
+            unreadCount: 0,
+            activeTab: 'all',
+            selectedNote: null,
+        };
+    },
+    computed: {
+        counts() {
+            return {
+                all: this.notifications.length,
+                system: this.notifications.filter(n => n.type === 'system').length,
+                warning: this.notifications.filter(n => n.type === 'warning').length,
+            };
+        },
+        filteredNotifications() {
+            if (this.activeTab === 'all') return this.notifications;
+            return this.notifications.filter(n => n.type === this.activeTab);
         }
-      } catch (error) {
-        console.error("Có lỗi khi đăng xuất", error);
-      }
     },
-    fetchNotifications() {
-      axios
-        .get("/api/notifications", { params: { per_page: 10 } })
-        .then((res) => {
-          this.notifications = res.data.data;
-          this.unreadCount = this.notifications.filter(n => !n.pivot.read_at).length;
-        })
-        .catch((err) => {
-          console.error("Fetch notifications failed:", err);
-        });
+    mounted() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && user.name) {
+            this.userName = user.name;
+        }
+        this.fetchNotifications();
+        if (window.Echo && user && user.id) {
+            Echo.private(`App.Models.User.${user.id}`)
+                .notification(() => {
+                    this.fetchNotifications();
+                });
+        }
     },
-    markAllRead() {
-      axios
-        .post("/api/notifications/mark-read-all")
-        .then(() => {
-          this.notifications.forEach(n => (n.read_at = new Date().toISOString()));
-          this.unreadCount = 0;
-        })
-        .catch(err => {
-          console.error("Mark all read failed:", err);
-        });
+    methods: {
+        selectNote(note) {
+            this.selectedNote = note;
+        },
+        async logout() {
+            try {
+                const response = await axios.post("/api/logout");
+                if (response.status === 200) {
+                    localStorage.removeItem("user");
+                    Cookies.remove("token");
+                    this.$router.push("/login");
+                }
+            } catch (error) {
+                console.error("Có lỗi khi đăng xuất", error);
+            }
+        },
+        fetchNotifications() {
+            axios
+                .get("/api/notifications", {
+                    params: {
+                        per_page: 10
+                    }
+                })
+                .then((res) => {
+                    this.notifications = res.data.data.map(note => ({
+                        ...note,
+                        type: note.type == 1 ?
+                            'warning' : note.type == 2 ?
+                            'system' : note.type,
+                        read_at: note.pivot.read_at
+                    }));
+                    this.unreadCount = this.notifications.filter(n => !n.pivot.read_at).length;
+                })
+                .catch((err) => {
+                    console.error("Fetch notifications failed:", err);
+                });
+        },
+        markAllRead() {
+            axios
+                .post("/api/notifications/mark-read-all")
+                .then(() => {
+                    this.notifications.forEach(n => (n.read_at = new Date().toISOString()));
+                    this.unreadCount = 0;
+                })
+                .catch(err => {
+                    console.error("Mark all read failed:", err);
+                });
+        },
+        async selectNote(note) {
+            this.selectedNote = note;
+            try {
+                await axios.post(`/api/notifications/${note.id}/mark-read`);
+                note.read_at = new Date().toISOString();
+                this.unreadCount = this.notifications.filter(n => !n.read_at).length;
+            } catch (err) {
+                console.error('Mark read failed:', err);
+            }
+            const modal = new bootstrap.Modal(this.$refs.detailModal);
+            modal.show();
+        },
+        formatAgo(datetime) {
+            const diff = (Date.now() - new Date(datetime)) / 1000;
+            if (diff < 60) return `${Math.floor(diff)} giây trước`;
+            if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
+            return `${Math.floor(diff / 86400)} ngày trước`;
+        },
+        iconName(type) {
+            switch (type) {
+                case "warning":
+                    return "warning";
+                case "system":
+                    return "settings";
+                default:
+                    return "notifications";
+            }
+        },
+        iconClass(type) {
+            switch (type) {
+                case "warning":
+                    return "text-warning";
+                case "system":
+                    return "text-info";
+                default:
+                    return "text-primary";
+            }
+        },
     },
-    formatAgo(datetime) {
-      const diff = (Date.now() - new Date(datetime)) / 1000;
-      if (diff < 60) return `${Math.floor(diff)} giây trước`;
-      if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
-      if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
-      return `${Math.floor(diff / 86400)} ngày trước`;
-    },
-    iconName(type) {
-      switch (type) {
-        case "warning":
-          return "warning";
-        case "system":
-          return "settings";
-        default:
-          return "notifications";
-      }
-    },
-    iconClass(type) {
-      switch (type) {
-        case "warning":
-          return "text-warning";
-        case "system":
-          return "text-info";
-        default:
-          return "text-primary";
-      }
-    },
-  },
 };
 </script>
