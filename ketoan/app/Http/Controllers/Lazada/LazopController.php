@@ -117,7 +117,8 @@ class LazopController extends Controller
                     'data' => [
                         'access_token' => $data['access_token'],
                         'expires_in' => $data['expires_in'] ?? null,
-                        'refresh_expires_in' => $data['refresh_expires_in'] ?? null
+                        'refresh_expires_in' => $data['refresh_expires_in'] ?? null,
+                        'refresh_token' => $data['refresh_token'] ?? null
                     ]
                 ]);
             } else {
