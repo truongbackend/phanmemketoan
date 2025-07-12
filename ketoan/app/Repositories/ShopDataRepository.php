@@ -53,7 +53,7 @@ class ShopDataRepository
 
     public function checkAuthShopStatus($authUserId)
     {
-        $tokens = LazadaShopTokens::where('auth_user_id', $authUserId)->get();
+        $tokens = LazadaShopTokens::where('auth_user_id', $authUserId)->where('active', 'Y')->get();
         
         $verifiedAccounts = [];
         

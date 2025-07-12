@@ -46,6 +46,7 @@ class LazadaApiService
                 'code' => $code,
                 'request_id' => $data['request_id'] ?? null,
                 'trace_id' => $data['_trace_id_'] ?? null,
+                'active' => 'Y',
             ];
             $this->shopDataService->saveOrUpdateLazadaShopToken($saveData);
         }
