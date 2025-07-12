@@ -26,6 +26,7 @@ class LazadaShopTokens extends Model
         'code',
         'request_id',
         'trace_id',
+        'active',
     ];
 
 }

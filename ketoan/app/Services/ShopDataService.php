@@ -55,6 +55,11 @@ class ShopDataService
         return $token;
     }
 
+    public function deactivateLazadaShopToken($authUserId, $id)
+    {
+        return $this->repo->deactivateToken($authUserId, $id);
+    }
+
     public function checkAuthShopStatus($authUserId)
     {
         return $this->repo->checkAuthShopStatus($authUserId);

@@ -136,6 +136,39 @@ class LazopController extends Controller
         }
     }
 
+    public function deactivateToken(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $userId = $user->id;
+            $tokenId = $request->input('token_id');
+            
+            if (!$tokenId) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Token ID là bắt buộc'
+                ], 422);
+            }
+            
+            $token = $this->shopDataService->deactivateLazadaShopToken($userId, $tokenId);
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'Token đã được deactivate thành công',
+                'data' => [
+                    'id' => $token->id,
+                    'account' => $token->account,
+                    'active' => $token->active
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function pushReceipt(Request $request)
     {
         try {

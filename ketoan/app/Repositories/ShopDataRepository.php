@@ -29,6 +29,17 @@ class ShopDataRepository
                                ->first();
     }
 
+    public function deactivateToken($authUserId, $id)
+    {
+        $token = $this->findByAuthUserIdAndId($authUserId, $id);
+        if (!$token) {
+            throw new \Exception('Token not found for user ID: ' . $authUserId . ' and token ID: ' . $id);
+        }
+        
+        $token->update(['active' => 'N']);
+        return $token;
+    }
+
     public function createOrUpdateBySellerId($data)
     {
         return LazadaShopTokens::updateOrCreate(
