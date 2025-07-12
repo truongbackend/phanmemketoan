@@ -49,9 +49,11 @@ class ShopDataRepository
         foreach ($tokens as $token) {
             $createdAt = Carbon::parse($token->updated_at);
             $expiresAt = $createdAt->addSeconds($token->expires_in);
+            $refreshExpiresAt = $createdAt->addSeconds($token->refresh_expires_in);
             $now = Carbon::now();
             
             $isExpired = $now->gt($expiresAt);
+            $isRefreshExpired = $now->gt($refreshExpiresAt);
             
             $verifiedAccounts[] = [
                 'id' => $token->id,
@@ -60,10 +62,15 @@ class ShopDataRepository
                 'seller_id' => $token->seller_id,
                 'user_id' => $token->user_id,
                 'country' => $token->country,
+                'short_code' => $token->short_code,
                 'expires_in' => $token->expires_in,
                 'expires_at' => $expiresAt->format('Y-m-d H:i:s'),
                 'is_expired' => $isExpired,
-                'days_until_expiry' => $isExpired ? 0 : $now->diffInDays($expiresAt, false)
+                'days_until_expiry' => $isExpired ? 0 : $now->diffInDays($expiresAt, false),
+                'refresh_expires_in' => $token->refresh_expires_in,
+                'refresh_expires_at' => $refreshExpiresAt->format('Y-m-d H:i:s'),
+                'is_refresh_expired' => $isRefreshExpired,
+                'days_until_refresh_expiry' => $isRefreshExpired ? 0 : $now->diffInDays($refreshExpiresAt, false)
             ];
         }
         
