@@ -52,22 +52,22 @@
                                         Đánh dấu tất cả đã đọc
                                     </button>
                                 </div>
-                                <ul class="nav nav-tabs px-3 pt-3 pb-2" role="tablist">
-                                    <li class="nav-item me-4">
+                                <ul class=" nav nav-tabs px-3 pt-3 pb-2" role="tablist">
+                                    <div class="tab-pane me-4">
                                         <button class="nav-link p-0 fs-13" :class="{ active: activeTab==='all' }" @click.stop="activeTab='all'">
                                             Tất cả <span class="text-muted fs-12">({{ counts.all }})</span>
                                         </button>
-                                    </li>
-                                    <li class="nav-item me-4">
+                                    </div>
+                                    <div class="tab-pane me-4">
                                         <button class="nav-link p-0 fs-13" :class="{ active: activeTab==='system' }" @click.stop="activeTab='system'">
                                             Hệ thống <span class="text-muted fs-12">({{ counts.system }})</span>
                                         </button>
-                                    </li>
-                                    <li class="nav-item">
+                                    </div>
+                                    <div class="tab-pane me-4">
                                         <button class="nav-link p-0 fs-13" :class="{ active: activeTab==='warning' }" @click.stop="activeTab='warning'">
                                             Cảnh báo <span class="text-muted fs-12">({{ counts.warning }})</span>
                                         </button>
-                                    </li>
+                                    </div>
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade show active overflow-auto" data-simplebar style="max-height: 580px;min-height:580px;" id="all-tab-pane" role="tabpanel" aria-labelledby="all-tab" tabindex="0">
@@ -75,8 +75,9 @@
                                             <router-link :to="{ name: 'admin-notification' }" class="dropdown-item">
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-shrink-0">
-                                                        <i class="material-symbols-outlined" :class="iconClass(note.type)">{{ iconName(note.type) }}</i>
+                                                        <i class="material-symbols-outlined " :class="iconClass(note.type)">{{ iconName(note.type) }}</i>
                                                     </div>
+
                                                     <div class="flex-grow-1 ms-3">
                                                         <p class="fs-13 text-dark">{{ note.title }}</p>
                                                         <p>
@@ -274,9 +275,9 @@ export default {
         iconName(type) {
             switch (type) {
                 case "warning":
-                    return "warning";
+                    return "verified";
                 case "system":
-                    return "settings";
+                    return "sms";
                 default:
                     return "notifications";
             }

@@ -30,8 +30,8 @@ router.beforeEach(async (to, from, next) => {
   const token = Cookies.get('token');
   const isAuthenticated = !!token;
   const isAuthPage = to.name === 'login' || to.name === 'register';
-  const isAdminRoute = to.path.startsWith('/admin/dashboard');
-  const isProtectedRoute = to.path.startsWith('/admin');
+  const isAdminRoute = to.path.startsWith('/app/dashboard');
+  const isProtectedRoute = to.path.startsWith('/app');
     if (!isAuthenticated && isProtectedRoute) {
     return next({ name: 'login' });
   }
@@ -55,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (isAuthenticated && isAuthPage) {
-    return next({ path: '/admin/dashboard' });
+    return next({ path: '/app/dashboard' });
   }
 
   next();

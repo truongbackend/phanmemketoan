@@ -48,7 +48,7 @@
         <div class="othres">
             <template v-if="user">
                 <span class="text-white fw-medium me-3 fs-14">Xin chào, {{ user.name }}</span>
-                <router-link to="admin/dashboard" class="btn bg-white fw-medium fs-14 text-primary rounded-pill hover-bg landing-page-btn">
+                <router-link to="app/dashboard" class="btn bg-white fw-medium fs-14 text-primary rounded-pill hover-bg landing-page-btn">
                 Phần mềm
                 </router-link>
             </template>

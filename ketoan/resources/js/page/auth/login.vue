@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <p>Bạn chưa có tài khoản.  <router-link :to="{ name: 'register' }" class="fw-medium text-primary text-decoration-none">Đăng ký ngay</router-link> hoặc quay lại <router-link :to="{ name: 'home' }" class="fw-medium text-primary text-decoration-none">Trang chủ</router-link></p>
                                 </div>
-                    
+
                             </form>
                         </div>
                     </div>
@@ -83,7 +83,7 @@ export default defineComponent({
                         path: '/'
                         });
                     localStorage.setItem('user', JSON.stringify(user));
-                    router.push('admin/dashboard');
+                    router.push('app/dashboard');
                     toast.success("Đăng nhập thành công");
 
                 }
