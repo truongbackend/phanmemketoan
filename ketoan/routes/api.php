@@ -1,21 +1,22 @@
 <?php
 
-use App\Http\Controllers\Admin\ComplaintController;
-use App\Http\Controllers\Admin\notificationController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\packageController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\RevenueReportController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Lazada\LazopController;
+use App\Http\Controllers\Admin\packageController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ComplaintController;
+use App\Http\Controllers\Shopee\AuthShopeeController;
+use App\Http\Controllers\Admin\notificationController;
+use App\Http\Controllers\Admin\RevenueReportController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ProductImportController;
 use App\Http\Controllers\Import\ViettelPostImportController;
-use App\Http\Controllers\Lazada\LazopController;
-use App\Http\Controllers\Shopee\AuthShopeeController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 
 /*
@@ -116,6 +117,8 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('revenue/customers-list', [RevenueReportController::class, 'listCustomersWithOrders']);
     Route::get('revenue/total-by-user', [RevenueReportController::class, 'totalRevenueByUser']);
     Route::get('revenue/export-total-by-user', [RevenueReportController::class, 'exportTotalRevenueByUser']);
+    Route::post('setting-account-ecommerce', [SettingController::class, 'store']);
+    Route::get('setting-account-ecommerce', [SettingController::class, 'index']);
 });
 Route::resource('packages', packageController::class);
 

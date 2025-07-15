@@ -103,14 +103,15 @@
                     <span class="title">Thông tin tài khoản</span>
                 </router-link>
             </li>
+
+            <li class="menu-title small">
+                <span class="menu-title-text">KÊNH BÁN HÀNG</span>
+            </li>
             <li class="menu-item">
                 <router-link :to="{ name: 'admin-setting' }" class="menu-link">
                     <span class="material-symbols-outlined menu-icon">settings</span>
                     <span class="title">Thiết lập</span>
                 </router-link>
-            </li>
-            <li class="menu-title small">
-                <span class="menu-title-text">KÊNH BÁN HÀNG</span>
             </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle active">
@@ -121,11 +122,6 @@
                     <li class="menu-item">
                         <router-link :to="{ name: 'channel-connection-lazada' }" class="menu-link" >
                             Kết nối sàn
-                        </router-link>
-                    </li>
-                    <li class="menu-item">
-                        <router-link :to="{ name: 'channel-connection-lazada-settings' }" class="menu-link" >
-                            Cài đặt chung
                         </router-link>
                     </li>
                     <li class="menu-item" >

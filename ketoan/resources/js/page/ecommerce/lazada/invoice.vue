@@ -173,7 +173,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
 
                     <div class="row">
                         <div class="col-12 text-end">
@@ -210,7 +210,6 @@ export default defineComponent({
         const baseUrl = globalState.baseUrl;
         const toast = useToast();
 
-        // Date range
         const start = ref(null);
         const end = ref(null);
         const dateRange = computed({

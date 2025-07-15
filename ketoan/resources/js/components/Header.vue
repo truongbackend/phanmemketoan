@@ -10,13 +10,14 @@
                         </button>
                     </li>
                     <li>
-                        <form class="src-form position-relative">
-                            <input type="text" class="form-control" placeholder="Search here....." />
-                            <button type="submit" class="src-btn position-absolute top-50 end-0 translate-middle-y bg-transparent p-0 border-0">
-                                <span class="material-symbols-outlined">search</span>
-                            </button>
-                        </form>
+                        <select class="form-select form-control h-55" aria-label="Chọn sàn">
+                            <option selected class="text-dark">Chọn sàn</option>
+                            <option value="1" class="text-dark">United States</option>
+                            <option value="2" class="text-dark">Canada</option>
+                            <option value="3" class="text-dark">France</option>
+                        </select>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -32,6 +33,7 @@
                             </button>
                         </div>
                     </li>
+
 
                     <li class="header-right-item">
                         <button class="fullscreen-btn bg-transparent p-0 border-0" id="fullscreen-button">
@@ -209,6 +211,8 @@ export default {
         selectNote(note) {
             this.selectedNote = note;
         },
+
+        
         async logout() {
             try {
                 const response = await axios.post("/api/logout");
@@ -285,7 +289,7 @@ export default {
         iconClass(type) {
             switch (type) {
                 case "warning":
-                    return "text-warning";
+                    return "text-success";
                 case "system":
                     return "text-info";
                 default:
