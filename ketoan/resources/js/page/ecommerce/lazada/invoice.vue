@@ -5,180 +5,32 @@
             <div class="card-body p-4">
                 <form @submit.prevent="callPushReceipt">
                     <div class="row">
-                        <div class="row align-items-center mb-4">
-                            <!-- 1/4: Tiêu đề -->
+                        <div class="align-items-center mb-4">
                             <div class="col-lg-3 col-sm-6">
                                 <h5 class="mb-0 fs-17 text-info">Chọn ngày xuất hóa đơn lazada</h5>
                             </div>
-
-                            <!-- 2/4: Checkbox Kiêm phiếu xuất -->
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="includeSlip" v-model="form.includeSlip" />
-                                <label class="form-check-label text-secondary" for="includeSlip">
-                                    Kiêm phiếu xuất
-                                </label>
-                                </div>
-                            </div>
-
-                            <!-- 3/4: Checkbox Lập kèm hóa đơn -->
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="attachInvoice" v-model="form.attachInvoice" />
-                                <label class="form-check-label text-secondary" for="attachInvoice">
-                                    Lập kèm hóa đơn
-                                </label>
-                                </div>
-                            </div>
-
-                            <!-- 4/4: Checkbox Máy tính tiền -->
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="fromCashMachine" v-model="form.fromCashMachine" />
-                                <label class="form-check-label text-secondary" for="fromCashMachine">
-                                    Là hóa đơn từ máy tính tiền
-                                </label>
-                                </div>
-                            </div>
-                            </div>
-
+                        </div>
                         <div class="col-lg-3 col-sm-6">
                             <div class="form-group mb-4">
                                 <label class="label text-secondary">Khoảng thời gian đơn hàng Lazada</label>
-                                <a-range-picker v-model:value="dateRange" format="DD/MM/YYYY" style="width: 100%; height: 55px;" :ranges="presetRanges" placeholder="Chọn khoảng ngày" />
-                            </div>
-                        </div>
+                                <a-range-picker
+  v-model:value="dateRange"
+  format="DD/MM/YYYY"
+  style="width: 100%; height: 55px;"
+  :presets="presetRanges"
+  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+/>
 
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Bán hàng trong nước</label>
-                                <select class="form-select form-control h-55" v-model="form.saleType">
-                                    <option value="domestic">1. Bán hàng trong nước</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Hình thức thanh toán</label>
-                                <select class="form-select form-control h-55" v-model="form.paymentMethod">
-                                    <option value="unpaid">Chưa thu tiền</option>
-                                    <option value="paid_date">Thu tiền ngày</option>
-                                    <option value="bank">Chuyển khoản</option>
-                                </select>
                             </div>
                         </div>
 
 
-
-                        <h5 class="mb-3 fs-17 text-info">Chứng từ ghi nợ</h5>
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Mã khách hàng</label>
-                                <select class="form-select form-control h-55" v-model="form.paymentMethod">
-                                    <option value="unpaid">Không có MST</option>
-                                    <option value="paid_date">Có MST</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Tên khách hàng</label>
-                                <select class="form-select form-control h-55" v-model="form.paymentMethod">
-                                    <option value="unpaid">Không có MST</option>
-                                    <option value="paid_date">Có MST</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Mã số thuế / CCCD Chủ hộ</label>
-                                <input type="text" class="form-control h-55" placeholder="Nhập mã số thuế hoặc CCCD" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Người liên hệ</label>
-                                <input type="text" class="form-control h-55" placeholder="Người liên hệ" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Địa chỉ</label>
-                                <select class="form-select form-control h-55" v-model="form.paymentMethod">
-                                    <option value="unpaid">Không có MST</option>
-                                    <option value="paid_date">Có MST</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Nhân viên bán hàng</label>
-                                <input type="text" class="form-control h-55" placeholder="Nhân viên bán hàng" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Diễn giải</label>
-                                <input type="text" class="form-control h-55" placeholder="Nhân viên bán hàng" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Điều khoản</label>
-                                <input type="text" class="form-control h-55" placeholder="Điều khoản" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Số ngày được nợ</label>
-                                <input type="text" class="form-control h-55" placeholder="Số ngày được nợ" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Hạn thanh toán</label>
-                                <input type="text" class="form-control h-55" placeholder="Hạn thanh toán" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Ngày hạch toán</label>
-                                <input type="text" class="form-control h-55" placeholder="Ngày hạch toán" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Ngày chứng từ</label>
-                                <input type="text" class="form-control h-55" placeholder="Ngày chứng từ" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Số chứng từ</label>
-                                <input type="text" class="form-control h-55" placeholder="Ngày chứng từ" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Loại tiền</label>
-                                <input type="text" class="form-control h-55" placeholder="VND" />
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group mb-4">
-                                <label class="label text-secondary">Chiết khấu</label>
-                                <input type="text" class="form-control h-55" placeholder="Không chiết khấu" />
-                            </div>
-                        </div>
                     </div>
-
 
                     <div class="row">
                         <div class="col-12 text-end">
                             <button type="submit" class="btn btn-primary">
-                                Gửi hóa đơn
+                                Lấy dữ liệu
                             </button>
                         </div>
                     </div>
@@ -203,6 +55,7 @@ import {
 } from 'vue-toast-notification';
 import moment from 'moment';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 export default defineComponent({
     setup() {
@@ -220,16 +73,16 @@ export default defineComponent({
                 end.value = e;
             }
         });
-        const presetRanges = {
-            'Trong vòng tháng này': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'Trong vòng 3 tháng trước': [
-                moment().subtract(3, 'months'),
-                moment()
-            ]
-        };
+        const presetRanges = [
+        {
+            label: 'Trong vòng tháng này',
+            value: [dayjs().startOf('month'), dayjs()]
+        },
+        {
+            label: 'Trong vòng 3 tháng trước',
+            value: [dayjs().subtract(3, 'month'), dayjs()]
+        }
+        ];
 
         // Các trường mới
         const form = reactive({

@@ -22,9 +22,38 @@
     </div>
 
     <div class="row justify-content-center">
+
       <div class="col-lg-12">
         <div class="card bg-white border-0 rounded-3 mb-4">
+
           <div class="card-body p-4">
+          <h4>Kết nối mã ứng dụng</h4>
+            <form @submit.prevent="connectApiMisa">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group mb-4">
+                            <label class="label">Key mã kết nối của công ty với Amiss </label>
+                            <input
+                                type="text"
+                                v-model="misaAccessToken"
+                                class="form-control text-gray-light h-55"
+                                :class="{'is-invalid': !misaAccessTokenValid}" />
+                            <div v-if="!misaAccessTokenValid" class="invalid-feedback">
+                                Tài khoản chưa được kết nối với Amiss
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 d-flex">
+                        <button type="submit" class="btn btn-primary py-2 px-4 fw-medium fs-15 d-flex align-items-center gap-2">
+                            <i class="ri-link-unlink-m fs-16"></i>
+                            Liên kết
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <h4>Cài đặt chung xuất hóa đơn</h4>
+
             <form @submit.prevent="settingaccountEcommerce">
               <div class="row">
                 <div class="col-lg-6 col-sm-6">
@@ -151,7 +180,8 @@
                     </select>
                   </div>
                 </div>
-                
+
+
 
                 <div class="col-lg-12">
                   <div class="d-flex flex-wrap gap-3">
@@ -192,8 +222,11 @@ export default defineComponent({
     const warehouse = ref('');
     const accountCapitalPrice = ref('632');
     const accountWarehouse = ref('1561');
+    const misaAccessToken = ref('');
     const paymentMethod = ref('');
-
+    const appIDAmiss = ref('2b4eb0df-b6be-4c87-96f5-2bf7c51a8a5d');
+    const companyCodeAmiss = ref('pnlinternationalinfovn');
+    const misaAccessTokenValid = ref(true);
     const interpretation = ref([]);
     const productNameSetting = ref([]);
 
@@ -250,6 +283,36 @@ export default defineComponent({
           console.error(err);
         });
     };
+    const connectApiMisa = () => {
+        misaAccessTokenValid.value = !!misaAccessToken.value;
+        if (!misaAccessTokenValid.value) {
+            toast.error('Vui lòng nhập mã kết nối!');
+            document.getElementById('preloader').style.display = 'none';
+            return;
+        }
+
+        const payload = {
+            app_id: appIDAmiss.value,
+            access_code: misaAccessToken.value,
+            org_company_code: companyCodeAmiss.value,
+        };
+
+        axios
+            .post('https://actapp.misa.vn/api/oauth/actopen/connect', payload)
+            .then(res => {
+                if (res.data.Success === true) {
+                    toast.success('Cài đặt đã được lưu thành công!');
+                } else {
+                    toast.error('Kết nối thất bại');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                toast.error('Không thể kết nối với Amiss!');
+            });
+    };
+
+
     const resetForm = () => loadSettings();
     onMounted(loadSettings);
 
@@ -267,6 +330,11 @@ export default defineComponent({
       productNameOptions,
       settingaccountEcommerce,
       resetForm,
+      companyCodeAmiss,
+      misaAccessToken,
+      appIDAmiss,
+      misaAccessTokenValid,
+      connectApiMisa
     };
   },
 });
