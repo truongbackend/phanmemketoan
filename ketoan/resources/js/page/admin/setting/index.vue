@@ -32,15 +32,21 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-sm-6">
                         <div class="form-group mb-4">
-                            <label class="label">Key mã kết nối của công ty với Amiss </label>
-                            <input
-                                type="text"
-                                v-model="misaAccessToken"
-                                class="form-control text-gray-light h-55"
-                                :class="{'is-invalid': !misaAccessTokenValid}" />
-                            <div v-if="!misaAccessTokenValid" class="invalid-feedback">
-                                Tài khoản chưa được kết nối với Amiss
-                            </div>
+                        <label class="label">Key mã kết nối của công ty với Amiss</label>
+                        <input
+                            type="text"
+                            v-model="misaAccessToken"
+                            class="form-control text-gray-light h-55"
+                            :class="{'is-invalid': !misaAccessTokenValid}"
+                            />
+
+                        <div v-if="!misaAccessTokenValid" class="invalid-feedback">
+                            Tài khoản chưa được kết nối với Amiss
+                        </div>
+                        <div v-if="connectedCompany" class="mt-2 text-success">
+                            <p class="mb-0 fw-bold">{{ connectedCompany }}</p>
+                            <small class="text-muted">Hết hạn: {{ connectedExpired }}</small>
+                        </div>
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 d-flex">
@@ -48,8 +54,10 @@
                             <i class="ri-link-unlink-m fs-16"></i>
                             Liên kết
                         </button>
+                        </div>
+
                     </div>
-                </div>
+
             </form>
 
             <h4>Cài đặt chung xuất hóa đơn</h4>
@@ -213,6 +221,7 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useToast } from 'vue-toast-notification';
+import Cookies from 'js-cookie';
 export default defineComponent({
   name: 'SettingIndex',
   setup() {
@@ -229,7 +238,8 @@ export default defineComponent({
     const misaAccessTokenValid = ref(true);
     const interpretation = ref([]);
     const productNameSetting = ref([]);
-
+    const connectedCompany = ref(null);
+    const connectedExpired = ref(null);
     const interpretationOptions = [
       { value: '1', label: 'Tên khách hàng', id: 'chkInterp1' },
       { value: '2', label: 'Mã đơn hàng', id: 'chkInterp2' },
@@ -260,6 +270,7 @@ export default defineComponent({
           console.error('Lỗi khi tải cài đặt:', err);
         });
     };
+
 
     const settingaccountEcommerce = () => {
       const payload = {
@@ -301,7 +312,19 @@ export default defineComponent({
             .post('https://actapp.misa.vn/api/oauth/actopen/connect', payload)
             .then(res => {
                 if (res.data.Success === true) {
-                    toast.success('Cài đặt đã được lưu thành công!');
+                    const dataObj = JSON.parse(res.data.Data);
+                    const accessTokenAmiss = dataObj.access_token;
+                    const expiredDate = new Date(dataObj.expired_time);
+
+                    Cookies.set('amiss_token', accessTokenAmiss, { expires: expiredDate, secure: true });
+                    Cookies.set('amiss_app_name', dataObj.app_name, { expires: expiredDate, secure: true });
+                    Cookies.set('amiss_expired', dataObj.expired_time, { expires: expiredDate, secure: true });
+                    Cookies.set('amiss_key', misaAccessToken.value, { expires: expiredDate, secure: true });
+                    misaAccessToken.value = '********';
+                    connectedCompany.value = dataObj.app_name;
+                    connectedExpired.value = expiredDate.toLocaleString();
+
+                    toast.success('Kết nối ứng với phần mềm Amiss thành công!');
                 } else {
                     toast.error('Kết nối thất bại');
                 }
@@ -310,11 +333,29 @@ export default defineComponent({
                 console.error(err);
                 toast.error('Không thể kết nối với Amiss!');
             });
-    };
+        };
+        const checkConnected = () => {
+        const token = Cookies.get('amiss_token');
+        const appName = Cookies.get('amiss_app_name');
+        const expiredTime = Cookies.get('amiss_expired');
+        const key = Cookies.get('amiss_key');
+
+        if (token && appName && expiredTime && key) {
+            connectedCompany.value = appName;
+            connectedExpired.value = new Date(expiredTime).toLocaleString();
+            misaAccessToken.value = '********';  // <-- Hiển thị mask
+        }
+        };
+
+
+
 
 
     const resetForm = () => loadSettings();
-    onMounted(loadSettings);
+    onMounted(() => {
+        loadSettings();
+        checkConnected();
+    });
 
     return {
       customerCode,
@@ -334,7 +375,9 @@ export default defineComponent({
       misaAccessToken,
       appIDAmiss,
       misaAccessTokenValid,
-      connectApiMisa
+      connectApiMisa,
+      connectedCompany,
+      connectedExpired,
     };
   },
 });

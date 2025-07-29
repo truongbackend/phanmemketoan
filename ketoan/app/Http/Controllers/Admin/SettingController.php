@@ -22,7 +22,6 @@ class SettingController extends Controller
         $data = $request->validate([
             'customer_code'           => 'required|string|max:255',
             'customer_name'           => 'required|string|max:255',
-
             'product_name_setting'    => 'nullable|array',
             'product_name_setting.*'  => 'string|max:255',
             'interpretation'          => 'nullable|array',
