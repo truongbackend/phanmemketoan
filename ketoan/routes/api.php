@@ -74,8 +74,10 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('resetPassword', [AuthController::class, 'resetPassword'])->name('resetPassword');
 
+// API Callback endpoint - không cần authentication
 Route::prefix('amis')->group(function () {
     Route::post('api-callback', [ApiCallbackController::class, 'handleCallback'])->name('api.callback');
+    Route::get('read-logs', [ApiCallbackController::class, 'readLogsByDate'])->name('api.read-logs');
 });
 
 Route::middleware(['auth:api', 'check.user.token'])->group(function () {
