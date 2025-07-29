@@ -7,9 +7,9 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 
 export default defineConfig({
     server: {
-        host: 'localhost',
-        port: 5173,
-        strictPort: false,
+        host: 'pnl-international.info.vn',
+        port: 80,
+        strictPort: true,
         https: false,
     },
     plugins: [

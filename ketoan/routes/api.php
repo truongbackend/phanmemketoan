@@ -6,12 +6,10 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Lazada\LazopController;
 use App\Http\Controllers\Admin\packageController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\ComplaintController;
-use App\Http\Controllers\Shopee\AuthShopeeController;
 use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Admin\RevenueReportController;
 use App\Http\Controllers\Import\ImportHistoryController;
@@ -20,8 +18,6 @@ use App\Http\Controllers\Import\ViettelPostImportController;
 use App\Http\Controllers\Lazada\LazopController;
 use App\Http\Controllers\Shopee\AuthShopeeController;
 use App\Http\Controllers\ApiCallbackController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 
 /*
