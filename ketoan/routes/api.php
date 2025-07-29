@@ -17,6 +17,11 @@ use App\Http\Controllers\Admin\RevenueReportController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ProductImportController;
 use App\Http\Controllers\Import\ViettelPostImportController;
+use App\Http\Controllers\Lazada\LazopController;
+use App\Http\Controllers\Shopee\AuthShopeeController;
+use App\Http\Controllers\ApiCallbackController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 
 /*
@@ -73,6 +78,9 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('resetPassword', [AuthController::class, 'resetPassword'])->name('resetPassword');
 
+Route::prefix('amis')->group(function () {
+    Route::post('api-callback', [ApiCallbackController::class, 'handleCallback'])->name('api.callback');
+});
 
 Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('profile', [AuthController::class, 'userProfile']);

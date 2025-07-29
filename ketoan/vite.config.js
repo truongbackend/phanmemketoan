@@ -7,10 +7,10 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 
 export default defineConfig({
     server: {
-            host: 'pnl-international.info.vn',
-            port: 80,
-            strictPort: true,
-            https: false,
+        host: 'localhost',
+        port: 5173,
+        strictPort: false,
+        https: false,
     },
     plugins: [
         laravel(['resources/js/app.js',

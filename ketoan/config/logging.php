@@ -131,6 +131,13 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 30,
         ],
+
+        'api_callback' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/api_callback/api_callback.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+        ],
     ],
 
 ];
