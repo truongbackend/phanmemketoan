@@ -6,17 +6,18 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Lazada\LazopController;
 use App\Http\Controllers\Admin\packageController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\ComplaintController;
-use App\Http\Controllers\Shopee\AuthShopeeController;
 use App\Http\Controllers\Admin\notificationController;
 use App\Http\Controllers\Admin\RevenueReportController;
 use App\Http\Controllers\Import\ImportHistoryController;
 use App\Http\Controllers\Import\ProductImportController;
 use App\Http\Controllers\Import\ViettelPostImportController;
+use App\Http\Controllers\Lazada\LazopController;
+use App\Http\Controllers\Shopee\AuthShopeeController;
+use App\Http\Controllers\ApiCallbackController;
 
 
 /*
@@ -73,6 +74,11 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('resetPassword', [AuthController::class, 'resetPassword'])->name('resetPassword');
 
+// API Callback endpoint - không cần authentication
+Route::prefix('amis')->group(function () {
+    Route::post('api-callback', [ApiCallbackController::class, 'handleCallback'])->name('api.callback');
+    Route::get('read-logs', [ApiCallbackController::class, 'readLogsByDate'])->name('api.read-logs');
+});
 
 Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('profile', [AuthController::class, 'userProfile']);
