@@ -14,58 +14,6 @@
             </p>
         </div>
     </div>
-    <div class="card shadow-sm mb-4">
-        <div class="card-body d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-                <img src="/assets/images/administrator.jpg" alt="Logo" class="rounded me-3"/>
-                <div>
-                    <h5 class="mb-1">COMPANY</h5>
-                    <p class="text-muted mb-0">
-                        <i class="bi bi-envelope me-1"></i>EMAIL<br />
-                        <i class="bi bi-geo-alt me-1"></i>LOCATION
-                    </p>
-                </div>
-            </div>
-            <div class="card bg-white border-0 rounded-3 mb-4">
-                <div class="card-body p-4">
-                <div class="d-flex align-items-center flex-grow-1 justify-content-center">
-                <div class="text-center" style="min-width:140px; padding:.75rem; border:1px dashed #ced4da; border-radius:.5rem;">
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <i class="bi bi-gear-fill me-1"></i>
-                        <span class="fw-bold">Demo – V2</span>
-                    </div>
-                    <small class="text-muted">Gói cước đang sử dụng</small>
-                </div>
-                <div class="text-center" style="min-width:140px; padding:.75rem; border:1px dashed #ced4da; border-radius:.5rem;">
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <i class="bi bi-clock-history text-success me-1"></i>
-                        <span>08/07/2025</span>
-                    </div>
-                    <small class="text-muted">Ngày kích hoạt</small>
-                </div>
-                <div class="text-center" style="min-width:140px; padding:.75rem; border:1px dashed #ced4da; border-radius:.5rem;">
-                    <div class="d-flex align-items-center justify-content-center mb-1">
-                        <i class="bi bi-clock-fill text-danger me-1"></i>
-                        <span>11/07/2025</span>
-                    </div>
-                    <small class="text-muted">Ngày hết hạn</small>
-                </div>
-                <div style="min-width:200px;">
-                    <div class="d-flex align-items-center mb-1">
-                        <small class="text-muted">Thời gian sử dụng: <strong>1/3</strong></small>
-                        <small class="ms-2 fw-bold">33%</small>
-                    </div>
-                    <div class="progress" style="height:6px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width:33%;"></div>
-                    </div>
-                </div>
-            </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
     <div class="row justify-content-center">
         <div class="col-lg-712">
             <div class="card bg-white border-0 rounded-3 mb-4">

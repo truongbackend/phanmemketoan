@@ -204,7 +204,7 @@
                       type="submit"
                       class="btn btn-primary py-2 px-4 fw-medium fs-16"
                     >
-                      Lưu cài đặt chung
+                      Cập nhật
                     </button>
                   </div>
                 </div>

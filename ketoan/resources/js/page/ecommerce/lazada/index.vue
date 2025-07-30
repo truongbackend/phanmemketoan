@@ -39,7 +39,7 @@
             </button>
         </div>
         <div class="card-body p-4" v-else>
-            <h2 class="fs-20 fw-semibold mb-4">Danh sách các shop đã kích hoạt</h2>
+            <h2 class="fs-17 fw-semibold mb-4">Danh sách các shop đã kích hoạt</h2>
             <div class="row">
                         <div class="col-xl-3 col-xxl-3 col-lg-3" v-for="(item, index) in accountShop" :key="index">
                             <div class="card bg-white border-1 border-dotted rounded-3 mb-3">

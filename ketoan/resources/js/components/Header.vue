@@ -10,12 +10,26 @@
                         </button>
                     </li>
                     <li>
-                        <select class="form-select form-control h-55" aria-label="Chọn sàn">
-                            <option selected class="text-dark">Chọn sàn</option>
-                            <option value="1" class="text-dark">United States</option>
-                            <option value="2" class="text-dark">Canada</option>
-                            <option value="3" class="text-dark">France</option>
-                        </select>
+                        <a-select
+                        v-model:value="selectedExchange"
+                        class="h-55"
+                        style="width: 300px"
+                        @change="handleExchangeChange"
+                        placeholder="Chọn tài khoản"
+                        >
+                        <template v-for="group in groupedAccounts" :key="group.label">
+                            <a-select-opt-group :label="group.label">
+                            <a-select-option
+                                v-for="item in group.options"
+                                :key="item.value"
+                                :value="item.value"
+                            >
+                                {{ item.label }}
+                            </a-select-option>
+                            </a-select-opt-group>
+                        </template>
+                        </a-select>
+
                     </li>
 
                 </ul>
@@ -173,15 +187,46 @@ import axios from "axios";
 export default {
     name: "Header",
     data() {
+
         return {
             userName: null,
             notifications: [],
             unreadCount: 0,
             activeTab: 'all',
             selectedNote: null,
+            selectedExchange: null,
+            accountShop: [],
+
         };
     },
     computed: {
+        groupedAccounts() {
+            const grouped = {};
+
+    this.accountShop.forEach((account) => {
+        const account_platform = account.account_platform || 'Khác'; // ví dụ: 'lazada', 'shopee'
+        const groupLabel = account_platform === 'lazada'
+            ? 'Tài khoản Lazada'
+            : account_platform === 'shopee'
+            ? 'Tài khoản Shopee'
+            : 'Khác';
+
+        if (!grouped[groupLabel]) {
+            grouped[groupLabel] = [];
+        }
+
+        grouped[groupLabel].push({
+            value: account.shop_id,   // hoặc account.id tuỳ backend
+            label: account.account,   // tên hiển thị
+        });
+    });
+
+    // chuyển sang dạng mảng như Ant Design Vue yêu cầu
+    return Object.keys(grouped).map(label => ({
+        label,
+        options: grouped[label]
+    }));
+        },
         counts() {
             return {
                 all: this.notifications.length,
@@ -206,13 +251,33 @@ export default {
                     this.fetchNotifications();
                 });
         }
+        this.getAccountShop();
+
     },
+
     methods: {
         selectNote(note) {
             this.selectedNote = note;
         },
+        handleExchangeChange(value) {
+            console.log("Selected exchange:", value);
+            this.selectedExchange = value;
+        },
+        getAccountShop() {
+            axios
+                .get(`/api/e-commerce/lazada/auth-shop-status`)
+                .then(res => {
+                    if (res.data.status == true) {
+                        this.accountShop = res.data.data.accounts;
+                        console.log("Tài khoản shop:", this.accountShop);
+                    }
+                })
+                .catch(err => {
+                    console.error('Lỗi khi lấy thông tin tài khoản:', err);
+                });
+        },
 
-        
+
         async logout() {
             try {
                 const response = await axios.post("/api/logout");

@@ -6,12 +6,6 @@ import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 
 export default defineConfig({
-    server: {
-            host: 'pnl-international.info.vn',
-            port: 80,
-            strictPort: true,
-            https: false,
-    },
     plugins: [
         laravel(['resources/js/app.js',
     ]),
@@ -22,11 +16,9 @@ export default defineConfig({
                     includeAbsolute: false,
                 },
             },
-
-
         }),
         Components({
-            resolvers: [AntDesignVueResolver()],
+            resolvers: [AntDesignVueResolver({ importStyle: false })],
         }),
 
     ],

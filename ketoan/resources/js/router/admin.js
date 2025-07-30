@@ -54,7 +54,7 @@ const adminRoutes = [
             {
                 path: "role",
                 name: "admin-role",
-                component: () => import("../page/admin/role/index.vue"),
+                component: () =>import("../page/admin/role/index.vue"),
             },
             {
                 path: "setting",
@@ -94,7 +94,7 @@ const adminRoutes = [
             {
                 path: "sales-channel/channel-connection/shopee",
                 name: "admin-channel-connection-shopee",
-                component: () =>import ("../page/ecommerce/lazada/index.vue"),
+                component: () =>import ("../page/ecommerce/shopee/index.vue"),
             },
         ]
     },

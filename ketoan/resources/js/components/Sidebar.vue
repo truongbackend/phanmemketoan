@@ -144,11 +144,6 @@
                 </a>
                 <ul class="menu-sub">
                     <li class="menu-item">
-                        <router-link :to="{ name: 'admin-role' }" class="menu-link" >
-                            Tất cả
-                        </router-link>
-                    </li>
-                    <li class="menu-item">
                         <router-link :to="{ name: 'admin-channel-connection-shopee' }" class="menu-link" >
                             Kết nối sàn
                         </router-link>

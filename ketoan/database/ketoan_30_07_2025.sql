@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th7 15, 2025 lúc 06:27 AM
+-- Thời gian đã tạo: Th7 30, 2025 lúc 08:13 AM
 -- Phiên bản máy phục vụ: 8.0.30
 -- Phiên bản PHP: 8.2.22
 
@@ -241,7 +241,7 @@ CREATE TABLE `lazada_shop_tokens` (
 --
 
 INSERT INTO `lazada_shop_tokens` (`id`, `auth_user_id`, `access_token`, `refresh_token`, `account_platform`, `account`, `seller_id`, `user_id`, `country`, `short_code`, `expires_in`, `refresh_expires_in`, `code`, `request_id`, `trace_id`, `active`, `created_at`, `updated_at`) VALUES
-(2, 1, '50000201b39sL5tdYjgs9PsUjikRnYIVynh2BrsdxOaxpNVve3E1e5566d8GkCZm', '500012016391R7hirhxriBcBw6rz0FKIPK0jtvDfaiTweuOvP0P147e47f7v5bUf', 'lazada', 'LzdOp_VN_test@163.com', NULL, NULL, 'vn', NULL, 604800, 2205956, '0_132625_ruTT1wF9D3ZODkCS3Y2V1CS8443', '2101667917524643754735581', '2140e7b017524643754704088e0fb0', 'Y', '2025-06-28 03:30:52', '2025-07-13 20:39:54'),
+(2, 1, '50000200d109TNswoxfb4K127477aduDosgzvFBGgT8quwgiHtL3hRS9CBloy7zs', '50001201410cKCkuepvcxT193a0fdcd7idwBrUYHlHOmyguvnCbGsPAJOASlwSb8', 'lazada', 'LzdOp_VN_test@163.com', NULL, NULL, 'vn', NULL, 604800, 1736200, '0_132625_ruTT1wF9D3ZODkCS3Y2V1CS8443', '2140fcb517538585640186619', '2140d18717538585640205760e760f', 'N', '2025-06-28 03:30:52', '2025-07-29 23:56:30'),
 (4, 1, '50000200933s6rv7jHtysUa95i0koSEWuGbhds7nVTHnh1908573buGvD5V9mTos', '50001201033qh0uaa6lwiMqAyrjeiDUiqVyiigNjZDV0D1c4f7f72DW8O3DJySVp', 'lazada', 'LzdOp_VN_test@163.com', NULL, NULL, 'vn', NULL, 604800, 2206368, '0_132625_ruTT1wF9D3ZODkCS3Y2V1CS8443', '2141310917524639630463977', '2141031417524639630448167e0f66', 'N', '2025-06-28 03:30:52', '2025-07-13 20:51:39'),
 (5, 1, '50000200933s6rv7jHtysUa95i0koSEWuGbhds7nVTHnh1908573buGvD5V9mTos', '50001201033qh0uaa6lwiMqAyrjeiDUiqVyiigNjZDV0D1c4f7f72DW8O3DJySVp', 'lazada', 'LzdOp_VN_test@163.com', NULL, NULL, 'vn', NULL, 604800, 2206368, '0_132625_ruTT1wF9D3ZODkCS3Y2V1CS8443', '2141310917524639630463977', '2141031417524639630448167e0f66', 'N', '2025-06-28 03:30:52', '2025-07-13 20:51:47'),
 (6, 1, '50000200933s6rv7jHtysUa95i0koSEWuGbhds7nVTHnh1908573buGvD5V9mTos', '50001201033qh0uaa6lwiMqAyrjeiDUiqVyiigNjZDV0D1c4f7f72DW8O3DJySVp', 'lazada', 'LzdOp_VN_test@163.com', NULL, NULL, 'vn', NULL, 604800, 2206368, '0_132625_ruTT1wF9D3ZODkCS3Y2V1CS8443', '2141310917524639630463977', '2141031417524639630448167e0f66', 'N', '2025-06-28 03:30:52', '2025-07-13 20:51:59'),
@@ -2130,7 +2130,7 @@ CREATE TABLE `setting_account_ecommerce` (
 --
 
 INSERT INTO `setting_account_ecommerce` (`id`, `customer_code`, `customer_name`, `interpretation`, `product_name_setting`, `added_tax_vat`, `warehouse`, `account_capital_price`, `account_warehouse`, `payment_method`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, '21212', '1221', '[\"2\", \"1\", \"3\"]', '[\"2\"]', '33311', '324234', '632', '1561', '1', 1, '2025-07-13 21:32:51', '2025-07-13 21:44:56');
+(1, 'heheheheheh', '1221', '[\"2\", \"1\", \"3\"]', '[\"2\"]', '33311', '324234', '632', '1561', '1', 1, '2025-07-13 21:32:51', '2025-07-28 23:14:47');
 
 -- --------------------------------------------------------
 
@@ -2163,7 +2163,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone`, `address`, `create_package`, `note`, `expiration_package`, `status`, `packages_id`, `api_token`, `token_created_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'truong', 'truongbackend@gmail.com', '2032-02-25 02:51:34', '$2a$12$NFemA43XtUrxRyeMbTcKA.PQXWX9DG9F7Yi/vsIu.Xb3TbTHbN1GC', '0521266565', '0521266565121', '2025-06-30', NULL, '2025-07-31', 1, 4, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzUyNTUyNzg0LCJleHAiOjE3NTMxNTc1ODQsIm5iZiI6MTc1MjU1Mjc4NCwianRpIjoiOWdJZTFsRkx1UldxUFM4TiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.szkS3PqkFYAvBcwVMnJwCFj9TPgneQC_P-ppzAuVxcA', '2025-06-22 23:06:32', NULL, '2024-07-20 01:59:26', '2025-07-14 21:13:04'),
+(1, 'truong', 'truongbackend@gmail.com', '2032-02-25 02:51:34', '$2a$12$NFemA43XtUrxRyeMbTcKA.PQXWX9DG9F7Yi/vsIu.Xb3TbTHbN1GC', '0521266565', '0521266565121', '2025-06-30', NULL, '2025-07-31', 1, 4, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzUzODU3NTI1LCJleHAiOjE3NTQ0NjIzMjUsIm5iZiI6MTc1Mzg1NzUyNSwianRpIjoiRzVlcEF5Wkx3aW1IMlVJOCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.EaiywSEbQzum1cVC8-kcfXkoaOxuQfxbuZv_G_4widM', '2025-06-22 23:06:32', NULL, '2024-07-20 01:59:26', '2025-07-29 23:38:45'),
 (6, 'admin', 'admin@gmail.com', NULL, '$2y$10$p4cmVtGZAMVWOhflDtgbguJ9UI9vjMm.Daa4otYgE.0Dgq2j6QUUC', '0352848002', '412', '2025-06-09', NULL, '2025-06-12', 0, 4, '', NULL, NULL, '2025-06-09 01:06:54', '2025-06-09 19:55:06'),
 (7, 'truong', 'gh@gmail.com', NULL, '$2y$10$NfHYNUt.p5eKgthmkVwlQ.4kcDgEINRv4gz9u2XeaH/uku22UdiVG', '352848002', '214', '2025-06-09', NULL, '2025-06-27', 1, 3, '', NULL, NULL, '2025-06-09 01:07:48', '2025-06-09 01:14:09'),
 (8, 'truong', 'truong@gmail.com', NULL, '$2a$12$NFemA43XtUrxRyeMbTcKA.PQXWX9DG9F7Yi/vsIu.Xb3TbTHbN1GC', NULL, NULL, NULL, NULL, NULL, 1, 3, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzUyNDY5MTIwLCJleHAiOjE3NTMwNzM5MjAsIm5iZiI6MTc1MjQ2OTEyMCwianRpIjoiOEJ3UVBoR2FmSE5yRlpYaiIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.i2lMlLSsoepkjnzjdD5kXFeEaMLkuO21xe9-R-qBBdI', NULL, NULL, '2025-06-09 03:00:02', '2025-07-13 21:58:40'),
