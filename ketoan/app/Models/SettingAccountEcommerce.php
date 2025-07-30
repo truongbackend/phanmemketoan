@@ -17,6 +17,8 @@ class SettingAccountEcommerce extends Model
         'account_capital_price',
         'account_warehouse',
         'payment_method',
+        'document_number_prefix',
+        'issue_voucher_prefix',
         'user_id',
         'product_name_setting'
     ];

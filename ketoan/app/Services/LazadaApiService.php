@@ -66,7 +66,6 @@ class LazadaApiService
 
     public function refreshTokenAndUpdate($authUserId, $tokenId)
     {
-        // Lấy refresh token từ database
         $refreshToken = $this->shopDataService->getRefreshTokenByAuthUserIdAndId($authUserId, $tokenId);
         
         if (!$refreshToken) {
@@ -119,5 +118,40 @@ class LazadaApiService
         $lazopRequest->addApiParam('order_ids', $orderIdsString);
         $response = $this->client->execute($lazopRequest, $accessToken);
         return json_decode($response, true);
+    }
+
+    public function getOrderTrace($accessToken, $params = [])
+    {
+        if (!$this->appKey || !$this->appSecret || !$accessToken) {
+            throw new \Exception('Missing app_key, app_secret or access_token');
+        }
+        
+        $lazopRequest = new LazopRequest('/logistic/order/trace', 'GET');
+        
+        foreach ($params as $key => $value) {
+            $lazopRequest->addApiParam($key, $value);
+        }
+        
+        $response = $this->client->execute($lazopRequest, $accessToken);
+        return json_decode($response, true);
+    }
+
+    public function getOrderTraceByPackageId($accessToken, $orderId, $packageId, $locale = 'en')
+    {
+        if (!$this->appKey || !$this->appSecret || !$accessToken) {
+            throw new \Exception('Missing app_key, app_secret or access_token');
+        }
+        
+        if (!$orderId || !$packageId) {
+            throw new \Exception('Order ID and Package ID are required');
+        }
+        
+        $params = [
+            'ofcPackageIdList' => '[\'' . $packageId . '\']',
+            'locale' => $locale,
+            'order_id' => $orderId
+        ];
+        
+        return $this->getOrderTrace($accessToken, $params);
     }
 }

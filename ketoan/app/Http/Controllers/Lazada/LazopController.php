@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Lazada;
 
 use App\Http\Controllers\Controller;
+use App\Models\SettingAccountEcommerce;
 use Illuminate\Http\Request;
 use App\Services\LazadaApiService;
 use App\Services\ShopDataService;
@@ -32,7 +33,6 @@ class LazopController extends Controller
             'data' => $data
         ]);
     }
-
 
     public function getAuthShopUrl(Request $request)
     {
@@ -172,6 +172,11 @@ class LazopController extends Controller
     public function pushReceipt(Request $request)
     {
         try {
+            $user = auth()->user();
+            $userId = $user->id;
+            $userSettingEcommerce = SettingAccountEcommerce::where('user_id', $userId)->first();
+            $userSettingEcommerceInterpretation = $userSettingEcommerce->interpretation;
+
             $createdBefore = $request->input('created_before');
             $createdAfter = $request->input('created_after');
 
@@ -231,31 +236,92 @@ class LazopController extends Controller
 
             $accessToken = $this->shopDataService->getTokenByAuthUserId(auth()->user()->id);
 
-            $data = $this->lazadaApiService->getOrderList($accessToken, $params);
+            $LZDDataOrders= $this->lazadaApiService->getOrderList($accessToken, $params);
 
-            if ($data['code'] != '0') {
-                return $this->responseApiLzd($data);
+            if ($LZDDataOrders['code'] != '0') {
+                return $this->responseApiLzd($LZDDataOrders);
             }
 
-            $data = $data['data'] ?? [];
-            $totalRecord = $data['countTotal'] ?? 0;
-            $totalInPage = $data['count'] ?? 0;
-            $listOrder = $data['orders'] ?? [];
-            $listOrderOrderNumbers = ($totalInPage > 0) ? array_column($listOrder, 'order_number') : [];
-            $dataOrderItems = [];
+            $LZDDataOrders = $LZDDataOrders['data'] ?? [];
+            $totalRecord = $LZDDataOrders['countTotal'] ?? 0;
+            $totalInPage = $LZDDataOrders['count'] ?? 0;
+            $LZDListOrder = $LZDDataOrders['orders'] ?? [];
+            $listOrderOrderNumbers = ($totalInPage > 0) ? array_column($LZDListOrder, 'order_number') : [];
+
+            $LZDDataOrderItems = [];
 
             if (!empty($listOrderOrderNumbers)) {
-                $dataOrderItems = $this->lazadaApiService->getOrderItemsByListID($accessToken, $listOrderOrderNumbers);
+                $LZDDataOrderItems = $this->lazadaApiService->getOrderItemsByListID($accessToken, $listOrderOrderNumbers);
 
-                if ($dataOrderItems['code'] != '0') {
-                    return $this->responseApiLzd($dataOrderItems);
+                if ($LZDDataOrderItems['code'] != '0') {
+                    return $this->responseApiLzd($LZDDataOrderItems);
+                }
+            }
+            
+            $rowsItemCount = 0;
+            $rowsItem = [];
+            foreach ($LZDListOrder as $LZDOrder) {
+                $orderNumber = $LZDOrder['order_number'] ?? $LZDOrder['order_id'];
+                $orderCustomerFirstName = $LZDOrder['customer_first_name'] ?? "";
+                $orderCustomerLastName = $LZDOrder['customer_last_name'] ?? "";
+                $orderCustomerName = $orderCustomerFirstName . " " . $orderCustomerLastName;
+   
+                $packageId = null;
+                $deliveredEventDateTime = null;
+
+                $fillterdOrderItem = $this->getPackageIdAndDeliveredTime($orderNumber, $LZDDataOrderItems, $accessToken);
+                $packageId = $fillterdOrderItem['package_id'];
+                $deliveredEventDateTime = $fillterdOrderItem['delivered_time'];
+                $deliveredEventDateTimeString = !empty($deliveredEventDateTime) ? date('Ymd', strtotime($deliveredEventDateTime)) : '';
+                
+                $TXTInterpretationOfOder = "";
+                $firstOrderItem = $fillterdOrderItem['matching_order_item']['order_items'][0] ?? null;
+                if ($firstOrderItem) {
+                    $TXTInterpretationOfOder = $this->getInterpretationOfItem($orderNumber, $orderCustomerName, $firstOrderItem, $userSettingEcommerceInterpretation);
+                }
+                foreach ($fillterdOrderItem['matching_order_item']['order_items'] as $orderItemIndex => $orderItem) {
+                    $rowsItem[] = [
+                        "A" => "Bán hàng hóa trong nước",
+                        "B" => "Chưa thu tiền",
+                        "C" => "Có",
+                        "D" => "Có",
+                        "E" => "Đã lập",
+                        "F" => $deliveredEventDateTime,
+                        "G" => $deliveredEventDateTime,
+                        "H" => !empty($userSettingEcommerce->document_number_prefix) ? $userSettingEcommerce->document_number_prefix . $orderNumber : $orderNumber,
+                        "I" => !empty($userSettingEcommerce->issue_voucher_prefix) ? $userSettingEcommerce->issue_voucher_prefix . $deliveredEventDateTimeString . str_pad($rowsItemCount + 1, 4, '0', STR_PAD_LEFT) : $orderNumber,
+                        "J" => "",
+                        "K" => "",
+                        "L" => "",
+                        "M" => $deliveredEventDateTime,
+                        "N" => !empty($userSettingEcommerce->customer_code) ? $userSettingEcommerce->customer_code : "",
+                        "O" => $orderCustomerName,
+                        "P" => "",
+                        "Q" => "",
+                        "R" => "",
+                        "S" => "",
+                        "T" => "",
+                        "U" => "",
+                        "V" => $TXTInterpretationOfOder,
+                        "W" => $TXTInterpretationOfOder,
+                        "X" => "",
+                        "Y" => "",
+                        "Z" => "",
+                        "AA" => "",
+                        "AB" => "VND",
+                        "AC" => "",
+                        "AD" => "",
+                        "AE" => "",
+                        "AF" => "",
+                        "AG" => "",
+                    ];
                 }
             }
 
             return response()->json([
                 'status' => true,
-                'data' => $data,
-                'data_items' => $dataOrderItems,
+                'data' => $LZDDataOrders,
+                'data_items' => $LZDDataOrderItems,
             ]);
         } catch (\Exception $e) {
             dd($e);
@@ -286,4 +352,69 @@ class LazopController extends Controller
             ], 500);
         }
     }
+
+    private function getPackageIdAndDeliveredTime($orderNumber, $LZDDataOrderItems, $accessToken)
+    {
+        $result = [
+            'package_id' => null,
+            'delivered_time' => null,
+            'matching_order_item' => null
+        ];
+
+        $matchingOrderItem = array_filter($LZDDataOrderItems['data'], function($orderItem) use ($orderNumber) {
+            return ($orderItem['order_number'] == $orderNumber) || ($orderItem['order_id'] == $orderNumber);
+        });
+        
+        if (!empty($matchingOrderItem)) {
+            $firstMatch = reset($matchingOrderItem);
+            if (!empty($firstMatch['order_items']) && isset($firstMatch['order_items'][0]['package_id'])) {
+                $result['package_id'] = $firstMatch['order_items'][0]['package_id'];
+                $result['matching_order_item'] = $firstMatch;
+                $orderTrace = $this->lazadaApiService->getOrderTraceByPackageId($accessToken, $orderNumber, $result['package_id']);
+                
+                if (isset($orderTrace['result']['module'][0]['package_detail_info_list'][0]['logistic_detail_info_list'])) {
+                    $logisticDetails = $orderTrace['result']['module'][0]['package_detail_info_list'][0]['logistic_detail_info_list'];
+                    
+                    foreach ($logisticDetails as $detail) {
+                        if (isset($detail['detail_type']) && $detail['detail_type'] === 'delivered') {
+                            if (isset($detail['event_time'])) {
+                                $timestamp = $detail['event_time'] / 1000;
+                                $result['delivered_time'] = date('Y-m-d H:i:s', $timestamp + (7 * 3600));
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    private function getInterpretationOfItem($orderNumber, $orderCustomerName, $orderItem, $userSettingEcommerceInterpretation) 
+    {
+        $parts = [];
+        $prefix = "Xuất BH-";
+
+        if (in_array("1", $userSettingEcommerceInterpretation)) {
+            $parts[] = $orderCustomerName;
+        }
+
+        if (in_array("2", $userSettingEcommerceInterpretation)) {
+            $parts[] = "Số đơn hàng: " . $orderNumber;
+        }
+
+        if (in_array("3", $userSettingEcommerceInterpretation)) {
+            $parts[] = $orderItem['name'];
+        }
+
+        $interpretation = $prefix . " " . implode(". ", $parts);
+
+        if (strlen($interpretation) > 255) {
+            $interpretation = substr($interpretation, 0, 252);
+        }
+
+        return $interpretation;
+    }
+
 }
