@@ -31,6 +31,8 @@ class SettingController extends Controller
             'account_capital_price'   => 'nullable|string|max:255',
             'account_warehouse'       => 'nullable|string|max:255',
             'payment_method'          => 'nullable|integer',
+            'document_number_prefix'  => 'nullable|string',
+            'issue_voucher_prefix'    => 'nullable|string',
         ]);
         $data['user_id'] = auth()->id();
 
@@ -40,7 +42,7 @@ class SettingController extends Controller
         );
 
         return response()->json([
-            'message'  => 'Settings saved successfully',
+            'message'  => 'Cài đặt đã được lưu thành công',
             'settings' => $setting,
         ], 200);
     }

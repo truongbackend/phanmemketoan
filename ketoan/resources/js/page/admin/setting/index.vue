@@ -188,9 +188,28 @@
                     </select>
                   </div>
                 </div>
-
-
-
+                <div class="col-lg-6 col-sm-6">
+                  <div class="form-group mb-4">
+                    <label class="label text-secondary">Số chứng từ</label>
+                    <input
+                      type="text"
+                      v-model="documentNumber"
+                      class="form-control h-55"
+                      placeholder="Nhập số chứng từ"
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                  <div class="form-group mb-4">
+                    <label class="label text-secondary">Số phiếu xuất</label>
+                    <input
+                      type="text"
+                      v-model="numberBallots"
+                      class="form-control h-55"
+                      placeholder="Nhập số phiếu xuất"
+                    />
+                  </div>
+                </div>
                 <div class="col-lg-12">
                   <div class="d-flex flex-wrap gap-3">
                     <button
@@ -240,6 +259,8 @@ export default defineComponent({
     const productNameSetting = ref([]);
     const connectedCompany = ref(null);
     const connectedExpired = ref(null);
+    const documentNumber = ref('');
+    const numberBallots = ref('');
     const interpretationOptions = [
       { value: '1', label: 'Tên khách hàng', id: 'chkInterp1' },
       { value: '2', label: 'Mã đơn hàng', id: 'chkInterp2' },
@@ -265,6 +286,8 @@ export default defineComponent({
           paymentMethod.value = data.payment_method?.toString() || '';
           interpretation.value = Array.isArray(data.interpretation) ? data.interpretation : [];
           productNameSetting.value = Array.isArray(data.product_name_setting) ? data.product_name_setting : [];
+        documentNumber.value = data.document_number_prefix || '';
+            numberBallots.value = data.issue_voucher_prefix || '';
         })
         .catch(err => {
           console.error('Lỗi khi tải cài đặt:', err);
@@ -283,6 +306,8 @@ export default defineComponent({
         account_capital_price: accountCapitalPrice.value,
         account_warehouse: accountWarehouse.value,
         payment_method: paymentMethod.value,
+        document_number_prefix: documentNumber.value,
+        issue_voucher_prefix: numberBallots.value,
       };
       axios
         .post('/api/setting-account-ecommerce', payload)
@@ -378,6 +403,9 @@ export default defineComponent({
       connectApiMisa,
       connectedCompany,
       connectedExpired,
+      documentNumber,
+    numberBallots,
+
     };
   },
 });
