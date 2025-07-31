@@ -433,7 +433,7 @@ class LazopController extends Controller
                         "BW" => $skuOfOrderItem,
                         "BX" => $totalAmountOfItem + $calTaxAmountOfItem,
                     ];
-
+                
                     if($isCombo){
                         foreach($recordSkuDetailPNL['details'] as $comboDetail){
                             $rowsItem[] = [
@@ -466,8 +466,8 @@ class LazopController extends Controller
                                 "AA" => "",
                                 "AB" => "VND",
                                 "AC" => "",
-                                "AD" => $skuOfOrderItem,
-                                "AE" => "",
+                                "AD" => $comboDetail['combo_detail_code'],
+                                "AE" => $skuOfOrderItem,
                                 "AF" => $this->getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceProductNameSetting),
                                 "AG" => "",
                                 "AH" => "",
