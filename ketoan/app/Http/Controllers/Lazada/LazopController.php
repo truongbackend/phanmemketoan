@@ -7,15 +7,19 @@ use App\Models\SettingAccountEcommerce;
 use Illuminate\Http\Request;
 use App\Services\LazadaApiService;
 use App\Services\ShopDataService;
+use App\Services\ProductService;
 
 class LazopController extends Controller
 {
     protected $lazadaApiService;
     protected $shopDataService;
-    public function __construct(LazadaApiService $lazadaApiService, ShopDataService $shopDataService)
+    protected $productService;
+
+    public function __construct(LazadaApiService $lazadaApiService, ShopDataService $shopDataService, ProductService $productService)
     {
         $this->lazadaApiService = $lazadaApiService;
         $this->shopDataService = $shopDataService;
+        $this->productService = $productService;
     }
 
     private function responseApiLzd($data)
@@ -176,6 +180,7 @@ class LazopController extends Controller
             $userId = $user->id;
             $userSettingEcommerce = SettingAccountEcommerce::where('user_id', $userId)->first();
             $userSettingEcommerceInterpretation = $userSettingEcommerce->interpretation;
+            $userSettingEcommerceProductNameSetting = $userSettingEcommerce->product_name_setting;
 
             $createdBefore = $request->input('created_before');
             $createdAfter = $request->input('created_after');
@@ -225,8 +230,15 @@ class LazopController extends Controller
 
             // Prepare params
             $params = [
-                'created_before' => $createdBeforeIso,
-                'created_after' => $createdAfterIso,
+                // 'created_before' => $createdBeforeIso,
+                // 'created_after' => $createdAfterIso,
+
+                // 'created_before' => "2025-07-27T23:59:59+07:00",
+                // 'created_after' => "2025-07-27T12:45:00+07:00",
+
+                'created_before' => "2024-10-30T14:59:59+07:00",
+                'created_after' => "2024-10-30T14:00:00+07:00",
+
                 'sort_by' => 'updated_at',
                 'sort_direction' => 'DESC',
                 'offset' => $request->input('offset', 0),
@@ -235,8 +247,12 @@ class LazopController extends Controller
             ];
 
             $accessToken = $this->shopDataService->getTokenByAuthUserId(auth()->user()->id);
-
             $LZDDataOrders= $this->lazadaApiService->getOrderList($accessToken, $params);
+
+            // return response()->json([
+            //     'status' => true,
+            //     'data' => $LZDDataOrders
+            // ]);
 
             if ($LZDDataOrders['code'] != '0') {
                 return $this->responseApiLzd($LZDDataOrders);
@@ -258,8 +274,31 @@ class LazopController extends Controller
                 }
             }
 
+            $allSkus = $this->getAllSkus($LZDDataOrderItems);
+
+            $skuValidation = $this->productService->validateSkus(array_column($allSkus, 'sku'));
+
+            if (!$skuValidation['valid']) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $skuValidation['message'],
+                    'missing_skus' => $skuValidation['missing_skus'],
+                    'all_skus' => $allSkus
+                ], 422);
+            }
+
+            $recordsSkuDetailPNL = $skuValidation['records'];
+
             $rowsItemCount = 0;
             $rowsItem = [];
+
+            // return response()->json([
+            //     'status' => true,
+            //     'LZDListOrder' => $LZDListOrder,
+            //     'LZDDataOrderItems' => $LZDDataOrderItems,
+            //     'recordsSkuDetailPNL' => $recordsSkuDetailPNL,
+            // ]);
+
             foreach ($LZDListOrder as $LZDOrder) {
                 $orderNumber = $LZDOrder['order_number'] ?? $LZDOrder['order_id'];
                 $orderCustomerFirstName = $LZDOrder['customer_first_name'] ?? "";
@@ -279,21 +318,61 @@ class LazopController extends Controller
                 if ($firstOrderItem) {
                     $TXTInterpretationOfOder = $this->getInterpretationOfItem($orderNumber, $orderCustomerName, $firstOrderItem, $userSettingEcommerceInterpretation);
                 }
-                foreach ($fillterdOrderItem['matching_order_item']['order_items'] as $orderItemIndex => $orderItem) {
+
+                // Gộp các order item có cùng SKU và tính tổng số lượng
+                $mergedOrderItems = [];
+                foreach ($fillterdOrderItem['matching_order_item']['order_items'] as $orderItem) {
+                    $sku = $orderItem['sku'];
+                    if (!isset($mergedOrderItems[$sku])) {
+                        $mergedOrderItems[$sku] = $orderItem;
+                        $mergedOrderItems[$sku]['quantity'] = 1;
+                        $mergedOrderItems[$sku]['total_voucher_seller'] = $orderItem['voucher_seller'];
+                        $mergedOrderItems[$sku]['total_item_price'] = $orderItem['item_price'];
+                    } else {
+                        $mergedOrderItems[$sku]['quantity']++;
+                        $mergedOrderItems[$sku]['total_voucher_seller'] += $orderItem['voucher_seller'];
+                        $mergedOrderItems[$sku]['total_item_price'] += $orderItem['item_price'];
+                    }
+                }
+
+                foreach ($mergedOrderItems as $orderItem) {
+                    $skuOfOrderItem = $orderItem['sku'];
+                    $recordSkuDetailPNL = array_filter($recordsSkuDetailPNL, function($record) use ($skuOfOrderItem) {
+                        return $record['sku'] == $skuOfOrderItem;
+                    });
+                    $recordSkuDetailPNL = reset($recordSkuDetailPNL);
+                    if(!empty($recordSkuDetailPNL['details'])){
+                        $isCombo = true;
+                    }else{
+                        $isCombo = false;
+                    }
+                    
+                    $revenueOfItem = $orderItem['total_item_price'] - $orderItem['total_voucher_seller'];
+                    $unitPriceOfItem = $revenueOfItem / $orderItem['quantity'] / (1 + $recordSkuDetailPNL['tax_rate'] / 100);
+                    $totalAmountOfItem = $unitPriceOfItem * $orderItem['quantity'];
+                    $calTaxAmountOfItem = $revenueOfItem - $totalAmountOfItem;
+
+                    $isProductDiscount = "";
+                    if($totalAmountOfItem  > 0){
+                        $isProductDiscount = "Không";
+                    }else if($totalAmountOfItem == 0){
+                        $isProductDiscount = "Có";
+                    }
+
                     $rowsItem[] = [
                         "A" => "Bán hàng hóa trong nước",
                         "B" => "Chưa thu tiền",
                         "C" => "Có",
                         "D" => "Có",
                         "E" => "Đã lập",
-                        "F" => $deliveredEventDateTime,
-                        "G" => $deliveredEventDateTime,
+                        "F" => $deliveredEventDateTimeString,
+                        "G" => $deliveredEventDateTimeString,
                         "H" => !empty($userSettingEcommerce->document_number_prefix) ? $userSettingEcommerce->document_number_prefix . $orderNumber : $orderNumber,
                         "I" => !empty($userSettingEcommerce->issue_voucher_prefix) ? $userSettingEcommerce->issue_voucher_prefix . $deliveredEventDateTimeString . str_pad($rowsItemCount + 1, 4, '0', STR_PAD_LEFT) : $orderNumber,
                         "J" => "",
                         "K" => "",
                         "L" => "",
-                        "M" => $deliveredEventDateTime,
+                        "M" => $deliveredEventDateTimeString,
                         "N" => !empty($userSettingEcommerce->customer_code) ? $userSettingEcommerce->customer_code : "",
                         "O" => $orderCustomerName,
                         "P" => "",
@@ -310,14 +389,58 @@ class LazopController extends Controller
                         "AA" => "",
                         "AB" => "VND",
                         "AC" => "",
-                        "AD" => "",
+                        "AD" => $skuOfOrderItem,
                         "AE" => "",
-                        "AF" => $this->getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceInterpretation),
+                        "AF" => $this->getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceProductNameSetting),
                         "AG" => "Không",
-                        "AH" => "",
+                        "AH" => $isProductDiscount,
+                        "AI" => "",//
+                        "AJ" => "",//
+                        "AK" => $recordSkuDetailPNL['unit'],
+                        "AL" => $orderItem['quantity'],
+                        "AM" => $unitPriceOfItem,
+                        "AN" => $totalAmountOfItem,
+                        "AO" => "",
+                        "AP" => "",
+                        "AQ" => "",
+                        "AR" => "",
+                        "AS" => "",
+                        "AT" => "",
+                        "AU" => "",
+                        "AV" => "",
+                        "AW" => "",
+                        "AX" => $recordSkuDetailPNL['tax_rate'],
+                        "AY" => "",
+                        "AZ" => $calTaxAmountOfItem,
+                        "BA" => "",
+                        "BB" => $userSettingEcommerce->added_tax_vat,
+                        "BC" => "Không",
+                        "BD" => "",
+                        "BE" => "",
+                        "BF" => "",
+                        "BG" => "",
+                        "BH" => "",
+                        "BI" => "",
+                        "BJ" => "",
+                        "BK" => "",
+                        "BL" => "Không",
+                        "BM" => $userSettingEcommerce->warehouse,
+                        "BN" => $userSettingEcommerce->account_capital_price,
+                        "BO" => $userSettingEcommerce->account_warehouse,
+                        "BP" => "",
+                        "BQ" => "",
+                        "BR" => "",
+                        "BS" => $this->getPaymentMethod($userSettingEcommerce->payment_method),
+                        "BT" => "Có",
+                        "BU" => $deliveredEventDateTimeString,
+                        "BV" => $orderNumber,
+                        "BW" => $skuOfOrderItem,
+                        "BX" => $totalAmountOfItem + $calTaxAmountOfItem,
                     ];
                 }
             }
+
+            dd($rowsItem);
 
             return response()->json([
                 'status' => true,
@@ -417,21 +540,65 @@ class LazopController extends Controller
 
         return $interpretation;
     }
-    private function getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceInterpretation)
+
+    private function getPaymentMethod($method_id)
+    {
+        $paymentMethod = "";
+        if($method_id == 1){
+            $paymentMethod = "TM/CK";
+        }else if($method_id == 2){
+            $paymentMethod = "Chuyển khoản";
+        }else if($method_id == 3){
+            $paymentMethod = "Tiền mặt";
+        }
+        
+        return $paymentMethod;
+    }
+
+    private function getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceProductNameSetting)
     {
         $parts = [];
 
-        if (in_array("2", $userSettingEcommerceInterpretation)) {
+        if (in_array("1", $userSettingEcommerceProductNameSetting)) {
             $parts[] =  $orderNumber;
         }
 
-        if (in_array("3", $userSettingEcommerceInterpretation)) {
+        if (in_array("2", $userSettingEcommerceProductNameSetting)) {
             $parts[] = $orderItem['name'];
         }
 
         return implode(". ", $parts);
     }
 
+    private function getAllSkus($LZDDataOrderItems)
+    {
+        if (!isset($LZDDataOrderItems['data']) || !is_array($LZDDataOrderItems['data'])) {
+            return [];
+        }
+
+        $skuNameMap = array_reduce($LZDDataOrderItems['data'], function($carry, $orderData) {
+            if (!isset($orderData['order_items']) || !is_array($orderData['order_items'])) {
+                return $carry;
+            }
+
+            foreach ($orderData['order_items'] as $orderItem) {
+                if (isset($orderItem['sku']) && !empty($orderItem['sku'])) {
+                    $sku = $orderItem['sku'];
+                    $name = $orderItem['name'] ?? '';
+                    
+                    if (!isset($carry[$sku]) || strlen($name) > strlen($carry[$sku])) {
+                        $carry[$sku] = $name;
+                    }
+                }
+            }
+            
+            return $carry;
+        }, []);
+
+        return array_values(array_map(function($sku, $name) {
+            return ['sku' => $sku, 'name' => $name];
+        }, array_keys($skuNameMap), $skuNameMap));
+    }
 
 
 }
