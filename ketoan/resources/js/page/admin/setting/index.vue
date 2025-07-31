@@ -286,7 +286,7 @@ export default defineComponent({
           paymentMethod.value = data.payment_method?.toString() || '';
           interpretation.value = Array.isArray(data.interpretation) ? data.interpretation : [];
           productNameSetting.value = Array.isArray(data.product_name_setting) ? data.product_name_setting : [];
-        documentNumber.value = data.document_number_prefix || '';
+         documentNumber.value = data.document_number_prefix || '';
             numberBallots.value = data.issue_voucher_prefix || '';
         })
         .catch(err => {

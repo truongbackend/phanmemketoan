@@ -100,16 +100,16 @@ class LazopController extends Controller
             $user = auth()->user();
             $userId = $user->id;
             $tokenId = $request->input('token_id');
-            
+
             if (!$tokenId) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Token ID là bắt buộc'
                 ], 422);
             }
-            
+
             $data = $this->lazadaApiService->refreshTokenAndUpdate($userId, $tokenId);
-            
+
             if (isset($data['access_token'])) {
                 return response()->json([
                     'status' => true,
@@ -142,16 +142,16 @@ class LazopController extends Controller
             $user = auth()->user();
             $userId = $user->id;
             $tokenId = $request->input('token_id');
-            
+
             if (!$tokenId) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Token ID là bắt buộc'
                 ], 422);
             }
-            
+
             $token = $this->shopDataService->deactivateLazadaShopToken($userId, $tokenId);
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'Token đã được deactivate thành công',
@@ -257,7 +257,7 @@ class LazopController extends Controller
                     return $this->responseApiLzd($LZDDataOrderItems);
                 }
             }
-            
+
             $rowsItemCount = 0;
             $rowsItem = [];
             foreach ($LZDListOrder as $LZDOrder) {
@@ -265,7 +265,7 @@ class LazopController extends Controller
                 $orderCustomerFirstName = $LZDOrder['customer_first_name'] ?? "";
                 $orderCustomerLastName = $LZDOrder['customer_last_name'] ?? "";
                 $orderCustomerName = $orderCustomerFirstName . " " . $orderCustomerLastName;
-   
+
                 $packageId = null;
                 $deliveredEventDateTime = null;
 
@@ -273,7 +273,7 @@ class LazopController extends Controller
                 $packageId = $fillterdOrderItem['package_id'];
                 $deliveredEventDateTime = $fillterdOrderItem['delivered_time'];
                 $deliveredEventDateTimeString = !empty($deliveredEventDateTime) ? date('Ymd', strtotime($deliveredEventDateTime)) : '';
-                
+
                 $TXTInterpretationOfOder = "";
                 $firstOrderItem = $fillterdOrderItem['matching_order_item']['order_items'][0] ?? null;
                 if ($firstOrderItem) {
@@ -312,8 +312,9 @@ class LazopController extends Controller
                         "AC" => "",
                         "AD" => "",
                         "AE" => "",
-                        "AF" => "",
-                        "AG" => "",
+                        "AF" => $this->getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceInterpretation),
+                        "AG" => "Không",
+                        "AH" => "",
                     ];
                 }
             }
@@ -338,9 +339,9 @@ class LazopController extends Controller
         try {
             $user = auth()->user();
             $userId = $user->id;
-            
+
             $status = $this->shopDataService->checkAuthShopStatus($userId);
-            
+
             return response()->json([
                 'status' => true,
                 'data' => $status
@@ -364,17 +365,17 @@ class LazopController extends Controller
         $matchingOrderItem = array_filter($LZDDataOrderItems['data'], function($orderItem) use ($orderNumber) {
             return ($orderItem['order_number'] == $orderNumber) || ($orderItem['order_id'] == $orderNumber);
         });
-        
+
         if (!empty($matchingOrderItem)) {
             $firstMatch = reset($matchingOrderItem);
             if (!empty($firstMatch['order_items']) && isset($firstMatch['order_items'][0]['package_id'])) {
                 $result['package_id'] = $firstMatch['order_items'][0]['package_id'];
                 $result['matching_order_item'] = $firstMatch;
                 $orderTrace = $this->lazadaApiService->getOrderTraceByPackageId($accessToken, $orderNumber, $result['package_id']);
-                
+
                 if (isset($orderTrace['result']['module'][0]['package_detail_info_list'][0]['logistic_detail_info_list'])) {
                     $logisticDetails = $orderTrace['result']['module'][0]['package_detail_info_list'][0]['logistic_detail_info_list'];
-                    
+
                     foreach ($logisticDetails as $detail) {
                         if (isset($detail['detail_type']) && $detail['detail_type'] === 'delivered') {
                             if (isset($detail['event_time'])) {
@@ -391,7 +392,7 @@ class LazopController extends Controller
         return $result;
     }
 
-    private function getInterpretationOfItem($orderNumber, $orderCustomerName, $orderItem, $userSettingEcommerceInterpretation) 
+    private function getInterpretationOfItem($orderNumber, $orderCustomerName, $orderItem, $userSettingEcommerceInterpretation)
     {
         $parts = [];
         $prefix = "Xuất BH-";
@@ -416,5 +417,21 @@ class LazopController extends Controller
 
         return $interpretation;
     }
+    private function getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceInterpretation)
+    {
+        $parts = [];
+
+        if (in_array("2", $userSettingEcommerceInterpretation)) {
+            $parts[] =  $orderNumber;
+        }
+
+        if (in_array("3", $userSettingEcommerceInterpretation)) {
+            $parts[] = $orderItem['name'];
+        }
+
+        return implode(". ", $parts);
+    }
+
+
 
 }

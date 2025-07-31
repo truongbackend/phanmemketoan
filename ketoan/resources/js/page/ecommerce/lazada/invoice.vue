@@ -77,13 +77,12 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 dayjs.locale('vi');
 import viVN from 'ant-design-vue/es/locale/vi_VN';
-import Cookies from 'js-cookie';
+
 export default defineComponent({
     setup() {
         const globalState = inject('globalState');
         const baseUrl = globalState.baseUrl;
         const toast = useToast();
-        const setting = ref([]);
         const start = ref(null);
         const end = ref(null);
         const dateRange = computed({
@@ -104,8 +103,6 @@ export default defineComponent({
                 value: [dayjs().subtract(3, 'month'), dayjs()]
             }
         ];
-        const app_id = ref('2b4eb0df-b6be-4c87-96f5-2bf7c51a8a5d');
-        const org_company_code = ref('pnlinternationalinfovn');
 
         const form = reactive({
             saleType: 'domestic',
@@ -118,125 +115,42 @@ export default defineComponent({
         const formatDMY = m => (m ? m.format('DD/MM/YYYY') : '');
 
         const callPushReceipt = async () => {
-    if (!start.value || !end.value) {
-        return toast.error('Vui lòng chọn khoảng thời gian hợp lệ');
-    }
+            if (!start.value || !end.value) {
+                return toast.error('Vui lòng chọn khoảng thời gian hợp lệ');
+            }
 
-    const payload = {
-        created_after: formatDMY(start.value),
-        created_before: formatDMY(end.value),
-        sale_type: form.saleType,
-        payment_method: form.paymentMethod,
-        include_slip: form.includeSlip ? 1 : 0,
-        attach_invoice: form.attachInvoice ? 1 : 0,
-        from_cash_machine: form.fromCashMachine ? 1 : 0
-    };
-    try {
-        const { data } = await axios.post(
-            `${baseUrl}/api/e-commerce/lazada/push-receipt`,
-            payload
-        );
-        if (data) {
-            console.log("🧾 Danh sách đơn hàng:", data.data.orders);
-            const taxInfo = data.orders.tax_invoice;
-            console.log(taxInfo.value);
-            postInvoice();
-        } else {
-            toast.error('Gửi hóa đơn thất bại. Không có đơn hàng phù hợp.');
-        }
-
-    } catch (err) {
-        console.error("❌ Lỗi khi gửi hóa đơn:", err);
-        toast.error('Đã xảy ra lỗi khi gửi hóa đơn.');
-    }
-};
-
-        const getSettings = async () => {
+            const payload = {
+                created_after: formatDMY(start.value),
+                created_before: formatDMY(end.value),
+                sale_type: form.saleType,
+                payment_method: form.paymentMethod,
+                include_slip: form.includeSlip ? 1 : 0,
+                attach_invoice: form.attachInvoice ? 1 : 0,
+                from_cash_machine: form.fromCashMachine ? 1 : 0
+            };
             try {
-                const response = await axios.get(
-                    `${baseUrl}/api/setting-account-ecommerce`
+                const { data } = await axios.post(
+                    `${baseUrl}/api/e-commerce/lazada/push-receipt`,
+                    payload
                 );
-                if (response) {
-                    setting.value = response.data.settings;
+                if (data) {
+                    console.log("🧾 Danh sách đơn hàng:", data.data.orders);
+                    const taxInfo = data.orders.tax_invoice;
+                    console.log(taxInfo.value);
                 } else {
-                    toast.error('Không thể lấy cài đặt Lazada');
+                    toast.error('Gửi hóa đơn thất bại. Không có đơn hàng phù hợp.');
                 }
-            } catch (error) {
-                console.error(error);
-                toast.error('Lỗi khi lấy cài đặt Lazada');
+
+            } catch (err) {
+                console.error("❌ Lỗi khi gửi hóa đơn:", err);
+                toast.error('Đã xảy ra lỗi khi gửi hóa đơn.');
             }
         };
-
-        const postInvoice = async () => {
-            const dataPost = {
-                app_id: app_id.value,
-                org_company_code: org_company_code.value,
-                voucher: [
-                    {
-                        "voucher_type": 1,
-                        "org_refno": "BS250107MG078VNN",
-                        "refdate": "2025-07-09",
-                        "posted_date": "2025-07-09",
-                        "is_paid": false,
-                        "include_invoice": 1,
-                        "is_sale_with_outward": true,
-                        "is_cash_register_invoice": true,
-                        //Chứng từ ghi nợ
-                        // Thông tin khách hàng
-
-                        account_object_code: setting.value?.customer_code || "MACKH-MACDINH",
-                        account_object_name: setting.value?.customer_name || "Khách hàng mặc định",
-                        account_object_address: setting.value?.customer_address || "Địa chỉ khách hàng mặc định",
-                        "term_id": null,
-                        "due_day": null,
-                        "due_date": null,
-
-                    }
-                ]
-            };
-
-    try {
-        const token = Cookies.get('amiss_token');
-        if (!token) {
-            toast.error('Chưa kết nối với Amiss hoặc token đã hết hạn!');
-            return;
-        }
-
-        const response = await axios.post(
-            'https://actapp.misa.vn/apir/sync/actopen/save',
-            dataPost,
-            {
-                headers: {
-                    'X-MISA-AccessToken': token,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-
-        if (response.data.status) {
-            toast.success('Đã gửi hóa đơn thành công');
-        } else {
-            toast.error('Gửi hóa đơn thất bại. Vui lòng thử lại sau.');
-        }
-    } catch (error) {
-        console.error(error);
-        toast.error('Đã xảy ra lỗi khi gửi hóa đơn.');
-    }
-};
-
-
-        onMounted(() => {
-            getSettings();
-        });
-
-
         return {
             dateRange,
             presetRanges,
             form,
             callPushReceipt,
-            setting,
-            postInvoice,
             viVN
         };
     }
