@@ -433,6 +433,40 @@ class LazopController extends Controller
                         "BW" => $skuOfOrderItem,
                         "BX" => $totalAmountOfItem + $calTaxAmountOfItem,
                     ];
+
+                    $rowsItemOther[] = [
+                        "A" => $deliveredEventDateTimeString,
+                        "B" => $deliveredEventDateTimeString,
+                        "C" => !empty($userSettingEcommerce->document_number_prefix) ? $userSettingEcommerce->document_number_prefix . $orderNumber : $orderNumber,
+                        "D" => "LZD thu hộ công nợ khách lẻ-Số đơn hàng: " . $orderNumber . "/LZD get payment on behalf from retail clients",
+                        "E" => "VND",
+                        "F" => "",
+                        "G" => "LZD thu hộ công nợ khách lẻ-Số đơn hàng: " . $orderNumber . "/LZD get payment on behalf from retail clients",
+                        "H" => $userSettingEcommerce->account_cash_debt,
+                        "I" => $userSettingEcommerce->account_revenue,
+                        "J" => $revenueOfItem,
+                        "K" => "",
+                        "L" => "",
+                        "M" => !empty($userSettingEcommerce->customer_code) ? $userSettingEcommerce->customer_code : "",
+                        "N" => "Không",
+                        "O" => "",
+                        "P" => "",
+                        "Q" => "",
+                        "R" => "",
+                        "S" => "",
+                        "T" => "",
+                        "U" => "",
+                        "V" => "",
+                        "W" => "",
+                        "X" => "",
+                        "Y" => "",
+                        "Z" => "",
+                        "AA" => "",
+                        "AB" => "",
+                        "AC" => "",
+                        "AD" => "",
+                        "AE" => $orderNumber,
+                    ];
                 
                     if($isCombo){
                         foreach($recordSkuDetailPNL['details'] as $comboDetail){
@@ -521,6 +555,7 @@ class LazopController extends Controller
             
             $dataExportService = new \App\Services\DataExportService();
             $headingsExportLazada  = $dataExportService->getExportHead('lazada');
+            $headingsExportLazadaOther  = $dataExportService->getExportHead('lazada_other');
 
             $exportsDir = storage_path('app/exports');
             if (!file_exists($exportsDir)) {
@@ -532,13 +567,20 @@ class LazopController extends Controller
             $filePathTemplateLazada = 'exports/' . $filenameTemplateLazada;
             Excel::store(new SimpleArrayExport($rowsItem), $filePathTemplateLazada, 'local');
 
+            array_unshift($rowsItemOther, $headingsExportLazadaOther);
+            $filenameTemplateLazadaOther = 'ban_hang_lazada_nghiep_vu_khac_' . date('Ymd_His') . '.' . 'xlsx';
+            $filePathTemplateLazadaOther = 'exports/' . $filenameTemplateLazadaOther;
+            Excel::store(new SimpleArrayExport($rowsItemOther), $filePathTemplateLazadaOther, 'local');
+
             //ZIP
-            $zipFileName = 'ban_hang_lazada_' . date('Ymd_His') . '.zip';
+            $zipFileName = 'export_lazada_' . date('Ymd_His') . '.zip';
             $zipPath = storage_path('app/exports/' . $zipFileName);
             $fileToZip1 = $exportsDir . '/' . $filenameTemplateLazada;
+            $fileToZip2 = $exportsDir . '/' . $filenameTemplateLazadaOther;
             $zip = new \ZipArchive;
             if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
                 $zip->addFile($fileToZip1, $filenameTemplateLazada);
+                $zip->addFile($fileToZip2, $filenameTemplateLazadaOther);
                 $zip->close();
             } else {
                 throw new \Exception('Không thể tạo file');
@@ -546,7 +588,7 @@ class LazopController extends Controller
 
             Storage::delete($filePathTemplateLazada);
 
-            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+            return response()->download($zipPath, $zipFileName);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
