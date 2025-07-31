@@ -33,6 +33,8 @@ class SettingController extends Controller
             'payment_method'          => 'nullable|integer',
             'document_number_prefix'  => 'nullable|string',
             'issue_voucher_prefix'    => 'nullable|string',
+            'account_revenue'         => 'nullable|string',
+            'account_cash_debt'       => 'nullable|string'
         ]);
         $data['user_id'] = auth()->id();
 

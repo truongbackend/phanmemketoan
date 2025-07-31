@@ -102,6 +102,29 @@
                             />
                         </div>
                     </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group mb-4">
+                            <label class="label text-secondary">TK Tiền/Chi phí/Nợ (*)</label>
+                            <input
+                            type="text"
+                            v-model="accountDebts"
+                            class="form-control h-55"
+                            placeholder="Nhập tên khách hàng"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group mb-4">
+                            <label class="label text-secondary">TK Doanh thu/Có (*)</label>
+                            <input
+                            type="text"
+                            v-model="accountRevenue"
+                            class="form-control h-55"
+                            placeholder="Nhập tên khách hàng"
+                            />
+                        </div>
+                    </div>
+
                 </div>
             <h4>Cài đặt chung xuất hóa đơn</h4>
             <form @submit.prevent="settingaccountEcommerce">
@@ -308,6 +331,8 @@ export default defineComponent({
     const documentNumber = ref('');
     const numberBallots = ref('');
     const accountShop = ref([]);
+    const accountDebts = ref('');
+    const accountRevenue = ref('');
     const interpretationOptions = [
       { value: '1', label: 'Tên khách hàng', id: 'chkInterp1' },
       { value: '2', label: 'Mã đơn hàng', id: 'chkInterp2' },
@@ -335,6 +360,8 @@ export default defineComponent({
           productNameSetting.value = Array.isArray(data.product_name_setting) ? data.product_name_setting : [];
          documentNumber.value = data.document_number_prefix || '';
             numberBallots.value = data.issue_voucher_prefix || '';
+            accountDebts.value = data.account_cash_debt || '';
+            accountRevenue.value = data.account_revenue || '';
         })
         .catch(err => {
           console.error('Lỗi khi tải cài đặt:', err);
@@ -355,6 +382,8 @@ export default defineComponent({
         payment_method: paymentMethod.value,
         document_number_prefix: documentNumber.value,
         issue_voucher_prefix: numberBallots.value,
+        account_cash_debt:accountDebts.value,
+        account_revenue:accountRevenue.value,
       };
       axios
         .post('/api/setting-account-ecommerce', payload)
@@ -468,6 +497,8 @@ export default defineComponent({
     numberBallots,
     accountShop,
       getAccountShop,
+      accountDebts,
+      accountRevenue
 
     };
   },
