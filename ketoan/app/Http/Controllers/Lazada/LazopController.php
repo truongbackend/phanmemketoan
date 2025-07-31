@@ -588,7 +588,7 @@ class LazopController extends Controller
 
             Storage::delete($filePathTemplateLazada);
 
-            return response()->download($zipPath, $zipFileName);
+            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);;
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
