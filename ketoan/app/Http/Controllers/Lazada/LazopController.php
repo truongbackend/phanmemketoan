@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Services\LazadaApiService;
 use App\Services\ShopDataService;
 use App\Services\ProductService;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SimpleArrayExport;
+use Illuminate\Support\Facades\Storage;
 
 class LazopController extends Controller
 {
@@ -230,15 +233,8 @@ class LazopController extends Controller
 
             // Prepare params
             $params = [
-                // 'created_before' => $createdBeforeIso,
-                // 'created_after' => $createdAfterIso,
-
-                // 'created_before' => "2025-07-27T23:59:59+07:00",
-                // 'created_after' => "2025-07-27T12:45:00+07:00",
-
-                'created_before' => "2024-10-30T14:59:59+07:00",
-                'created_after' => "2024-10-30T14:00:00+07:00",
-
+                'created_before' => $createdBeforeIso,
+                'created_after' => $createdAfterIso,
                 'sort_by' => 'updated_at',
                 'sort_direction' => 'DESC',
                 'offset' => $request->input('offset', 0),
@@ -394,8 +390,8 @@ class LazopController extends Controller
                         "AF" => $this->getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceProductNameSetting),
                         "AG" => "Không",
                         "AH" => $isProductDiscount,
-                        "AI" => "",//
-                        "AJ" => "",//
+                        "AI" => $userSettingEcommerce->account_cash_debt,
+                        "AJ" => $userSettingEcommerce->account_revenue,
                         "AK" => $recordSkuDetailPNL['unit'],
                         "AL" => $orderItem['quantity'],
                         "AM" => $unitPriceOfItem,
@@ -437,18 +433,121 @@ class LazopController extends Controller
                         "BW" => $skuOfOrderItem,
                         "BX" => $totalAmountOfItem + $calTaxAmountOfItem,
                     ];
+
+                    if($isCombo){
+                        foreach($recordSkuDetailPNL['details'] as $comboDetail){
+                            $rowsItem[] = [
+                                "A" => "Bán hàng hóa trong nước",
+                                "B" => "Chưa thu tiền",
+                                "C" => "Có",
+                                "D" => "Có",
+                                "E" => "Đã lập",
+                                "F" => $deliveredEventDateTimeString,
+                                "G" => $deliveredEventDateTimeString,
+                                "H" => !empty($userSettingEcommerce->document_number_prefix) ? $userSettingEcommerce->document_number_prefix . $orderNumber : $orderNumber,
+                                "I" => !empty($userSettingEcommerce->issue_voucher_prefix) ? $userSettingEcommerce->issue_voucher_prefix . $deliveredEventDateTimeString . str_pad($rowsItemCount + 1, 4, '0', STR_PAD_LEFT) : $orderNumber,
+                                "J" => "",
+                                "K" => "",
+                                "L" => "",
+                                "M" => $deliveredEventDateTimeString,
+                                "N" => !empty($userSettingEcommerce->customer_code) ? $userSettingEcommerce->customer_code : "",
+                                "O" => $orderCustomerName,
+                                "P" => "",
+                                "Q" => "",
+                                "R" => "",
+                                "S" => "",
+                                "T" => "",
+                                "U" => "",
+                                "V" => $TXTInterpretationOfOder,
+                                "W" => $TXTInterpretationOfOder,
+                                "X" => "",
+                                "Y" => "",
+                                "Z" => "",
+                                "AA" => "",
+                                "AB" => "VND",
+                                "AC" => "",
+                                "AD" => $skuOfOrderItem,
+                                "AE" => "",
+                                "AF" => $this->getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceProductNameSetting),
+                                "AG" => "",
+                                "AH" => "",
+                                "AI" => "",
+                                "AJ" => "",
+                                "AK" => $comboDetail['unit'],
+                                "AL" => $comboDetail['quantity'],
+                                "AM" => "",
+                                "AN" => "",
+                                "AO" => "",
+                                "AP" => "",
+                                "AQ" => "",
+                                "AR" => "",
+                                "AS" => "",
+                                "AT" => "",
+                                "AU" => "",
+                                "AV" => "",
+                                "AW" => "",
+                                "AX" => "",
+                                "AY" => "",
+                                "AZ" => "",
+                                "BA" => "",
+                                "BB" => "",
+                                "BC" => "Không",
+                                "BD" => "",
+                                "BE" => "",
+                                "BF" => "",
+                                "BG" => "",
+                                "BH" => "",
+                                "BI" => "",
+                                "BJ" => "",
+                                "BK" => "",
+                                "BL" => "Không",
+                                "BM" => $userSettingEcommerce->warehouse,
+                                "BN" => $userSettingEcommerce->account_capital_price,
+                                "BO" => $userSettingEcommerce->account_warehouse,
+                                "BP" => "",
+                                "BQ" => "",
+                                "BR" => "",
+                                "BS" => $this->getPaymentMethod($userSettingEcommerce->payment_method),
+                                "BT" => "Có",
+                                "BU" => $deliveredEventDateTimeString,
+                                "BV" => $orderNumber,
+                                "BW" => $skuOfOrderItem,
+                                "BX" => "0",
+                            ];
+                        }
+                    }
                 }
             }
+            
+            $dataExportService = new \App\Services\DataExportService();
+            $headingsExportLazada  = $dataExportService->getExportHead('lazada');
 
-            dd($rowsItem);
+            $exportsDir = storage_path('app/exports');
+            if (!file_exists($exportsDir)) {
+                mkdir($exportsDir, 0777, true);
+            }
 
-            return response()->json([
-                'status' => true,
-                'data' => $LZDDataOrders,
-                'data_items' => $LZDDataOrderItems,
-            ]);
+            array_unshift($rowsItem, $headingsExportLazada);
+            $filenameTemplateLazada = 'ban_hang_lazada_' . date('Ymd_His') . '.' . 'xlsx';
+            $filePathTemplateLazada = 'exports/' . $filenameTemplateLazada;
+            Excel::store(new SimpleArrayExport($rowsItem), $filePathTemplateLazada, 'local');
+
+            //ZIP
+            $zipFileName = 'ban_hang_lazada_' . date('Ymd_His') . '.zip';
+            $zipPath = storage_path('app/exports/' . $zipFileName);
+            $fileToZip1 = $exportsDir . '/' . $filenameTemplateLazada;
+            $zip = new \ZipArchive;
+            if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+                $zip->addFile($fileToZip1, $filenameTemplateLazada);
+                $zip->close();
+            } else {
+                throw new \Exception('Không thể tạo file');
+            }
+
+            Storage::delete($filePathTemplateLazada);
+
+            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
         } catch (\Exception $e) {
-            dd($e);
             return response()->json([
                 'status' => false,
                 'code' => '0',
