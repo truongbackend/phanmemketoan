@@ -20,8 +20,26 @@
         </ol>
       </nav>
     </div>
-
-    <div class="row justify-content-center">
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="setting-tab" data-bs-toggle="pill" data-bs-target="#setting" type="button" role="tab" aria-controls="setting" aria-selected="true">Cài đặt chung</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="settingLazada" data-bs-toggle="pill" data-bs-target="#settingLazada" type="button" role="tab" aria-controls="settingLazada" aria-selected="false">Lazada</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="settingShoppe" data-bs-toggle="pill" data-bs-target="#settingShoppe" type="button" role="tab" aria-controls="settingShoppe" aria-selected="false">Shoppe</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Tiktok</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Amis</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+            <div class="row justify-content-center">
 
       <div class="col-lg-12">
         <div class="card bg-white border-0 rounded-3 mb-4">
@@ -59,9 +77,33 @@
                     </div>
 
             </form>
-
+            <h4>Thiết lập Lazada</h4>
+            <div class="row" v-for="shop in accountShop" :key="shop.id">
+                <p class="text-secondary mb-4">{{shop.account}}</p>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group mb-4">
+                            <label class="label text-secondary">Số chứng từ</label>
+                            <input
+                            type="text"
+                            v-model="customerName"
+                            class="form-control h-55"
+                            placeholder="Nhập tên khách hàng"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group mb-4">
+                            <label class="label text-secondary">Số phiếu xuất</label>
+                            <input
+                            type="text"
+                            v-model="customerName"
+                            class="form-control h-55"
+                            placeholder="Nhập tên khách hàng"
+                            />
+                        </div>
+                    </div>
+                </div>
             <h4>Cài đặt chung xuất hóa đơn</h4>
-
             <form @submit.prevent="settingaccountEcommerce">
               <div class="row">
                 <div class="col-lg-6 col-sm-6">
@@ -233,6 +275,10 @@
         </div>
       </div>
     </div>
+        </div>
+    </div>
+
+
   </div>
 </template>
 
@@ -261,6 +307,7 @@ export default defineComponent({
     const connectedExpired = ref(null);
     const documentNumber = ref('');
     const numberBallots = ref('');
+    const accountShop = ref([]);
     const interpretationOptions = [
       { value: '1', label: 'Tên khách hàng', id: 'chkInterp1' },
       { value: '2', label: 'Mã đơn hàng', id: 'chkInterp2' },
@@ -318,6 +365,19 @@ export default defineComponent({
         .catch(err => {
           console.error(err);
         });
+    };
+    const getAccountShop = () => {
+        axios
+            .get(`/api/e-commerce/lazada/auth-shop-status`)
+            .then(res => {
+            if (res.data.status == true) {
+                accountShop.value = res.data.data.accounts;
+            }
+            })
+            .catch(err => {
+                console.error('Lỗi khi lấy thông tin tài khoản:', err);
+                toast.error('Lỗi khi lấy thông tin tài khoản. Vui lòng thử lại.');
+            });
     };
     const connectApiMisa = () => {
         misaAccessTokenValid.value = !!misaAccessToken.value;
@@ -380,6 +440,7 @@ export default defineComponent({
     onMounted(() => {
         loadSettings();
         checkConnected();
+        getAccountShop();
     });
 
     return {
@@ -405,6 +466,8 @@ export default defineComponent({
       connectedExpired,
       documentNumber,
     numberBallots,
+    accountShop,
+      getAccountShop,
 
     };
   },
