@@ -38,9 +38,8 @@
         </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+        <div class="tab-pane fade show active" id="setting" role="tabpanel" aria-labelledby="ssetting" tabindex="0">
             <div class="row justify-content-center">
-
       <div class="col-lg-12">
         <div class="card bg-white border-0 rounded-3 mb-4">
 

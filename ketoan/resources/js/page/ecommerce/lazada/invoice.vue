@@ -85,6 +85,7 @@ export default defineComponent({
         const toast = useToast();
         const start = ref(null);
         const end = ref(null);
+        const isLoading = ref(false);
         const dateRange = computed({
             get: () =>
                 start.value && end.value ? [start.value, end.value] : [],
@@ -119,6 +120,8 @@ export default defineComponent({
                 return toast.error('Vui lòng chọn khoảng thời gian hợp lệ');
             }
 
+            isLoading.value = true; // Bắt đầu tải
+
             const payload = {
                 created_after: formatDMY(start.value),
                 created_before: formatDMY(end.value),
@@ -128,22 +131,54 @@ export default defineComponent({
                 attach_invoice: form.attachInvoice ? 1 : 0,
                 from_cash_machine: form.fromCashMachine ? 1 : 0
             };
+
             try {
-                const { data } = await axios.post(
+                const response = await axios.post(
                     `${baseUrl}/api/e-commerce/lazada/push-receipt`,
-                    payload
+                    payload,
+                    { responseType: 'blob' }
                 );
-                if (data) {
-                    console.log("🧾 Danh sách đơn hàng:", data.data.orders);
-                    const taxInfo = data.orders.tax_invoice;
-                    console.log(taxInfo.value);
-                } else {
-                    toast.error('Gửi hóa đơn thất bại. Không có đơn hàng phù hợp.');
-                }
+
+                // ... logic tải file ...
+                const blob = new Blob([response.data], { type: response.data.type });
+                const filename = response.headers['content-disposition']
+                    ? response.headers['content-disposition'].split('filename=')[1].split(';')[0].replace(/"/g, '')
+                    : 'hoa_don_lazada.zip';
+
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+
+                toast.success('Gửi hóa đơn thành công! Tệp đang được tải xuống.');
 
             } catch (err) {
                 console.error("❌ Lỗi khi gửi hóa đơn:", err);
-                toast.error('Đã xảy ra lỗi khi gửi hóa đơn.');
+                if (err.response && err.response.data) {
+                    const reader = new FileReader();
+                    reader.onload = function() {
+                        try {
+                            const errorJson = JSON.parse(reader.result);
+                            if (errorJson.missing_skus && errorJson.missing_skus.length > 0) {
+                                const missingSkusList = errorJson.missing_skus.join(', ');
+                                const errorMessage = `Thất bại: Có sản phẩm chưa khai báo. Vui lòng bổ sung các mã SKU sau: ${missingSkusList}`;
+                                toast.error(errorMessage, { duration: 10000 });
+                            } else {
+                                toast.error(`Lỗi: ${errorJson.message || 'Không thể xử lý yêu cầu.'}`);
+                            }
+                        } catch (e) {
+                            toast.error('Đã xảy ra lỗi không xác định từ máy chủ.');
+                        }
+                    };
+                    reader.readAsText(err.response.data);
+                } else {
+                    toast.error('Đã xảy ra lỗi kết nối. Vui lòng thử lại.');
+                }
+            } finally {
+                isLoading.value = false; // Luôn dừng tải ở đây
             }
         };
         return {
@@ -151,7 +186,8 @@ export default defineComponent({
             presetRanges,
             form,
             callPushReceipt,
-            viVN
+            viVN,
+            isLoading
         };
     }
 });
