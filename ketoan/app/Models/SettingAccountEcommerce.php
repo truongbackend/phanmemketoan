@@ -20,7 +20,9 @@ class SettingAccountEcommerce extends Model
         'document_number_prefix',
         'issue_voucher_prefix',
         'user_id',
-        'product_name_setting'
+        'product_name_setting',
+        'account_cash_debt',
+        'account_revenue',
     ];
     protected $casts = [
         'interpretation'        => 'array',
