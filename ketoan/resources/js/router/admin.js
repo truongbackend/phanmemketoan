@@ -61,6 +61,11 @@ const adminRoutes = [
                 name: "admin-setting",
                 component: () =>import ("../page/admin/setting/index.vue"),
             },
+            {
+                path: "setting/lazada",
+                name: "admin-setting-lazada",
+                component: () =>import ("../page/admin/setting/lazada.vue"),
+            },
              {
                 path: "storedProcedure",
                 name: "admin-storedProcedure",

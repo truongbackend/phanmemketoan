@@ -125,6 +125,7 @@ Route::middleware(['auth:api', 'check.user.token'])->group(function () {
     Route::get('revenue/export-total-by-user', [RevenueReportController::class, 'exportTotalRevenueByUser']);
     Route::post('setting-account-ecommerce', [SettingController::class, 'store']);
     Route::get('setting-account-ecommerce', [SettingController::class, 'index']);
+    Route::post('setting-account-lazada', [SettingController::class, 'LazadaSettings']);
 });
 Route::resource('packages', packageController::class);
 

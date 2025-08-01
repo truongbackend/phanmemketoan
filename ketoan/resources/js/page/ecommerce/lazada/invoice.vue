@@ -120,7 +120,8 @@ export default defineComponent({
                 return toast.error('Vui lòng chọn khoảng thời gian hợp lệ');
             }
 
-            isLoading.value = true; // Bắt đầu tải
+            document.getElementById('preloader').style.display = 'block';
+            isLoading.value = false;
 
             const payload = {
                 created_after: formatDMY(start.value),
@@ -139,7 +140,6 @@ export default defineComponent({
                     { responseType: 'blob' }
                 );
 
-                // ... logic tải file ...
                 const blob = new Blob([response.data], { type: response.data.type });
                 const filename = response.headers['content-disposition']
                     ? response.headers['content-disposition'].split('filename=')[1].split(';')[0].replace(/"/g, '')
@@ -152,7 +152,8 @@ export default defineComponent({
                 link.click();
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(link.href);
-
+                isLoading.value = true;
+                document.getElementById('preloader').style.display = 'none';
                 toast.success('Gửi hóa đơn thành công! Tệp đang được tải xuống.');
 
             } catch (err) {
@@ -163,22 +164,32 @@ export default defineComponent({
                         try {
                             const errorJson = JSON.parse(reader.result);
                             if (errorJson.missing_skus && errorJson.missing_skus.length > 0) {
+                                isLoading.value = true;
+                                document.getElementById('preloader').style.display = 'none';
                                 const missingSkusList = errorJson.missing_skus.join(', ');
-                                const errorMessage = `Thất bại: Có sản phẩm chưa khai báo. Vui lòng bổ sung các mã SKU sau: ${missingSkusList}`;
+                                const errorMessage = `Thất bại: Sản phẩm có mã đang thiếu sau: ${missingSkusList}`;
                                 toast.error(errorMessage, { duration: 10000 });
+
                             } else {
-                                toast.error(`Lỗi: ${errorJson.message || 'Không thể xử lý yêu cầu.'}`);
+                                isLoading.value = true;
+                                document.getElementById('preloader').style.display = 'none';
+                                toast.error(`Lỗi Không thể xử lý yêu cầu.`);
                             }
                         } catch (e) {
+                            isLoading.value = true;
+                                document.getElementById('preloader').style.display = 'none';
                             toast.error('Đã xảy ra lỗi không xác định từ máy chủ.');
                         }
                     };
                     reader.readAsText(err.response.data);
+                    isLoading.value = true;
+                                document.getElementById('preloader').style.display = 'none';
                 } else {
                     toast.error('Đã xảy ra lỗi kết nối. Vui lòng thử lại.');
                 }
             } finally {
-                isLoading.value = false; // Luôn dừng tải ở đây
+                isLoading.value = false;
+                document.getElementById('preloader').style.display = 'block';
             }
         };
         return {

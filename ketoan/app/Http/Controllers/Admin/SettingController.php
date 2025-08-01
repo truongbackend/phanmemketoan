@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SettingAccountEcommerce;
+use App\Models\SettingAccountLazada;
 
 class SettingController extends Controller
 {
@@ -31,7 +32,6 @@ class SettingController extends Controller
             'account_capital_price'   => 'nullable|string|max:255',
             'account_warehouse'       => 'nullable|string|max:255',
             'payment_method'          => 'nullable|integer',
-            'document_number_prefix'  => 'nullable|string',
             'issue_voucher_prefix'    => 'nullable|string',
             'account_revenue'         => 'nullable|string',
             'account_cash_debt'       => 'nullable|string'
@@ -47,6 +47,32 @@ class SettingController extends Controller
             'message'  => 'Cài đặt đã được lưu thành công',
             'settings' => $setting,
         ], 200);
+    }
+    public function LazadaSettings(Request $request)
+    {
+        $settings = $request->input('settings');
+        $userId = auth()->id();
+        if (!is_array($settings)) {
+        return response()->json(['message' => 'Dữ liệu không hợp lệ'], 400);
+    }
+        foreach ($settings as $shopId => $shop) {
+        SettingAccountLazada::updateOrCreate(
+            [
+                'user_id' => $userId,
+                'shop_id' => $shopId,
+            ],
+            [
+                'document_number_prefix'    => $shop['documentNumber'] ?? '',
+                'issue_voucher_prefix'     => $shop['numberBallots'] ?? '',
+                'account_cash_debt'      => $shop['accountDebts'] ?? '',
+                'account_revenue'    => $shop['accountRevenue'] ?? '',
+                'shop_id'            => $shop['id'] ?? $shopId,
+            ]
+        );
+    }
+    return response()->json([
+        'message' => 'Lưu cài đặt Lazada thành công!',
+    ], 200);
     }
 
 }
