@@ -96,6 +96,28 @@ const saveShopSettings = () => {
     toast.error('Có lỗi khi lưu cài đặt.');
   });
 };
+const getLazadaSettings = () => {
+  axios.get('/api/setting-account-lazada')
+    .then(res => {
+      if (res.data.settings) {
+        res.data.settings.forEach(setting => {
+          if (shopSettings.value[setting.shop_id]) {
+            shopSettings.value[setting.shop_id] = {
+              documentNumber: setting.document_number_prefix,
+              numberBallots: setting.issue_voucher_prefix,
+              accountDebts: setting.account_cash_debt,
+              accountRevenue: setting.account_revenue
+            };
+          }
+        });
+        console.log('Lazada settings loaded:', shopSettings.value);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      toast.error('Có lỗi khi tải cài đặt Lazada.');
+    });
+};
 
 const resetForm = () => {
   Object.keys(shopSettings.value).forEach(shopId => {
@@ -110,6 +132,7 @@ const resetForm = () => {
 
 onMounted(() => {
   getAccountShop();
+  getLazadaSettings();
 });
 </script>
 

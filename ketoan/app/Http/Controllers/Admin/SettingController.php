@@ -74,5 +74,15 @@ class SettingController extends Controller
         'message' => 'Lưu cài đặt Lazada thành công!',
     ], 200);
     }
+    public function getLazadaSettings()
+    {
+        $userId = auth()->id();
+        $settings = SettingAccountLazada::where('user_id', $userId)->get();
+
+        return response()->json([
+            'settings' => $settings,
+        ], 200);
+    }
+
 
 }
