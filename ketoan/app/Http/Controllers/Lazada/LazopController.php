@@ -10,6 +10,7 @@ use App\Services\ShopDataService;
 use App\Services\ProductService;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SimpleArrayExport;
+use App\Models\SettingAccountLazada;
 use Illuminate\Support\Facades\Storage;
 
 class LazopController extends Controller
@@ -179,9 +180,27 @@ class LazopController extends Controller
     public function pushReceipt(Request $request)
     {
         try {
+            $shopId = $request->input('auth_shop_id');
+
+            if(!$shopId){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Shop ID là bắt buộc'
+                ], 422);
+            }
+            
             $user = auth()->user();
             $userId = $user->id;
             $userSettingEcommerce = SettingAccountEcommerce::where('user_id', $userId)->first();
+            $userSettingLazada = SettingAccountLazada::where('shop_id', $shopId)->where('user_id', $userId)->first();
+            
+            if(!$userSettingLazada){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Shop ID không tồn tại'
+                ], 422);
+            }
+
             $userSettingEcommerceInterpretation = $userSettingEcommerce->interpretation;
             $userSettingEcommerceProductNameSetting = $userSettingEcommerce->product_name_setting;
 
@@ -363,8 +382,8 @@ class LazopController extends Controller
                         "E" => "Đã lập",
                         "F" => $deliveredEventDateTimeString,
                         "G" => $deliveredEventDateTimeString,
-                        "H" => !empty($userSettingEcommerce->document_number_prefix) ? $userSettingEcommerce->document_number_prefix . $orderNumber : $orderNumber,
-                        "I" => !empty($userSettingEcommerce->issue_voucher_prefix) ? $userSettingEcommerce->issue_voucher_prefix . $deliveredEventDateTimeString . str_pad($rowsItemCount + 1, 4, '0', STR_PAD_LEFT) : $orderNumber,
+                        "H" => !empty($userSettingLazada->document_number_prefix) ? $userSettingLazada->document_number_prefix . $orderNumber : $orderNumber,
+                        "I" => !empty($userSettingLazada->issue_voucher_prefix) ? $userSettingLazada->issue_voucher_prefix . $deliveredEventDateTimeString . str_pad($rowsItemCount + 1, 4, '0', STR_PAD_LEFT) : $orderNumber,
                         "J" => "",
                         "K" => "",
                         "L" => "",
@@ -390,8 +409,8 @@ class LazopController extends Controller
                         "AF" => $this->getAFColumnContent($orderNumber, $orderItem, $userSettingEcommerceProductNameSetting),
                         "AG" => "Không",
                         "AH" => $isProductDiscount,
-                        "AI" => $userSettingEcommerce->account_cash_debt,
-                        "AJ" => $userSettingEcommerce->account_revenue,
+                        "AI" => $userSettingLazada->account_cash_debt,
+                        "AJ" => $userSettingLazada->account_revenue,
                         "AK" => $recordSkuDetailPNL['unit'],
                         "AL" => $orderItem['quantity'],
                         "AM" => $unitPriceOfItem,
@@ -437,13 +456,13 @@ class LazopController extends Controller
                     $rowsItemOther[] = [
                         "A" => $deliveredEventDateTimeString,
                         "B" => $deliveredEventDateTimeString,
-                        "C" => !empty($userSettingEcommerce->document_number_prefix) ? $userSettingEcommerce->document_number_prefix . $orderNumber : $orderNumber,
+                        "C" => !empty($userSettingLazada->document_number_prefix) ? $userSettingLazada->document_number_prefix . $orderNumber : $orderNumber,
                         "D" => "LZD thu hộ công nợ khách lẻ-Số đơn hàng: " . $orderNumber . "/LZD get payment on behalf from retail clients",
                         "E" => "VND",
                         "F" => "",
                         "G" => "LZD thu hộ công nợ khách lẻ-Số đơn hàng: " . $orderNumber . "/LZD get payment on behalf from retail clients",
-                        "H" => $userSettingEcommerce->account_cash_debt,
-                        "I" => $userSettingEcommerce->account_revenue,
+                        "H" => $userSettingLazada->account_cash_debt,
+                        "I" => $userSettingLazada->account_revenue,
                         "J" => $revenueOfItem,
                         "K" => "",
                         "L" => "",
@@ -478,8 +497,8 @@ class LazopController extends Controller
                                 "E" => "Đã lập",
                                 "F" => $deliveredEventDateTimeString,
                                 "G" => $deliveredEventDateTimeString,
-                                "H" => !empty($userSettingEcommerce->document_number_prefix) ? $userSettingEcommerce->document_number_prefix . $orderNumber : $orderNumber,
-                                "I" => !empty($userSettingEcommerce->issue_voucher_prefix) ? $userSettingEcommerce->issue_voucher_prefix . $deliveredEventDateTimeString . str_pad($rowsItemCount + 1, 4, '0', STR_PAD_LEFT) : $orderNumber,
+                                "H" => !empty($userSettingLazada->document_number_prefix) ? $userSettingLazada->document_number_prefix . $orderNumber : $orderNumber,
+                                "I" => !empty($userSettingLazada->issue_voucher_prefix) ? $userSettingLazada->issue_voucher_prefix . $deliveredEventDateTimeString . str_pad($rowsItemCount + 1, 4, '0', STR_PAD_LEFT) : $orderNumber,
                                 "J" => "",
                                 "K" => "",
                                 "L" => "",
@@ -552,7 +571,7 @@ class LazopController extends Controller
                     }
                 }
             }
-            
+
             $dataExportService = new \App\Services\DataExportService();
             $headingsExportLazada  = $dataExportService->getExportHead('lazada');
             $headingsExportLazadaOther  = $dataExportService->getExportHead('lazada_other');
