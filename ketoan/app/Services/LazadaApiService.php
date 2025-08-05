@@ -84,6 +84,7 @@ class LazadaApiService
                 'refresh_expires_in' => $response['refresh_expires_in'] ?? null,
                 'request_id' => $response['request_id'] ?? null,
                 'trace_id' => $response['_trace_id_'] ?? null,
+                'active' => 'Y',
             ];
             
             $this->shopDataService->updateLazadaShopToken($authUserId, $tokenId, $updateData);

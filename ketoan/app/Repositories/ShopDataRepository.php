@@ -22,6 +22,11 @@ class ShopDataRepository
         return LazadaShopTokens::where('auth_user_id', $userId)->first();
     }
 
+    public function findByAuthUserIdAndShopId($authUserId, $shopId)
+    {
+        return LazadaShopTokens::where('auth_user_id', $authUserId)->where('shop_id', $shopId)->where('active', 'Y')->first();
+    }
+
     public function findByAuthUserIdAndId($authUserId, $id)
     {
         return LazadaShopTokens::where('auth_user_id', $authUserId)

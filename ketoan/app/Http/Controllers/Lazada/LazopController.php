@@ -261,7 +261,15 @@ class LazopController extends Controller
                 'status' => 'delivered',
             ];
 
-            $accessToken = $this->shopDataService->getTokenByAuthUserId(auth()->user()->id);
+            $accessToken = $this->shopDataService->getTokenByAuthUserIdAndShopId(auth()->user()->id, $shopId);
+
+            if(!$accessToken){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Không tìm thấy token hợp lệ'
+                ], 422);
+            }
+
             $LZDDataOrders= $this->lazadaApiService->getOrderList($accessToken, $params);
 
             // return response()->json([
