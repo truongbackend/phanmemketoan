@@ -10,16 +10,8 @@ class AuthShopeeController extends Controller
 {
     public function getAuthShopUrl(Request $request)
     {
-        $partnerId = $request->input('partner_id');
-        $partnerKey = $request->input('partner_key');
-        if (!$partnerId || !$partnerKey) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Missing partner_id or partner_key'
-            ], 400);
-        }
         $shopeeAuthService = new ShopeeAuthService();
-        $url = $shopeeAuthService->authShop($partnerId, $partnerKey);
+        $url = $shopeeAuthService->authShop();
         return response()->json([
             'status' => true,
             'auth_url' => $url
@@ -28,69 +20,61 @@ class AuthShopeeController extends Controller
 
     public function getTokenShopLevel(Request $request)
     {
-        $partnerId = $request->input('partner_id');
-        $partnerKey = $request->input('partner_key');
         $code = $request->input('code');
         $shopId = $request->input('shop_id');
-        if (!$partnerId || !$partnerKey || !$code || !$shopId) {
+        if (!$code || !$shopId) {
             return response()->json([
                 'status' => false,
-                'message' => 'Missing partner_id, partner_key, code hoặc shop_id'
+                'message' => 'Missing code or shop_id'
             ], 400);
         }
-        $service = new \App\Services\ShopeeAuthService();
-        $result = $service->getTokenShopLevel($partnerId, $partnerKey, $code, $shopId);
+        $service = new ShopeeAuthService();
+        $result = $service->getTokenShopLevel($code, $shopId);
         return response()->json($result);
     }
 
     public function getTokenAccountLevel(Request $request)
     {
-        $partnerId = $request->input('partner_id');
-        $partnerKey = $request->input('partner_key');
         $code = $request->input('code');
         $mainAccountId = $request->input('main_account_id');
-        if (!$partnerId || !$partnerKey || !$code || !$mainAccountId) {
+        if (!$code || !$mainAccountId) {
             return response()->json([
                 'status' => false,
-                'message' => 'Missing partner_id, partner_key, code hoặc main_account_id'
+                'message' => 'Missing code or main_account_id'
             ], 400);
         }
-        $service = new \App\Services\ShopeeAuthService();
-        $result = $service->getTokenAccountLevel($partnerId, $partnerKey, $code, $mainAccountId);
+        $service = new ShopeeAuthService();
+        $result = $service->getTokenAccountLevel($code, $mainAccountId);
         return response()->json($result);
     }
 
     public function getAccessTokenShopLevel(Request $request)
     {
-        $partnerId = $request->input('partner_id');
-        $partnerKey = $request->input('partner_key');
         $shopId = $request->input('shop_id');
         $refreshToken = $request->input('refresh_token');
-        if (!$partnerId || !$partnerKey || !$shopId || !$refreshToken) {
+        if (!$shopId || !$refreshToken) {
             return response()->json([
                 'status' => false,
-                'message' => 'Missing partner_id, partner_key, shop_id hoặc refresh_token'
+                'message' => 'Missing shop_id or refresh_token'
             ], 400);
         }
-        $service = new \App\Services\ShopeeAuthService();
-        $result = $service->getAccessTokenShopLevel($partnerId, $partnerKey, $shopId, $refreshToken);
+        $service = new ShopeeAuthService();
+        $result = $service->getAccessTokenShopLevel($shopId, $refreshToken);
         return response()->json($result);
     }
 
     public function getAccessTokenMerchantLevel(Request $request)
     {
-        $partnerId = $request->input('partner_id');
-        $partnerKey = $request->input('partner_key');
         $merchantId = $request->input('merchant_id');
         $refreshToken = $request->input('refresh_token');
-        if (!$partnerId || !$partnerKey || !$merchantId || !$refreshToken) {
+        if (!$merchantId || !$refreshToken) {
             return response()->json([
                 'status' => false,
-                'message' => 'Missing partner_id, partner_key, merchant_id hoặc refresh_token'
+                'message' => 'Missing merchant_id or refresh_token'
             ], 400);
         }
-        $service = new \App\Services\ShopeeAuthService();
-        $result = $service->getAccessTokenMerchantLevel($partnerId, $partnerKey, $merchantId, $refreshToken);
+        $service = new ShopeeAuthService();
+        $result = $service->getAccessTokenMerchantLevel($merchantId, $refreshToken);
         return response()->json($result);
     }
 }
