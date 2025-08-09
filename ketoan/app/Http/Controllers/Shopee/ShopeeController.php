@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\ShopeeAuthService;
 
-class AuthShopeeController extends Controller
+class ShopeeController extends Controller
 {
     public function getAuthShopUrl(Request $request)
     {
         $shopeeAuthService = new ShopeeAuthService();
         $url = $shopeeAuthService->authShop();
+        
         return response()->json([
             'status' => true,
             'auth_url' => $url
@@ -28,9 +29,15 @@ class AuthShopeeController extends Controller
                 'message' => 'Missing code or shop_id'
             ], 400);
         }
+        $user = auth()->user();
+        $authUserId = $user->id;
         $service = new ShopeeAuthService();
-        $result = $service->getTokenShopLevel($code, $shopId);
-        return response()->json($result);
+        $result = $service->getTokenShopLevel($code, $shopId, $authUserId);
+
+        return response()->json([
+            'status' => true,
+            'data' => $result
+        ]);
     }
 
     public function getTokenAccountLevel(Request $request)

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use App\Repositories\ShopeeShopDataRepository;
 use Illuminate\Support\Facades\Http;
 
 class ShopeeAuthService
@@ -35,7 +37,7 @@ class ShopeeAuthService
     }
 
     // Lấy token cấp Shop Level
-    public function getTokenShopLevel($code, $shopId)
+    public function getTokenShopLevel($code, $shopId, $authUserId)
     {
         $path = "/api/v2/auth/token/get";
         $timest = time();
@@ -47,12 +49,26 @@ class ShopeeAuthService
         $baseString = sprintf("%s%s%s", $this->partnerId, $path, $timest);
         $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
         $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $this->partnerId, $timest, $sign);
-        //dd($url, $body);
-        // Gửi yêu cầu POST và nhận phản hồi
+ 
         $response = Http::withHeaders(['Content-Type' => 'application/json'])
             ->post($url, $body);
 
         $result = $response->json();
+
+        if (isset($result['access_token'])) {
+            $saveData = [
+                'auth_user_id' => $authUserId,
+                'shop_id' => $shopId,
+                'access_token' => $result['access_token'],
+                'refresh_token' => $result['refresh_token'] ?? null,
+                'expire_in' => $result['expire_in'],
+                'request_id' => $result['request_id'],
+                'active' => 'Y',
+            ];
+
+            $shopeeShopDataRepository = new ShopeeShopDataRepository();
+            $shopeeShopDataRepository->createOrUpdateByShopId($saveData);
+        }
         return $result;
     }
 
@@ -78,18 +94,18 @@ class ShopeeAuthService
     }
 
     // Lấy Access Token cấp Shop Level
-    public function getAccessTokenShopLevel($shopId, $refreshToken)
+    public function getAccessTokenShopLevel($partnerId, $partnerKey, $shopId, $refreshToken)
     {
         $path = "/api/v2/auth/access_token/get";
         $timest = time();
         $body = [
-            "partner_id" => intval($this->partnerId),
+            "partner_id" => intval($partnerId),
             "shop_id" => intval($shopId),
             "refresh_token" => $refreshToken,
         ];
-        $baseString = sprintf("%s%s%s", $this->partnerId, $path, $timest);
-        $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
-        $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $this->partnerId, $timest, $sign);
+        $baseString = sprintf("%s%s%s", $partnerId, $path, $timest);
+        $sign = hash_hmac('sha256', $baseString, $partnerKey);
+        $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $partnerId, $timest, $sign);
 
         // Gửi yêu cầu POST và nhận phản hồi
         $response = Http::withHeaders(['Content-Type' => 'application/json'])
@@ -100,18 +116,18 @@ class ShopeeAuthService
     }
 
     // Lấy Access Token cấp Merchant Level
-    public function getAccessTokenMerchantLevel($merchantId, $refreshToken)
+    public function getAccessTokenMerchantLevel($partnerId, $partnerKey, $merchantId, $refreshToken)
     {
         $path = "/api/v2/auth/access_token/get";
         $timest = time();
         $body = [
-            "partner_id" => $this->partnerId,
+            "partner_id" => $partnerId,
             "merchant_id" => $merchantId,
             "refresh_token" => $refreshToken,
         ];
-        $baseString = sprintf("%s%s%s", $this->partnerId, $path, $timest);
-        $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
-        $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $this->partnerId, $timest, $sign);
+        $baseString = sprintf("%s%s%s", $partnerId, $path, $timest);
+        $sign = hash_hmac('sha256', $baseString, $partnerKey);
+        $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $partnerId, $timest, $sign);
 
         // Gửi yêu cầu POST và nhận phản hồi
         $response = Http::withHeaders(['Content-Type' => 'application/json'])
