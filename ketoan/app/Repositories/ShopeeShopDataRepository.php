@@ -21,12 +21,17 @@ class ShopeeShopDataRepository
     {
         return ShopeeShopTokens::where('auth_user_id', $authUserId)->where('shop_id', $shopId)->where('active', 'Y')->first();
     }
-
-    public function deactivateToken($authUserId, $shopId)
+    
+    public function findByAuthUserIdAndTokenId($authUserId, $tokenId)
     {
-        $token = $this->findByAuthUserIdAndShopId($authUserId, $shopId);
+        return ShopeeShopTokens::where('auth_user_id', $authUserId)->where('id', $tokenId)->where('active', 'Y')->first();
+    }
+
+    public function deactivateToken($authUserId, $tokenId)
+    {
+        $token = $this->findByAuthUserIdAndTokenId($authUserId, $tokenId);
         if (!$token) {
-            throw new \Exception('Token not found for user ID: ' . $authUserId . ' and shop ID: ' . $shopId);
+            throw new \Exception('Token not found for user ID: ' . $authUserId . ' and token ID: ' . $tokenId);
         }
         
         $token->update(['active' => 'N']);

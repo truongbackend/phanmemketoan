@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Shopee;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\ShopeeShopDataRepository;
 use Illuminate\Http\Request;
 use App\Services\ShopeeAuthService;
 
@@ -38,6 +39,40 @@ class ShopeeController extends Controller
             'status' => true,
             'data' => $result
         ]);
+    }
+
+    public function deactivateToken(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $userId = $user->id;
+            $tokenId = $request->input('token_id');
+
+            if (!$tokenId) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Token ID is required'
+                ], 422);
+            }
+
+            $shopeeShopDataRepository = new ShopeeShopDataRepository();
+            $token = $shopeeShopDataRepository->deactivateToken($userId, $tokenId);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Token đã được deactivate thành công',
+                'data' => [
+                    'id' => $token->id,
+                    'shop_id' => $token->shop_id,
+                    'active' => $token->active
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function getTokenAccountLevel(Request $request)
