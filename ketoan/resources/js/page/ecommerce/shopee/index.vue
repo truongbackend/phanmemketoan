@@ -26,7 +26,7 @@
             <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
                 <div class="d-flex align-items-center justify-content-center mb-4 gap-3">
                     <div class="facebook-icon d-flex align-items-center justify-content-center">
-                        <img src="/assets/avatar/lazada.jpg" width="50px" class="me-2" />
+                        <img src="/assets/avatar/shopee.png" width="50px" class="me-2" />
                     </div>
                     <div class="text-start">
                         <h2 class="fs-24 fw-semibold mb-1">Shopee</h2>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <button type="button" @click="connectLazada" class="btn btn-info fw-medium text-white py-2 px-4">
+            <button type="button" @click="connectShoppe" class="btn btn-info fw-medium text-white py-2 px-4">
                 <i class="ri-link me-2" ></i>Kết nối
             </button>
         </div>
@@ -90,7 +90,7 @@
                     </div>
             </div>
         <div class="card-footer bg-white">
-            <button @click="connectLazada" class="btn btn-outline-info fw-medium rounded-3 hover-white mt-3 py-2 px-4"><i class="ri-add-circle-fill me-2"></i>Thêm kết nối</button>
+            <button @click="connectShoppe" class="btn btn-outline-info fw-medium rounded-3 hover-white mt-3 py-2 px-4"><i class="ri-add-circle-fill me-2"></i>Thêm kết nối</button>
         </div>
 
     </div>
@@ -109,9 +109,10 @@ export default defineComponent({
     const toast = useToast();
     const accountShop = ref([]);
 
-    const connectLazada = async () => {
+    const connectShoppe = async () => {
         try {
-            const { data } = await axios.post(`${baseUrl}/api/e-commerce/lazada/auth-shop`);
+            const { data } = await axios.post(`${baseUrl}/api/e-commerce/shopee/auth-shop`);
+            console.log(data);
             if (!data.auth_url) return;
             const w = 1200;
             const h = 680;
@@ -128,7 +129,7 @@ export default defineComponent({
 
             const popup = window.open(
             data.auth_url,
-            'LazadaAuth',
+            'ShoppeAuth',
             `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=yes`
             );
             if (!popup) {
@@ -158,12 +159,12 @@ export default defineComponent({
 
     const fetchAccessToken = (code) => {
       axios
-        .get(`${baseUrl}/api/e-commerce/lazada/shop-access-token`, { params: { code } })
+        .get(`${baseUrl}/api/e-commerce/shoppe/shop-access-token`, { params: { code } })
         .then(res => {
           console.log('Access token response:', res.data);
           res.data.success
-            ? toast.success('Kết nối thành công với Lazada!')
-            : toast.error('Lỗi khi kết nối với Lazada. Vui lòng thử lại.');
+            ? toast.success('Kết nối thành công với Shoppe!')
+            : toast.error('Lỗi khi kết nối với Shoppe. Vui lòng thử lại.');
         })
         .catch(err => {
           console.error('Lỗi khi lấy access token:', err);
@@ -172,7 +173,7 @@ export default defineComponent({
 
     const getAccountShop = () => {
         axios
-            .get(`${baseUrl}/api/e-commerce/lazada/auth-shop-status`)
+            .get(`${baseUrl}/api/e-commerce/Shoppe/auth-shop-status`)
             .then(res => {
             if (res.data.status == true) {
                 accountShop.value = res.data.data.accounts;
@@ -188,7 +189,7 @@ export default defineComponent({
     };
     const refeshAccountShop = (token_id) => {
         axios
-            .post(`${baseUrl}/api/e-commerce/lazada/refresh-token-by-id`,{ token_id })
+            .post(`${baseUrl}/api/e-commerce/Shoppe/refresh-token-by-id`,{ token_id })
             .then(res => {
             if (res.data.status == true) {
                 toast.success('Token đã được làm mới thành công');
@@ -201,7 +202,7 @@ export default defineComponent({
     };
     const deactivateAccountShop = (token_id) => {
         axios
-            .post(`${baseUrl}/api/e-commerce/lazada/deactivate-token`,{ token_id })
+            .post(`${baseUrl}/api/e-commerce/Shoppe/deactivate-token`,{ token_id })
             .then(res => {
             if (res.data.status == true) {
                 toast.success('Tài khoản đã được hủy kích hoạt thành công');
@@ -218,7 +219,7 @@ export default defineComponent({
     });
 
     return {
-      connectLazada,
+      connectShoppe,
       getAccountShop,
       accountShop,
       refeshAccountShop,
