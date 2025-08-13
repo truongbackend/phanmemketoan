@@ -18,7 +18,7 @@ use App\Http\Controllers\Import\ViettelPostImportController;
 use App\Http\Controllers\Lazada\LazopController;
 use App\Http\Controllers\Shopee\ShopeeController;
 use App\Http\Controllers\ApiCallbackController;
-
+use App\Http\Controllers\TikTokShop\TikTokShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +54,7 @@ Route::middleware(['auth:api'])->prefix('e-commerce')->group(function () {
     Route::prefix('shopee')->group(function () {
         Route::post('/auth-shop', [ShopeeController::class, 'getAuthShopUrl'])->name('shopee.authshop');
         Route::post('/token-shop-level', [ShopeeController::class, 'getTokenShopLevel'])->name('shopee.tokenShopLevel');
+        Route::post('/deactivate-token', [ShopeeController::class, 'deactivateToken'])->name('shopee.deactivate-token');
         Route::post('/token-account-level', [ShopeeController::class, 'getTokenAccountLevel'])->name('shopee.tokenAccountLevel');
         Route::post('/access-token-shop-level', [ShopeeController::class, 'getAccessTokenShopLevel'])->name('shopee.accessTokenShopLevel');
         Route::post('/access-token-merchant-level', [ShopeeController::class, 'getAccessTokenMerchantLevel'])->name('shopee.accessTokenMerchantLevel');
@@ -66,6 +67,10 @@ Route::middleware(['auth:api'])->prefix('e-commerce')->group(function () {
         Route::post('/deactivate-token', [LazopController::class, 'deactivateToken'])->name('lazada.deactivate-token');
         Route::post('/push-receipt', [LazopController::class, 'pushReceipt'])->name('lazada.push-receipt');
         Route::get('/auth-shop-status', [LazopController::class, 'checkAuthShopStatus'])->name('lazada.auth-shop-status');
+    });
+
+    Route::prefix('tiktok-shop')->group(function () {
+        Route::post('/auth-shop', [TikTokShopController::class, 'getAuthShopUrl'])->name('tiktokshop.auth-shop');
     });
 });
 

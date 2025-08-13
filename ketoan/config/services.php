@@ -20,6 +20,10 @@ return [
         'partner_key' => env('SHOPEE_PARTNER_KEY', '61666a6c696477524a6269426d55706666444e7672784c75706e506d70487a51'),
     ],
 
+    'tiktokshop' => [
+        'authorisation_link' => env('TIKTOK_SHOP_API_HOST', 'https://services.tiktokshop.com/open/authorize?service_id=7484171759699445509'),
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
