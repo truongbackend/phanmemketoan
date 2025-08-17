@@ -90,33 +90,52 @@ class ShopeeController extends Controller
         return response()->json($result);
     }
 
-    public function getAccessTokenShopLevel(Request $request)
-    {
-        $shopId = $request->input('shop_id');
-        $refreshToken = $request->input('refresh_token');
-        if (!$shopId || !$refreshToken) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Missing shop_id or refresh_token'
-            ], 400);
-        }
-        $service = new ShopeeAuthService();
-        $result = $service->getAccessTokenShopLevel($shopId, $refreshToken);
-        return response()->json($result);
-    }
+    // public function getAccessTokenShopLevel(Request $request)
+    // {
+    //     $shopId = $request->input('shop_id');
+    //     $refreshToken = $request->input('refresh_token');
+    //     if (!$shopId || !$refreshToken) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Missing shop_id or refresh_token'
+    //         ], 400);
+    //     }
+    //     $service = new ShopeeAuthService();
+    //     $result = $service->getAccessTokenShopLevel($shopId, $refreshToken);
+    //     return response()->json($result);
+    // }
 
-    public function getAccessTokenMerchantLevel(Request $request)
+    // public function getAccessTokenMerchantLevel(Request $request)
+    // {
+    //     $merchantId = $request->input('merchant_id');
+    //     $refreshToken = $request->input('refresh_token');
+    //     if (!$merchantId || !$refreshToken) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Missing merchant_id or refresh_token'
+    //         ], 400);
+    //     }
+    //     $service = new ShopeeAuthService();
+    //     $result = $service->getAccessTokenMerchantLevel($merchantId, $refreshToken);
+    //     return response()->json($result);
+    // }
+
+    public function checkAuthShopStatus(Request $request)
     {
-        $merchantId = $request->input('merchant_id');
-        $refreshToken = $request->input('refresh_token');
-        if (!$merchantId || !$refreshToken) {
+        try {
+            $authUserId = auth()->user()->id;
+            $shopeeAuthService = new ShopeeAuthService();
+            $result = $shopeeAuthService->checkAuthShopStatus($authUserId);
+        
+            return response()->json([
+            'status' => true,
+                'data' => $result
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Missing merchant_id or refresh_token'
-            ], 400);
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
         }
-        $service = new ShopeeAuthService();
-        $result = $service->getAccessTokenMerchantLevel($merchantId, $refreshToken);
-        return response()->json($result);
     }
 }

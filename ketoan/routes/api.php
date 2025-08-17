@@ -56,8 +56,9 @@ Route::middleware(['auth:api'])->prefix('e-commerce')->group(function () {
         Route::post('/token-shop-level', [ShopeeController::class, 'getTokenShopLevel'])->name('shopee.tokenShopLevel');
         Route::post('/deactivate-token', [ShopeeController::class, 'deactivateToken'])->name('shopee.deactivate-token');
         Route::post('/token-account-level', [ShopeeController::class, 'getTokenAccountLevel'])->name('shopee.tokenAccountLevel');
-        Route::post('/access-token-shop-level', [ShopeeController::class, 'getAccessTokenShopLevel'])->name('shopee.accessTokenShopLevel');
-        Route::post('/access-token-merchant-level', [ShopeeController::class, 'getAccessTokenMerchantLevel'])->name('shopee.accessTokenMerchantLevel');
+        // Route::post('/access-token-shop-level', [ShopeeController::class, 'getAccessTokenShopLevel'])->name('shopee.accessTokenShopLevel');
+        // Route::post('/access-token-merchant-level', [ShopeeController::class, 'getAccessTokenMerchantLevel'])->name('shopee.accessTokenMerchantLevel');
+        Route::get('/auth-shop-status', [ShopeeController::class, 'checkAuthShopStatus'])->name('shopee.auth-shop-status');
     });
     Route::prefix('lazada')->group(function () {
         Route::post('/auth-shop', [LazopController::class, 'getAuthShopUrl'])->name('lazada.auth-shop');

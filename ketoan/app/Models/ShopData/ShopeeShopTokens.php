@@ -24,7 +24,6 @@ class ShopeeShopTokens extends Model
         'refresh_token',
         'expire_in',
         'request_id',
-        'shop_name',
         'active',
     ];
 }

@@ -57,24 +57,18 @@ class ShopeeShopDataRepository
         
         foreach ($tokens as $token) {
             $createdAt = Carbon::parse($token->updated_at);
-            $expiresAt = $createdAt->addSeconds($token->expires_in);
-            $refreshExpiresAt = $createdAt->addSeconds($token->refresh_expires_in);
+            $expiresAt = $createdAt->addSeconds($token->expire_in);
             $now = Carbon::now();
             
             $isExpired = $now->gt($expiresAt);
-            $isRefreshExpired = $now->gt($refreshExpiresAt);
             
             $verifiedAccounts[] = [
+                'id' => $token->id,
                 'shop_id' => $token->shop_id,
-                'shop_name' => $token->shop_name,
-                'expires_in' => $token->expires_in,
-                'expires_at' => $expiresAt->format('Y-m-d H:i:s'),
+                'expire_in' => $token->expire_in,
+                'expire_at' => $expiresAt->format('Y-m-d H:i:s'),
                 'is_expired' => $isExpired,
                 'days_until_expiry' => $isExpired ? 0 : $now->diffInDays($expiresAt, false),
-                'refresh_expires_in' => $token->refresh_expires_in,
-                'refresh_expires_at' => $refreshExpiresAt->format('Y-m-d H:i:s'),
-                'is_refresh_expired' => $isRefreshExpired,
-                'days_until_refresh_expiry' => $isRefreshExpired ? 0 : $now->diffInDays($refreshExpiresAt, false)
             ];
         }
         

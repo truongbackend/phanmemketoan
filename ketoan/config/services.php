@@ -17,7 +17,7 @@ return [
     'shopee' => [
         'host' => env('SHOPEE_API_HOST', 'https://partner.test-stable.shopeemobile.com'),
         'partner_id' => env('SHOPEE_PARTNER_ID', '1280537'),
-        'partner_key' => env('SHOPEE_PARTNER_KEY', '61666a6c696477524a6269426d55706666444e7672784c75706e506d70487a51'),
+        'partner_key' => env('SHOPEE_PARTNER_KEY', 'shpk5a424d7a6a5553766f52445a4a46734c724c78564e637a54624668534d79'),
     ],
 
     'tiktokshop' => [

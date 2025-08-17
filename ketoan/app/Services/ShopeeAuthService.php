@@ -54,7 +54,7 @@ class ShopeeAuthService
             ->post($url, $body);
 
         $result = $response->json();
-
+        
         if (isset($result['access_token'])) {
             $saveData = [
                 'auth_user_id' => $authUserId,
@@ -93,47 +93,53 @@ class ShopeeAuthService
         return $result;
     }
 
-    // Lấy Access Token cấp Shop Level
-    public function getAccessTokenShopLevel($partnerId, $partnerKey, $shopId, $refreshToken)
+    // // Lấy Access Token cấp Shop Level
+    // public function getAccessTokenShopLevel($partnerId, $partnerKey, $shopId, $refreshToken)
+    // {
+    //     $path = "/api/v2/auth/access_token/get";
+    //     $timest = time();
+    //     $body = [
+    //         "partner_id" => intval($partnerId),
+    //         "shop_id" => intval($shopId),
+    //         "refresh_token" => $refreshToken,
+    //     ];
+    //     $baseString = sprintf("%s%s%s", $partnerId, $path, $timest);
+    //     $sign = hash_hmac('sha256', $baseString, $partnerKey);
+    //     $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $partnerId, $timest, $sign);
+
+    //     // Gửi yêu cầu POST và nhận phản hồi
+    //     $response = Http::withHeaders(['Content-Type' => 'application/json'])
+    //         ->post($url, $body);
+
+    //     $result = $response->json();
+    //     return $result;
+    // }
+
+    // // Lấy Access Token cấp Merchant Level
+    // public function getAccessTokenMerchantLevel($partnerId, $partnerKey, $merchantId, $refreshToken)
+    // {
+    //     $path = "/api/v2/auth/access_token/get";
+    //     $timest = time();
+    //     $body = [
+    //         "partner_id" => $partnerId,
+    //         "merchant_id" => $merchantId,
+    //         "refresh_token" => $refreshToken,
+    //     ];
+    //     $baseString = sprintf("%s%s%s", $partnerId, $path, $timest);
+    //     $sign = hash_hmac('sha256', $baseString, $partnerKey);
+    //     $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $partnerId, $timest, $sign);
+
+    //     // Gửi yêu cầu POST và nhận phản hồi
+    //     $response = Http::withHeaders(['Content-Type' => 'application/json'])
+    //         ->post($url, $body);
+
+    //     $result = $response->json();
+    //     return $result;
+    // }
+
+    public function checkAuthShopStatus($authUserId)
     {
-        $path = "/api/v2/auth/access_token/get";
-        $timest = time();
-        $body = [
-            "partner_id" => intval($partnerId),
-            "shop_id" => intval($shopId),
-            "refresh_token" => $refreshToken,
-        ];
-        $baseString = sprintf("%s%s%s", $partnerId, $path, $timest);
-        $sign = hash_hmac('sha256', $baseString, $partnerKey);
-        $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $partnerId, $timest, $sign);
-
-        // Gửi yêu cầu POST và nhận phản hồi
-        $response = Http::withHeaders(['Content-Type' => 'application/json'])
-            ->post($url, $body);
-
-        $result = $response->json();
-        return $result;
-    }
-
-    // Lấy Access Token cấp Merchant Level
-    public function getAccessTokenMerchantLevel($partnerId, $partnerKey, $merchantId, $refreshToken)
-    {
-        $path = "/api/v2/auth/access_token/get";
-        $timest = time();
-        $body = [
-            "partner_id" => $partnerId,
-            "merchant_id" => $merchantId,
-            "refresh_token" => $refreshToken,
-        ];
-        $baseString = sprintf("%s%s%s", $partnerId, $path, $timest);
-        $sign = hash_hmac('sha256', $baseString, $partnerKey);
-        $url = sprintf("%s%s?partner_id=%s&timestamp=%s&sign=%s", $this->host, $path, $partnerId, $timest, $sign);
-
-        // Gửi yêu cầu POST và nhận phản hồi
-        $response = Http::withHeaders(['Content-Type' => 'application/json'])
-            ->post($url, $body);
-
-        $result = $response->json();
-        return $result;
+        $shopeeShopDataRepository = new ShopeeShopDataRepository();
+        return $shopeeShopDataRepository->checkAuthShopStatus($authUserId);
     }
 }
