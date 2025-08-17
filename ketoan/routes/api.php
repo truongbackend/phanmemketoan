@@ -72,6 +72,8 @@ Route::middleware(['auth:api'])->prefix('e-commerce')->group(function () {
     Route::prefix('tiktok-shop')->group(function () {
         Route::post('/auth-shop', [TikTokShopController::class, 'getAuthShopUrl'])->name('tiktokshop.auth-shop');
         Route::post('/auth-token', [TikTokShopController::class, 'getAuthToken'])->name('tiktokshop.auth-token');
+        Route::get('/auth-shop-status', [TikTokShopController::class, 'checkAuthShopStatus'])->name('tiktokshop.auth-shop-status');
+        Route::post('/deactivate-token', [TikTokShopController::class, 'deactivateToken'])->name('tiktokshop.deactivate-token');
     });
 });
 

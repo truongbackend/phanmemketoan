@@ -55,4 +55,43 @@ class TikTokShopController extends Controller
             ], 500);
         }
     }
+
+    public function checkAuthShopStatus(Request $request)
+    {
+        try {
+            $authUserId = auth()->user()->id;
+            $result = $this->tiktokShopService->checkAuthShopStatus($authUserId);
+
+            return response()->json([
+                'status' => true,
+                'data' => $result
+            ]);
+        }catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deactivateToken(Request $request)
+    {
+        try {
+            $authUserId = auth()->user()->id;
+            $request->validate([
+                'token_id' => 'required|string'
+            ]);
+            $tokenId = $request->input('token_id');
+            $result = $this->tiktokShopService->deactivateToken($authUserId, $tokenId);
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully deactivated token'
+            ]);
+        }catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

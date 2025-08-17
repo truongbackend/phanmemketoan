@@ -92,4 +92,14 @@ class TikTokShopService
             ];
         }
     }
+
+    public function checkAuthShopStatus($authUserId)
+    {
+        return $this->repo->checkAuthShopStatus($authUserId);
+    }
+
+    public function deactivateToken($authUserId, $tokenId)
+    {
+        return $this->repo->deactivateToken($authUserId, $tokenId);
+    }
 }
