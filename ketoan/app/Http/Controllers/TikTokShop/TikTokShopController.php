@@ -24,4 +24,35 @@ class TikTokShopController extends Controller
             'data' => $authorisation_link
         ]);
     }
+
+    public function getAuthToken(Request $request)
+    {
+        try {
+            $request->validate([
+                'auth_code' => 'required|string'
+            ]);
+    
+            $authCode = $request->input('auth_code');
+            $authUserId = auth()->user()->id;
+            
+            $result = $this->tiktokShopService->getAuthToken($authCode, $authUserId);
+    
+            if ($result['success']) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Successfully authenticated with TikTok Shop'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => $result['error'] ?? 'Error occurred while getting auth token'
+                ], $result['status_code'] ?? 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

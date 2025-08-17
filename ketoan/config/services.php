@@ -21,7 +21,11 @@ return [
     ],
 
     'tiktokshop' => [
-        'authorisation_link' => env('TIKTOK_SHOP_API_HOST', 'https://services.tiktokshop.com/open/authorize?service_id=7484171759699445509'),
+        'authorisation_link' => env('TIKTOK_SHOP_API_HOST', 'https://services.tiktokshop.com/open/authorize'),
+        'authorisation_service_id' => env('TIKTOK_SHOP_AUTHORISATION_SERVICE_ID', '7484171759699445509'),
+        'app_key' => env('TIKTOK_SHOP_APP_KEY', '6fmlfsk9o594g'),
+        'app_secret' => env('TIKTOK_SHOP_APP_SECRET', 'b7a47b9668131c7a19e2909bc67e84654f81c241'),
+        'tiktok_api_url' => 'https://auth.tiktok-shops.com/api',
     ],
 
     'mailgun' => [
